@@ -57,6 +57,17 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [EwalletController::class, 'destroy'])->name('profile.ewallet.destroy');
     });
 
+    // RESOURCES & BOOKINGS
+    Route::get('/resources', [\App\Http\Controllers\ResourceController::class, 'index']);
+    Route::post('/bookings', [\App\Http\Controllers\BookingController::class, 'store']);
+
+    // Admin only Resource management
+    Route::middleware('admin')->group(function () {
+        Route::post('/resources', [\App\Http\Controllers\ResourceController::class, 'store']);
+        Route::put('/resources/{resource}', [\App\Http\Controllers\ResourceController::class, 'update']);
+        Route::delete('/resources/{resource}', [\App\Http\Controllers\ResourceController::class, 'destroy']);
+    });
+
     // OTHER
     Route::get('/profile/orders', function () {
         return view('profile.orders');

@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Booking;
+use App\Models\Resource;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BookingConfirmation;
+
+class BookingController extends Controller {
+    public function store(Request $request) {
+        $request->validate([
+            'resource_id' => 'required|exists:resources,id',
+            'start_time' => 'required|date|after:now',
+            'end_time' => 'required|date|after:start_time',
+            'agree_terms' => 'required|accepted', // Logika baru: User harus menyetujui syarat sebelum booking masuk kalender
+        ]);
+
+        // VALIDASI BENTROK JADWAL (Logic Inti Modul 4)
+        $isConflict = Booking::where('resource_id', $request->resource_id)
+            ->where('status', '!=', 'cancelled')
+            ->where(function ($query) use ($request) {
+                $query->whereBetween('start_time', [$request->start_time, $request->end_time])
+                      ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
+                      ->orWhere(function ($q) use ($request) {
+                          $q->where('start_time', '<=', $request->start_time)
+                            ->where('end_time', '>=', $request->end_time);
+                      });
+            })->exists();
+
+        if ($isConflict) {
+            return response()->json(['message' => 'Jadwal bentrok! Silahkan pilih waktu lain.'], 422);
+        }
+
+        $resource = Resource::find($request->resource_id);
+        $start = Carbon::parse($request->start_time);
+        $end = Carbon::parse($request->end_time);
+        $hours = $start->diffInHours($end);
+        
+        // At least 1 hour price if less than an hour
+        $totalPrice = max(1, $hours) * $resource->price_per_hour;
+
+        $booking = Booking::create([
+            'user_id' => auth()->id(),
+            'resource_id' => $request->resource_id,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'total_price' => $totalPrice,
+            'status' => 'pending'
+        ]);
+
+        // KIRIM EMAIL KONFIRMASI
+        try {
+            Mail::to(auth()->user()->email)->send(new BookingConfirmation($booking));
+        } catch (\Exception $e) {
+            // Log error or handle silently for now
+            // To ensure the booking process itself doesn't fail just because email failed
+        }
+
+        return response()->json([
+            'message' => 'Booking berhasil! Silakan cek email Anda untuk konfirmasi.',
+            'booking' => $booking
+        ], 201);
+    }
+}

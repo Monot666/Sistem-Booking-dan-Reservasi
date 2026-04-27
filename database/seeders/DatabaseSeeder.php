@@ -30,5 +30,28 @@ class DatabaseSeeder extends Seeder
 
         // 2. Membuat 10 user tambahan secara acak
         User::factory(10)->create();
+
+        // 3. Menambahkan Resource (Room/Aset)
+        \App\Models\Resource::firstOrCreate(
+            ['name' => 'Deluxe Room 101'],
+            [
+                'type' => 'Room',
+                'description' => 'A luxury deluxe room with king bed.',
+                'capacity' => 2,
+                'price_per_hour' => 50000,
+                'is_active' => true,
+            ]
+        );
+
+        \App\Models\Resource::firstOrCreate(
+            ['name' => 'Meeting Room A'],
+            [
+                'type' => 'Meeting',
+                'description' => 'Spacious meeting room for 10 people.',
+                'capacity' => 10,
+                'price_per_hour' => 150000,
+                'is_active' => true,
+            ]
+        );
     }
 }

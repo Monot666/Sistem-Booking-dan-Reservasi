@@ -1,6 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3" style="z-index: 9999;" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3" style="z-index: 9999;" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 <section class="hero-section">
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
@@ -9,6 +23,9 @@
             </a>
             
             <div class="nav-right-buttons d-flex align-items-center">
+                <a href="{{ url('/send-tester') }}" class="btn btn-outline-light me-3 btn-sm">
+                    📧 Kirim Report User
+                </a>
                 @auth
                     {{-- Tampilan saat User SUDAH Login --}}
                     <div class="user-profile-nav d-flex align-items-center">
