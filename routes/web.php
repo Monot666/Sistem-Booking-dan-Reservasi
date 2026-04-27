@@ -96,3 +96,4 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::get('/send-tester', [TesterController::class, 'send']);
+Route::get('/test', [TesterController::class, 'index']);

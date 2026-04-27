@@ -29,5 +29,4 @@ class TesterController extends Controller
             return back()->with('error', 'Gagal mengirim email: ' . $e->getMessage());
         }
     }
-
 }
