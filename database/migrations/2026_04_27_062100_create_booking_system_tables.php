@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up() {
+
+        DB::statement('CREATE DATABASE IF NOT EXISTS roomly');
         // 1. Users & Auth Tables
         Schema::create('users', function (Blueprint $table) {
             $table->id();
