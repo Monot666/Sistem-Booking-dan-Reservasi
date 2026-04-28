@@ -20,11 +20,11 @@ class TesterController extends Controller
             $users = User::latest()->take(10)->get(); 
 
             Mail::send('email.tester', ['users' => $users], function ($message) {
-                $message->to('cathyrium@gmail.com')
+                $message->to('roomlytrust@gmail.com')
                         ->subject('Daftar User Terbaru');
             });
 
-            return back()->with('success', 'Email berhasil dikirim ke cathyrium@gmail.com!');
+            return back()->with('success', 'Email berhasil dikirim ke roomlytrust@gmail.com!');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal mengirim email: ' . $e->getMessage());
         }
