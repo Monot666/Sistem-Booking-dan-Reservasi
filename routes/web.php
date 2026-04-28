@@ -58,14 +58,17 @@ Route::middleware('auth')->group(function () {
     });
 
     // RESOURCES & BOOKINGS
-    Route::get('/resources', [\App\Http\Controllers\ResourceController::class, 'index']);
-    Route::post('/bookings', [\App\Http\Controllers\BookingController::class, 'store']);
+    Route::get('/resources', [\App\Http\Controllers\ResourceController::class, 'index'])->name('resources.index');
+    Route::get('/resources/{resource}', [\App\Http\Controllers\ResourceController::class, 'show'])->name('resources.show');
+    Route::get('/bookings', [\App\Http\Controllers\BookingController::class, 'index'])->name('bookings.index');
+    Route::get('/bookings/{id}', [\App\Http\Controllers\BookingController::class, 'show'])->name('bookings.show');
+    Route::post('/bookings', [\App\Http\Controllers\BookingController::class, 'store'])->name('bookings.store');
 
     // Admin only Resource management
     Route::middleware('admin')->group(function () {
-        Route::post('/resources', [\App\Http\Controllers\ResourceController::class, 'store']);
-        Route::put('/resources/{resource}', [\App\Http\Controllers\ResourceController::class, 'update']);
-        Route::delete('/resources/{resource}', [\App\Http\Controllers\ResourceController::class, 'destroy']);
+        Route::post('/resources', [\App\Http\Controllers\ResourceController::class, 'store'])->name('resources.store');
+        Route::put('/resources/{resource}', [\App\Http\Controllers\ResourceController::class, 'update'])->name('resources.update');
+        Route::delete('/resources/{resource}', [\App\Http\Controllers\ResourceController::class, 'destroy'])->name('resources.destroy');
     });
 
     // OTHER

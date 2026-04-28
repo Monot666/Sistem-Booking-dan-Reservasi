@@ -52,4 +52,32 @@ class User extends Authenticatable
             'birthdate' => 'date', // Tambahkan cast date agar mudah diolah
         ];
     }
+<<<<<<< HEAD
 }
+=======
+
+    /**
+     * Get the bookings for the user.
+     */
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    /**
+     * Get the cards for the user.
+     */
+    public function cards()
+    {
+        return $this->hasMany(Card::class);
+    }
+
+    /**
+     * Get the e-wallets for the user.
+     */
+    public function ewallets()
+    {
+        return $this->hasMany(Ewallet::class);
+    }
+}
+>>>>>>> 88f4aec (feat: setup dynamic resource seeder)

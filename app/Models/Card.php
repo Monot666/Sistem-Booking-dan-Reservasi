@@ -12,4 +12,12 @@ class Card extends Model
         'account_number',
         'card_name',
     ];
+
+    /**
+     * Get the user that owns the card.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -32,6 +32,11 @@ class EwalletController extends Controller
     public function update(Request $request, $id)
     {
         $wallet = Ewallet::findOrFail($id);
+        
+        // Authorization check: ensure wallet belongs to authenticated user
+        if ($wallet->user_id !== auth()->id()) {
+            return back()->with('error', 'Anda tidak memiliki akses ke e-wallet ini');
+        }
 
         $wallet->update([
             'name' => $request->name,
@@ -44,6 +49,12 @@ class EwalletController extends Controller
     public function destroy($id)
     {
         $wallet = Ewallet::findOrFail($id);
+        
+        // Authorization check: ensure wallet belongs to authenticated user
+        if ($wallet->user_id !== auth()->id()) {
+            return back()->with('error', 'Anda tidak memiliki akses ke e-wallet ini');
+        }
+        
         $wallet->delete();
 
         return back()->with('success', 'E-Wallet berhasil dihapus');

@@ -6,8 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up() {
+        // Create database only for MySQL/MariaDB (skip for SQLite)
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('CREATE DATABASE IF NOT EXISTS ' . config('database.connections.mysql.database'));
+        }
 
-        DB::statement('CREATE DATABASE IF NOT EXISTS roomly');
         // 1. Users & Auth Tables
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -32,7 +35,7 @@ return new class extends Migration {
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
@@ -110,6 +113,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('type'); 
             $table->text('description')->nullable();
+            $table->string('image')->nullable();
             $table->integer('capacity');
             $table->decimal('price_per_hour', 12, 2);
             $table->boolean('is_active')->default(true);

@@ -28,6 +28,12 @@ class CardController extends Controller
     public function update(Request $request, $id)
     {
         $card = Card::findOrFail($id);
+        
+        // Authorization check: ensure card belongs to authenticated user
+        if ($card->user_id !== auth()->id()) {
+            return back()->with('error', 'Anda tidak memiliki akses ke kartu ini');
+        }
+        
         $card->update($request->all());
 
         return back()->with('success', 'Kartu berhasil diupdate');
@@ -35,7 +41,14 @@ class CardController extends Controller
 
     public function destroy($id)
     {
-        Card::findOrFail($id)->delete();
+        $card = Card::findOrFail($id);
+        
+        // Authorization check: ensure card belongs to authenticated user
+        if ($card->user_id !== auth()->id()) {
+            return back()->with('error', 'Anda tidak memiliki akses ke kartu ini');
+        }
+        
+        $card->delete();
 
         return back()->with('success', 'Kartu berhasil dihapus');
     }

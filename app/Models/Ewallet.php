@@ -11,4 +11,12 @@ class Ewallet extends Model
         'name',
         'phone'
     ];
+
+    /**
+     * Get the user that owns the e-wallet.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

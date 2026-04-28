@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 
 class ResourceController extends Controller {
     public function index() { 
-        return Resource::all(); 
+        return response()->json([
+            'message' => 'Success',
+            'data' => Resource::all()
+        ], 200);
     }
 
     public function store(Request $request) {
@@ -18,11 +21,20 @@ class ResourceController extends Controller {
             'capacity' => 'required|integer',
             'price_per_hour' => 'required|numeric',
         ]);
-        return Resource::create($data);
+        
+        $resource = Resource::create($data);
+        
+        return response()->json([
+            'message' => 'Resource created successfully',
+            'data' => $resource
+        ], 201);
     }
 
     public function show(Resource $resource) { 
-        return $resource; 
+        return response()->json([
+            'message' => 'Success',
+            'data' => $resource
+        ], 200);
     }
 
     public function update(Request $request, Resource $resource) {
@@ -33,12 +45,20 @@ class ResourceController extends Controller {
             'capacity' => 'sometimes|required|integer',
             'price_per_hour' => 'sometimes|required|numeric',
         ]);
+        
         $resource->update($data);
-        return $resource;
+        
+        return response()->json([
+            'message' => 'Resource updated successfully',
+            'data' => $resource
+        ], 200);
     }
 
     public function destroy(Resource $resource) {
         $resource->delete();
-        return response()->json(['message' => 'Deleted']);
+        
+        return response()->json([
+            'message' => 'Resource deleted successfully'
+        ], 200);
     }
 }
