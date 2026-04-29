@@ -20,10 +20,7 @@ class BookingController extends Controller {
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json([
-            'message' => 'Success',
-            'data' => $bookings
-        ], 200);
+        return view('profile.orders', compact('bookings'));
     }
 
     /**
@@ -31,21 +28,14 @@ class BookingController extends Controller {
      */
     public function show($id)
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::with('resource', 'user', 'payments')->findOrFail($id);
 
         // Authorization check: ensure booking belongs to authenticated user
         if ($booking->user_id !== auth()->id()) {
-            return response()->json([
-                'message' => 'Unauthorized access to this booking'
-            ], 403);
+            abort(403);
         }
 
-        $booking->load('resource', 'user', 'payments');
-
-        return response()->json([
-            'message' => 'Success',
-            'data' => $booking
-        ], 200);
+        return view('profile.order_detail', compact('booking'));
     }
 
     /**
@@ -56,25 +46,20 @@ class BookingController extends Controller {
             'resource_id' => 'required|exists:resources,id',
             'start_time' => 'required|date|after:now',
             'end_time' => 'required|date|after:start_time',
-            'agree_terms' => 'required|accepted', // Logika baru: User harus menyetujui syarat sebelum booking masuk kalender
+            'agree_terms' => 'required|accepted',
         ]);
 
         // VALIDASI BENTROK JADWAL (Logic Inti Modul 4)
+        // Using overlap logic: (StartA < EndB) AND (EndA > StartB)
         $isConflict = Booking::where('resource_id', $request->resource_id)
             ->where('status', '!=', 'cancelled')
             ->where(function ($query) use ($request) {
-                $query->whereBetween('start_time', [$request->start_time, $request->end_time])
-                      ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
-                      ->orWhere(function ($q) use ($request) {
-                          $q->where('start_time', '<=', $request->start_time)
-                            ->where('end_time', '>=', $request->end_time);
-                      });
+                $query->where('start_time', '<', $request->end_time)
+                      ->where('end_time', '>', $request->start_time);
             })->exists();
 
         if ($isConflict) {
-            return response()->json([
-                'message' => 'Jadwal bentrok! Silahkan pilih waktu lain.'
-            ], 422);
+            return back()->withErrors(['conflict' => 'Jadwal bentrok! Silahkan pilih waktu lain.'])->withInput();
         }
 
         $resource = Resource::find($request->resource_id);
@@ -82,7 +67,6 @@ class BookingController extends Controller {
         $end = Carbon::parse($request->end_time);
         $hours = $start->diffInHours($end);
         
-        // At least 1 hour price if less than an hour
         $totalPrice = max(1, $hours) * $resource->price_per_hour;
 
         $booking = Booking::create([
@@ -98,15 +82,9 @@ class BookingController extends Controller {
         try {
             Mail::to(auth()->user()->email)->send(new BookingConfirmation($booking));
         } catch (\Exception $e) {
-            // Log error or handle silently for now
-            // To ensure the booking process itself doesn't fail just because email failed
+            // Log error
         }
 
-        $booking->load('resource');
-
-        return response()->json([
-            'message' => 'Booking berhasil! Silakan cek email Anda untuk konfirmasi.',
-            'data' => $booking
-        ], 201);
+        return redirect()->route('profile.orders')->with('success', 'Booking berhasil! Silakan cek email Anda untuk konfirmasi.');
     }
 }

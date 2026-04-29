@@ -10,6 +10,8 @@ class IsAdmin {
         if (auth()->check() && auth()->user()->role === 'admin') {
             return $next($request);
         }
-        return response()->json(['message' => 'Unauthorized. Admin only.'], 403);
+        
+        // Return 403 Forbidden for web requests
+        abort(403, 'Unauthorized. Admin only.');
     }
 }
