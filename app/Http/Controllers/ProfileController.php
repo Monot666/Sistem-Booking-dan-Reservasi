@@ -25,13 +25,13 @@ class ProfileController extends Controller
 
         // 1. Validasi Input
         $request->validate([
-            'name'      => 'required|string|max:255',
-            'gender'    => 'nullable|string',
-            'city'      => 'nullable|string|max:100',
-            'phone'     => 'nullable|string|max:20',
-            'day'       => 'nullable|numeric|between:1,31',
-            'month'     => 'nullable|string',
-            'year'      => 'nullable|numeric|digits:4',
+            'name'        => 'required|string|max:255',
+            'gender'      => 'nullable|string',
+            'city'        => 'nullable|string|max:100',
+            'phone'       => 'nullable|string|max:20',
+            'birth_day'   => 'nullable|numeric|between:1,31',
+            'birth_month' => 'nullable|string',
+            'birth_year'  => 'nullable|numeric|digits:4',
         ], [
             'name.required' => 'Nama lengkap tidak boleh kosong.',
         ]);
@@ -42,8 +42,16 @@ class ProfileController extends Controller
         $user->city   = $request->city;
         $user->phone  = $request->phone;
 
-        if ($request->day && $request->month && $request->year) {
-            $user->birthdate = $request->year . '-' . $request->month . '-' . $request->day;
+        if ($request->birth_day && $request->birth_month && $request->birth_year) {
+            $months = [
+                'January' => '01', 'February' => '02', 'March' => '03', 'April' => '04',
+                'May' => '05', 'June' => '06', 'July' => '07', 'August' => '08',
+                'September' => '09', 'October' => '10', 'November' => '11', 'December' => '12'
+            ];
+            
+            $monthNum = $months[$request->birth_month] ?? '01';
+            $dayNum = sprintf('%02d', $request->birth_day);
+            $user->birthdate = $request->birth_year . '-' . $monthNum . '-' . $dayNum;
         }
         
         $user->save();

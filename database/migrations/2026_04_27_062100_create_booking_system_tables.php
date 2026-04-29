@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up() {
-        // Create database only for MySQL/MariaDB (skip for SQLite)
-        if (DB::getDriverName() !== 'sqlite') {
-            DB::statement('CREATE DATABASE IF NOT EXISTS ' . config('database.connections.mysql.database'));
-        }
-
         // 1. Users & Auth Tables
         Schema::create('users', function (Blueprint $table) {
             $table->id();
