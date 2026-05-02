@@ -1,0 +1,261 @@
+
+.booking-page {
+    position: relative;
+    min-height: calc(100vh - 80px);
+    background: url('../img/bg-booking.png') center center / cover no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem 4rem;
+}
+
+.booking-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(9, 26, 46, 0.52);
+    z-index: 1;
+}
+
+.booking-container,
+.booking-panel,
+.booking-ad {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1160px;
+}
+
+.booking-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+
+.booking-back {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+}
+
+.booking-back:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.booking-header h2 {
+    margin: 0;
+    font-size: clamp(1.9rem, 2.8vw, 2.5rem);
+    font-weight: 600;
+}
+
+.booking-panel {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 0;
+    background: transparent;
+    margin-bottom: 1.75rem;
+}
+
+.booking-form-row {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 3fr) 100px;
+    gap: 1rem;
+    align-items: end;
+    padding: 1.25rem;
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 1.5rem;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.16);
+}
+
+.booking-field {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.booking-field--wide {
+    width: 100%;
+}
+
+.booking-field__label {
+    font-size: 0.85rem;
+    color: #999;
+    font-weight: 500;
+}
+
+.booking-input {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    background: #fff;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.booking-input img {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.booking-input input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.booking-search-button {
+    width: 100%;
+    height: 60px;
+    border-radius: 0.75rem;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    font-size: 1rem;
+}
+
+.booking-search-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.booking-ad {
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.16);
+}
+
+.booking-ad img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+@media (max-width: 992px) {
+    .booking-form-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .booking-page {
+        padding: 2rem 0.75rem 3rem;
+    }
+
+    .booking-header {
+        margin-bottom: 1.25rem;
+    }
+
+    .booking-form-row {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 0.75rem;
+    }
+}
+}
+
+@media (max-width: 576px) {
+    .booking-page {
+        padding: 1.5rem 0.75rem 2.5rem;
+    }
+
+    .booking-searchbar {
+        padding: 0.75rem;
+    }
+}
+
+.popup-block {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: #fcfcfc;
+    border: 1px solid #e3e3e3;
+}
+
+.popup-block h4 {
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+    color: #222;
+}
+
+.popup-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.popup-row--bottom {
+    margin-bottom: 1.5rem;
+}
+
+.label-side {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.label-side span {
+    font-weight: 600;
+    color: #222;
+}
+
+.custom-icon {
+    width: 24px;
+    height: 24px;
+}
+
+#popup-tanggal input,
+#popup-calender-quest input {
+    margin-bottom: 1rem;
+}
+
+#popup-tanggal button,
+#popup-calender-quest button {
+    width: 100%;
+}
+
+.booking-text {
+    color: #5e5e5e;
+    line-height: 1.6;
+}
+
+@media (max-width: 767px) {
+    .booking-row {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-card-mini {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .booking-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .booking-card {
+        padding: 1.5rem;
+    }
+
+    .booking-row {
+        gap: 0.75rem;
+    }
+}
+

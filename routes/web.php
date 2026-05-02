@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('landing');
 
+Route::get('/booking', function () {
+    return view('booking');
+})->name('booking');
+
 /*
 |--------------------------------------------------------------------------
 | AUTH

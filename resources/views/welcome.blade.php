@@ -60,7 +60,7 @@
                     Selamat datang di website Roomly, dimana kamu bisa memesan kamar yang mewah dan elegan. 
                     Yang pastinya cocok untuk melepas penat Anda, bahkan keluarga dan pasangan Anda.
                 </p>
-                <a href="#" class="btn btn-gold btn-lg px-5">BOOK NOW</a>
+                <a href="{{ route('booking') }}" class="btn btn-gold btn-lg px-5">BOOK NOW</a>
                 
                 <div class="hero-divider"></div>
 
