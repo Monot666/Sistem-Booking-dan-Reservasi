@@ -2,18 +2,51 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\Resource;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ResourceController extends Controller {
-    public function index() { 
-        $resources = Resource::where('is_active', true)->get();
-        return view('resources.index', compact('resources'));
+    public function index(Request $request) { 
+        $resources = Resource::where('is_active', true);
+
+        if ($request->filled('guests')) {
+            $resources->where('capacity', '>=', (int) $request->guests);
+        }
+
+        if ($request->filled('checkin') && $request->filled('checkout')) {
+            try {
+                $checkin = Carbon::parse($request->checkin)->startOfDay();
+                $checkout = Carbon::parse($request->checkout)->endOfDay();
+
+                $resources->whereDoesntHave('bookings', function ($query) use ($checkin, $checkout) {
+                    $query->where('status', '!=', 'cancelled')
+                        ->where(function ($query) use ($checkin, $checkout) {
+                            $query->where('start_time', '<', $checkout)
+                                  ->where('end_time', '>', $checkin);
+                        });
+                });
+            } catch (\Exception $e) {
+                // invalid date format, ignore availability filter
+            }
+        }
+
+        $resources = $resources->get();
+
+        return view('user.component.index', [
+            'resources' => $resources,
+            'checkin' => $request->checkin,
+            'checkout' => $request->checkout,
+            'guests' => $request->guests,
+            'rooms' => $request->rooms,
+        ]);
     }
 
     public function show(Resource $resource) { 
-        return view('resources.show', compact('resource'));
+        return view('user.component.show', compact('resource'));
     }
+
 
     public function store(Request $request) {
         $data = $request->validate([
@@ -30,13 +63,6 @@ class ResourceController extends Controller {
             'message' => 'Resource created successfully',
             'data' => $resource
         ], 201);
-    }
-
-    public function show(Resource $resource) { 
-        return response()->json([
-            'message' => 'Success',
-            'data' => $resource
-        ], 200);
     }
 
     public function update(Request $request, Resource $resource) {

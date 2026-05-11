@@ -17,9 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 })->name('landing');
 
-Route::get('/booking', function () {
-    return view('booking');
-})->name('booking');
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +39,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
+
+    // booking page (harus terdaftar supaya route('booking') di welcome berfungsi)
+    Route::get('/booking', [\App\Http\Controllers\ResourceController::class, 'index'])->name('booking');
+
 
     // PROFILE
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
@@ -62,11 +65,11 @@ Route::middleware('auth')->group(function () {
     });
 
     // RESOURCES & BOOKINGS
-    Route::get('/resources', [\App\Http\Controllers\ResourceController::class, 'index'])->name('resources.index');
+    Route::get('/component', [\App\Http\Controllers\ResourceController::class, 'index'])->name('resources.index');
     Route::get('/resources/{resource}', [\App\Http\Controllers\ResourceController::class, 'show'])->name('resources.show');
-    Route::get('/bookings', [\App\Http\Controllers\BookingController::class, 'index'])->name('bookings.index');
-    Route::get('/bookings/{id}', [\App\Http\Controllers\BookingController::class, 'show'])->name('bookings.show');
-    Route::post('/bookings', [\App\Http\Controllers\BookingController::class, 'store'])->name('bookings.store');
+    Route::get('/booking', [\App\Http\Controllers\BookingController::class, 'index'])->name('bookings.index');
+    Route::get('/user/booking/{id}', [\App\Http\Controllers\BookingController::class, 'show'])->name('bookings.show');
+    Route::post('/booking', [\App\Http\Controllers\BookingController::class, 'store'])->name('bookings.store');
 
     // Admin only Resource management
     Route::middleware('admin')->group(function () {

@@ -144,8 +144,11 @@ function initializeSearchButton() {
 function handleSearch() {
     const dateRange = document.getElementById('date-range').value;
     const guestRoom = document.getElementById('guest-room').value;
+    const checkinInput = document.getElementById('checkin');
+    const checkoutInput = document.getElementById('checkout');
+    const guestsInput = document.getElementById('guests');
+    const roomsInput = document.getElementById('rooms');
 
-    // Basic validation
     if (!dateRange || dateRange === '') {
         alert('Please select check-in and check-out dates.');
         return;
@@ -156,12 +159,52 @@ function handleSearch() {
         return;
     }
 
-    // Here you would typically submit the form or redirect to search results
-    // For now, just show the selected values
-    alert(`Searching for bookings:\nDates: ${dateRange}\nGuests & Rooms: ${guestRoom}`);
+    const dates = parseDateRange(dateRange);
+    if (!dates || dates.length !== 2) {
+        alert('Please select a valid date range.');
+        return;
+    }
 
-    // Example: redirect to search results page
-    // window.location.href = `/search?dates=${encodeURIComponent(dateRange)}&guests=${encodeURIComponent(guestRoom)}`;
+    const checkin = formatDateISO(dates[0]);
+    const checkout = formatDateISO(dates[1]);
+    if (!checkin || !checkout) {
+        alert('Unable to parse selected dates.');
+        return;
+    }
+
+    const guestsMatch = guestRoom.match(/(\d+)\s*Adult/);
+    const roomsMatch = guestRoom.match(/(\d+)\s*Room/);
+
+    if (!guestsMatch || !roomsMatch) {
+        alert('Please select a valid number of guests and rooms.');
+        return;
+    }
+
+    checkinInput.value = checkin;
+    checkoutInput.value = checkout;
+    guestsInput.value = guestsMatch[1];
+    roomsInput.value = roomsMatch[1];
+
+    document.getElementById('booking-search-form').submit();
+}
+
+function parseDateRange(dateRange) {
+    const regex = /(\d{1,2}\s+[A-Za-z]+\s+\d{4})/g;
+    const matches = [...dateRange.matchAll(regex)].map(match => match[1]);
+    if (matches.length === 2) {
+        return matches;
+    }
+
+    const parts = dateRange.split(/\s*(?:to|-)\s*/i);
+    return parts.length === 2 ? parts : null;
+}
+
+function formatDateISO(dateString) {
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) {
+        return null;
+    }
+    return date.toISOString().split('T')[0];
 }
 
 // Utility functions
