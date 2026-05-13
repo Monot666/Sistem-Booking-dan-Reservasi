@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\AdminController\TesterController;
 use App\Http\Controllers\CardController;
@@ -41,7 +42,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
 
     // booking page (harus terdaftar supaya route('booking') di welcome berfungsi)
-    Route::get('/booking', [\App\Http\Controllers\ResourceController::class, 'index'])->name('booking');
+    Route::get('/booking', [BookingController::class, 'index'])->name('booking');
 
 
     // PROFILE
