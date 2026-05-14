@@ -98,12 +98,47 @@
 
 <section class="py-5 bg-white text-center">
     <div class="container py-4">
-        <h2 class="section-title font-serif mb-5 text-dark">Magnificent hotel building</h2>
+        <h2 class="section-title font-serif mb-5 text-dark">Wide Choice of Hotels</h2>
         <div class="row g-4">
-            <div class="col-md-3 hotel-card"><img src="{{ asset('assets/img/fave_hotel 1.png') }}" alt="Hotel 1"></div>
-            <div class="col-md-3 hotel-card"><img src="{{ asset('assets/img/hotel_aston 1.png') }}" alt="Hotel 2"></div>
-            <div class="col-md-3 hotel-card"><img src="{{ asset('assets/img/novotel 1.png') }}" alt="Hotel 3"></div>
-            <div class="col-md-3 hotel-card"><img src="{{ asset('assets/img/Rectangle 1.png') }}" alt="Hotel 4"></div>
+            <!-- Gambar 1 -->
+            <div class="col-md-3 hotel-card">
+                <div class="hotel-wrapper">
+                    <img src="{{ asset('assets/img/hotel_aston 1.png') }}" alt="Gedung">
+                    <div class="hotel-overlay">
+                        <div class="hotel-text">Gedung Hotel</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gambar 2 -->
+            <div class="col-md-3 hotel-card">
+                <div class="hotel-wrapper">
+                    <img src="{{ asset('assets/img/aston-solo-hotel.jpg') }}" alt="Kamar">
+                    <div class="hotel-overlay">
+                        <div class="hotel-text">Kamar Hotel</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gambar 3 -->
+            <div class="col-md-3 hotel-card">
+                <div class="hotel-wrapper">
+                    <img src="{{ asset('assets/img/1d3b438d_z.jpg') }}" alt="Lobby">
+                    <div class="hotel-overlay">
+                        <div class="hotel-text">Lobby Hotel</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gambar 4 -->
+            <div class="col-md-3 hotel-card">
+                <div class="hotel-wrapper">
+                    <img src="{{ asset('assets/img/images (1).jpg') }}" alt="Swimming Pool">
+                    <div class="hotel-overlay">
+                        <div class="hotel-text">Swimming Pool</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
