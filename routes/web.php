@@ -3,12 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\AdminController\TesterController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\EwalletController;
 use App\Http\Controllers\ResourceController;
-use App\Http\Controllers\BookingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,9 +38,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
 
     // --- BOOKING SYSTEM ---
-    // Nama rute 'booking' mengarah ke halaman booking step
-    Route::get('/booking', fn () => view('user.booking'))->name('booking');
-
+    // Saya mengambil versi 'Incoming Change' karena biasanya logic booking ada di Controller
+    Route::get('/booking', [BookingController::class, 'index'])->name('booking');
     Route::post('/booking', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/user/booking/{id}', [BookingController::class, 'show'])->name('bookings.show');
 
@@ -76,7 +75,7 @@ Route::middleware('auth')->group(function () {
     | ADMIN ONLY
     |--------------------------------------------------------------------------
     */
-   Route::middleware('admin')->group(function () {
+    Route::middleware('admin')->group(function () {
         // Management Resource oleh Admin
         Route::post('/resources', [ResourceController::class, 'store'])->name('resources.store');
         Route::put('/resources/{resource}', [ResourceController::class, 'update'])->name('resources.update');

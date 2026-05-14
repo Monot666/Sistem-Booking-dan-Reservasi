@@ -45,7 +45,7 @@
                     </div>
                 @else
                     {{-- Tampilan saat User BELUM Login --}}
-                    <a href="{{ route('login') }}" class="btn text-white me-3 text-decoration-none">Login</a> 
+                    <a href="{{ route('login') }}" class="btn-login-outline me-3">Login</a> 
                     <a href="{{ route('register') }}" class="btn btn-gold">Register</a>
                 @endauth
             </div>
@@ -55,13 +55,15 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="hero-title font-serif">Welcome To <br> Roomly</h1>
-                <p class="text-white-50 fs-5 mb-4" style="max-width: 600px;">
-                    Selamat datang di website Roomly, dimana kamu bisa memesan kamar yang mewah dan elegan. 
-                    Yang pastinya cocok untuk melepas penat Anda, bahkan keluarga dan pasangan Anda.
-                </p>
-                <a href="{{ route('booking') }}" class="btn btn-gold btn-lg px-5">BOOK NOW</a>
-                
+                <div class="hero-text-wrapper">
+                    <h1 class="hero-title font-serif">Welcome To <br> Roomly</h1>
+                    <p class="hero-description">
+                        Selamat datang di website Roomly, dimana kamu bisa memesan kamar yang mewah dan elegan. 
+                        Yang pastinya cocok untuk melepas penat Anda, bahkan keluarga dan pasangan Anda.
+                    </p>
+                    <a href="{{ url('/booking') }}" class="btn btn-gold btn-lg px-5">BOOK NOW</a>
+                </div>
+
                 <div class="hero-divider"></div>
 
                 <div class="row g-0">
@@ -98,10 +100,45 @@
     <div class="container py-4">
         <h2 class="section-title font-serif mb-5 text-dark">Wide Choice of Hotels</h2>
         <div class="row g-4">
-            <div class="col-md-3 hotel-card"><img src="{{ asset('assets/img/fave_hotel 1.png') }}" alt="Hotel 1"></div>
-            <div class="col-md-3 hotel-card"><img src="{{ asset('assets/img/hotel_aston 1.png') }}" alt="Hotel 2"></div>
-            <div class="col-md-3 hotel-card"><img src="{{ asset('assets/img/novotel 1.png') }}" alt="Hotel 3"></div>
-            <div class="col-md-3 hotel-card"><img src="{{ asset('assets/img/Rectangle 1.png') }}" alt="Hotel 4"></div>
+            <!-- Gambar 1 -->
+            <div class="col-md-3 hotel-card">
+                <div class="hotel-wrapper">
+                    <img src="{{ asset('assets/img/hotel_aston 1.png') }}" alt="Gedung">
+                    <div class="hotel-overlay">
+                        <div class="hotel-text">Gedung Hotel</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gambar 2 -->
+            <div class="col-md-3 hotel-card">
+                <div class="hotel-wrapper">
+                    <img src="{{ asset('assets/img/aston-solo-hotel.jpg') }}" alt="Kamar">
+                    <div class="hotel-overlay">
+                        <div class="hotel-text">Kamar Hotel</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gambar 3 -->
+            <div class="col-md-3 hotel-card">
+                <div class="hotel-wrapper">
+                    <img src="{{ asset('assets/img/1d3b438d_z.jpg') }}" alt="Lobby">
+                    <div class="hotel-overlay">
+                        <div class="hotel-text">Lobby Hotel</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gambar 4 -->
+            <div class="col-md-3 hotel-card">
+                <div class="hotel-wrapper">
+                    <img src="{{ asset('assets/img/images (1).jpg') }}" alt="Swimming Pool">
+                    <div class="hotel-overlay">
+                        <div class="hotel-text">Swimming Pool</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
