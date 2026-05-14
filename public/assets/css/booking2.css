@@ -1,0 +1,91 @@
+.booking-wrapper {
+    padding: 30px;
+    background-color: #fff;
+}
+
+.booking-card {
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.room-main-title {
+    color: #e69138;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+/* Kunci utama agar tidak berantakan ke bawah */
+.booking-layout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.room-preview {
+    flex: 1;
+    min-width: 280px;
+}
+
+.room-pricing {
+    flex: 2.5;
+}
+
+.img-container img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.amenities-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #555;
+    margin: 15px 0;
+}
+
+/* Styling Tabel */
+.pricing-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pricing-table th {
+    border: 1px solid #f0f0f0;
+    padding: 12px;
+    font-size: 0.9rem;
+    background: #fafafa;
+}
+
+.pricing-table td {
+    border: 1px solid #f0f0f0;
+    padding: 15px;
+    vertical-align: top;
+}
+
+.opt-desc small { display: block; color: #888; font-size: 0.7rem; }
+.opt-desc strong { display: block; margin: 5px 0; font-size: 1rem; }
+.opt-desc p { font-size: 0.85rem; margin: 0; color: #666; }
+.non-ref { color: #d9534f; font-size: 0.8rem; }
+
+.price-col {
+    color: #e69138;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.btn-select {
+    background: #f4b400;
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.text-center { text-align: center; }

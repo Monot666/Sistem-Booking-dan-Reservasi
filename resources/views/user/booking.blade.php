@@ -12,7 +12,7 @@
         </div>
 
         <div class="booking-panel">
-            <form id="booking-search-form" method="GET" action="{{ route('resources.index') }}">
+            <form id="booking-search-form" method="GET" action="{{ route('login.action') }}">
                 <div class="booking-form-row">
                     <div class="booking-field booking-field--wide">
                         <label class="booking-field__label" for="date-range">Check-in & Check-out Dates</label>

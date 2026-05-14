@@ -34,7 +34,7 @@ class ResourceController extends Controller {
 
         $resources = $resources->get();
 
-        return view('user.component.index', [
+        return view('user.booking-component.booking2', [
             'resources' => $resources,
             'checkin' => $request->checkin,
             'checkout' => $request->checkout,
@@ -44,7 +44,7 @@ class ResourceController extends Controller {
     }
 
     public function show(Resource $resource) { 
-        return view('user.component.show', compact('resource'));
+        return view('user.bookingdua.show', compact('resource'));
     }
 
 

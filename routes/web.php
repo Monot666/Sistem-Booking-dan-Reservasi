@@ -7,48 +7,51 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\AdminController\TesterController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\EwalletController;
+use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\BookingController;
 
 /*
 |--------------------------------------------------------------------------
-| PUBLIC
+| PUBLIC ROUTES
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
     return view('welcome');
 })->name('landing');
 
-
-
-
 /*
 |--------------------------------------------------------------------------
-| AUTH
+| AUTH ROUTES
 |--------------------------------------------------------------------------
 */
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'loginAction'])->name('login.action');
-
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'registerAction'])->name('register.action');
-
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| PROTECTED
+| PROTECTED ROUTES (Harus Login)
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
 
-    // booking page (harus terdaftar supaya route('booking') di welcome berfungsi)
-    Route::get('/booking', [\App\Http\Controllers\ResourceController::class, 'index'])->name('booking');
+    // --- BOOKING SYSTEM ---
+    // Nama rute 'booking' mengarah ke halaman booking step
+    Route::get('/booking', fn () => view('user.booking'))->name('booking');
 
+    Route::post('/booking', [BookingController::class, 'store'])->name('bookings.store');
+    Route::get('/user/booking/{id}', [BookingController::class, 'show'])->name('bookings.show');
 
-    // PROFILE
+    // --- PROFILE ---
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/orders', function () {
+        return view('profile.orders');
+    })->name('profile.orders');
 
-    // KARTU
+    // --- KARTU ---
     Route::prefix('profile/cards')->group(function () {
         Route::get('/', [CardController::class, 'index'])->name('profile.cards');
         Route::post('/', [CardController::class, 'store'])->name('profile.cards.store');
@@ -56,7 +59,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [CardController::class, 'destroy'])->name('profile.cards.destroy');
     });
 
-    // E-WALLET (FIX CONSISTENT)
+    // --- E-WALLET ---
     Route::prefix('profile/e-wallet')->group(function () {
         Route::get('/', [EwalletController::class, 'index'])->name('profile.ewallet');
         Route::post('/', [EwalletController::class, 'store'])->name('profile.ewallet.store');
@@ -64,45 +67,35 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [EwalletController::class, 'destroy'])->name('profile.ewallet.destroy');
     });
 
-    // RESOURCES & BOOKINGS
-    Route::get('/component', [\App\Http\Controllers\ResourceController::class, 'index'])->name('resources.index');
-    Route::get('/resources/{resource}', [\App\Http\Controllers\ResourceController::class, 'show'])->name('resources.show');
-    Route::get('/booking', [\App\Http\Controllers\BookingController::class, 'index'])->name('bookings.index');
-    Route::get('/user/booking/{id}', [\App\Http\Controllers\BookingController::class, 'show'])->name('bookings.show');
-    Route::post('/booking', [\App\Http\Controllers\BookingController::class, 'store'])->name('bookings.store');
-
-    // Admin only Resource management
-    Route::middleware('admin')->group(function () {
-        Route::post('/resources', [\App\Http\Controllers\ResourceController::class, 'store'])->name('resources.store');
-        Route::put('/resources/{resource}', [\App\Http\Controllers\ResourceController::class, 'update'])->name('resources.update');
-        Route::delete('/resources/{resource}', [\App\Http\Controllers\ResourceController::class, 'destroy'])->name('resources.destroy');
-    });
-
-    // OTHER
-    Route::get('/profile/orders', function () {
-        return view('profile.orders');
-    })->name('profile.orders');
+    // --- RESOURCES ---
+    Route::get('/component', [ResourceController::class, 'index'])->name('bookingdua.index');
+    Route::get('/resources/{resource}', [ResourceController::class, 'show'])->name('bookingdua.show');
 
     /*
     |--------------------------------------------------------------------------
-    | ADMIN
+    | ADMIN ONLY
     |--------------------------------------------------------------------------
     */
-    Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+   Route::middleware('admin')->group(function () {
+        // Management Resource oleh Admin
+        Route::post('/resources', [ResourceController::class, 'store'])->name('resources.store');
+        Route::put('/resources/{resource}', [ResourceController::class, 'update'])->name('resources.update');
+        Route::delete('/resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy');
 
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-
-        // TAMBAHAN (biar sidebar tidak error)
-        Route::get('/rooms', fn() => view('admin.rooms'))->name('rooms');
-        Route::get('/bookings', fn() => view('admin.bookings'))->name('bookings');
-        Route::get('/guests', fn() => view('admin.guests'))->name('guests');
-        Route::get('/finance', fn() => view('admin.finance'))->name('finance');
+        // Admin Panel Group
+        Route::prefix('admin')->name('admin.')->group(function () {
+            Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+            Route::get('/rooms', fn() => view('admin.rooms'))->name('rooms');
+            Route::get('/bookings', fn() => view('admin.bookings'))->name('bookings');
+            Route::get('/guests', fn() => view('admin.guests'))->name('guests');
+            Route::get('/finance', fn() => view('admin.finance'))->name('finance');
+        });
     });
 });
 
 /*
 |--------------------------------------------------------------------------
-| TEST
+| TESTING ROUTES
 |--------------------------------------------------------------------------
 */
 Route::get('/send-tester', [TesterController::class, 'send']);

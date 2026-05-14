@@ -164,12 +164,12 @@
                                 <div class="d-flex gap-3 text-center">
                                     <div class="date-box">
                                         <small class="text-muted d-block">CHECK-IN</small>
-                                        <span class="fw-bold h4">{{ $booking->start_time->format('d') }}</span>
+                                        <span class="fw-bold h4">{{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y') }}</span>
                                         <small>{{ $booking->start_time->format('M Y') }}<br>{{ $booking->start_time->format('D') }}</small>
                                     </div>
                                     <div class="date-box">
                                         <small class="text-muted d-block">CHECK-OUT</small>
-                                        <span class="fw-bold h4">{{ $booking->end_time->format('d') }}</span>
+                                        <span class="fw-bold h4">{{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y') }}</span>
                                         <small>{{ $booking->end_time->format('M Y') }}<br>{{ $booking->end_time->format('D') }}</small>
                                     </div>
                                 </div>
