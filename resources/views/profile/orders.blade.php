@@ -121,7 +121,7 @@
         <div class="col-md-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3>My Bookings</h3>
-                <a href="{{ route('resources.index') }}" class="btn btn-gold">
+                <a href="{{ route('booking') }}" class="btn btn-gold">
                     <i class="fas fa-plus"></i> New Booking
                 </a>
             </div>
@@ -132,7 +132,7 @@
                         <i class="fas fa-calendar-alt"></i>
                         <h5>No Bookings Yet</h5>
                         <p>Start your journey by booking a room today!</p>
-                        <a href="{{ route('resources.index') }}" class="btn btn-gold mt-3">Browse Rooms</a>
+                <a href="{{ route('booking') }}" class="btn btn-gold mt-3">Browse Rooms</a>
                     </div>
                 </div>
             @else
@@ -185,7 +185,7 @@
                             <div class="d-flex justify-content-between align-items-end mt-2">
                                 <div class="price-tag">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</div>
                                 <div class="d-flex gap-2">
-                                    <a href="{{ route('bookings.show', $booking->id) }}" class="btn btn-maps px-3 py-1">
+                                    <a href="{{ route('user.booking') }}" class="btn btn-maps px-3 py-1">
                                         View Details
                                     </a>
                                     @if($booking->status === 'pending')

@@ -34,17 +34,30 @@ class ResourceController extends Controller {
 
         $resources = $resources->get();
 
-        return view('user.booking-component.booking2', [
+        // UI booking flow: tampilkan halaman pilih kamar (pilih-kamar.blade.php)
+        // kalau perlu data resources, kirimkan sebagai variabel.
+        return view('user.pilih-kamar', [
             'resources' => $resources,
             'checkin' => $request->checkin,
             'checkout' => $request->checkout,
             'guests' => $request->guests,
             'rooms' => $request->rooms,
         ]);
+
     }
 
     public function show(Resource $resource) { 
-        return view('user.bookingdua.show', compact('resource'));
+        $user = auth()->user();
+
+        // Minimal data agar view "Review Pemesanan" tidak error.
+        // Sesuaikan tax/price jika nanti sudah ada perhitungan real dari booking.
+        $bookingData = [
+            'room_title' => $resource->name,
+            'price' => $resource->price_per_hour,
+            'tax' => 0,
+        ];
+
+        return view('user.review-pemesanan', compact('resource', 'user', 'bookingData'));
     }
 
 

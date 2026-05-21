@@ -20,7 +20,8 @@ class BookingController extends Controller {
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('profile.orders', compact('bookings'));
+        // /user/booking harus menampilkan halaman user booking
+        return view('user.booking', compact('bookings'));
     }
 
     /**

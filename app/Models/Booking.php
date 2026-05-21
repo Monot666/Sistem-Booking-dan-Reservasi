@@ -18,4 +18,8 @@ class Booking extends Model {
     public function payments() {
         return $this->hasMany(Payment::class);
     }
+
+    protected $table = 'bookings';
+
 }
+

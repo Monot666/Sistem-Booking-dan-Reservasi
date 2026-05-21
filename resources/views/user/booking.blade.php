@@ -12,7 +12,7 @@
         </div>
 
         <div class="booking-panel">
-            <form id="booking-search-form" method="GET" action="{{ route('login.action') }}">
+            <form id="booking-search-form" method="GET" action="{{ route('bookingdua.index') }}">
                 <div class="booking-form-row">
                     <div class="booking-field booking-field--wide">
                         <label class="booking-field__label" for="date-range">Check-in & Check-out Dates</label>
@@ -34,7 +34,7 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-gold booking-search-button" type="button">
+                    <button class="btn btn-gold booking-search-button" type="submit">
                         <i class="fa-solid fa-search"></i>
                         <span>Search Available</span>
                     </button>

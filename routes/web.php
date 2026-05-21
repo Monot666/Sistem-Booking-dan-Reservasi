@@ -39,7 +39,8 @@ Route::middleware('auth')->group(function () {
 
     // --- BOOKING SYSTEM ---
     // Saya mengambil versi 'Incoming Change' karena biasanya logic booking ada di Controller
-    Route::get('/booking', [BookingController::class, 'index'])->name('booking');
+Route::get('/booking', [BookingController::class, 'index'])->name('booking');
+Route::get('/user/booking', [BookingController::class, 'index'])->name('user.booking');
     Route::post('/booking', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/user/booking/{id}', [BookingController::class, 'show'])->name('bookings.show');
 
@@ -66,9 +67,18 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [EwalletController::class, 'destroy'])->name('profile.ewallet.destroy');
     });
 
-    // --- RESOURCES ---
-    Route::get('/component', [ResourceController::class, 'index'])->name('bookingdua.index');
-    Route::get('/resources/{resource}', [ResourceController::class, 'show'])->name('bookingdua.show');
+    //pilih kamar
+    Route::get('/component', [\App\Http\Controllers\PilihKamarController::class, 'index'])
+        ->name('bookingdua.index');
+
+    Route::get('/pilih-kamar', [\App\Http\Controllers\PilihKamarController::class, 'index'])
+        ->name('pilih-kamar');
+
+
+    Route::get('/resources/{resource}', [ResourceController::class, 'show'])
+        ->name('pilih-kamar.show');
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -82,18 +92,23 @@ Route::middleware('auth')->group(function () {
         Route::delete('/resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy');
 
         // Admin Panel Group
+        // USER PAYMENT
+        Route::post('/payments', [\App\Http\Controllers\PembayaranController::class, 'store'])->name('payments.store');
+
+        // ADMIN ONLY
         Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-            Route::get('/rooms', fn() => view('admin.rooms'))->name('rooms');
+            Route::get('/rooms', fn() => view('admin.kamar'))->name('rooms');
             Route::get('/bookings', fn() => view('admin.bookings'))->name('bookings');
             Route::get('/guests', fn() => view('admin.guests'))->name('guests');
-            Route::get('/finance', fn() => view('admin.finance'))->name('finance');
+            Route::get('/finance', [\App\Http\Controllers\Admin\AdminPaymentController::class, 'index'])->name('finance');
         });
     });
 });
 
 /*
-|--------------------------------------------------------------------------
+|--------------------------------------------------------
+------------------
 | TESTING ROUTES
 |--------------------------------------------------------------------------
 */
