@@ -275,3 +275,44 @@ body {
 }
 
 .footer { background-color: #0a0a0a; padding: 40px 0; border-top: 2px solid var(--gold-primary); }
+
+.partner-box {
+    width: 100%;
+    aspect-ratio: 16 / 10; /* Mengunci bentuk proporsi semua kotak agar kembar */
+    background-color: #ffffff;
+    border-radius: 8px; /* Sudut melengkung yang konsisten */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px; /* Menjaga logo tidak menempel ke pinggir kotak */
+    overflow: hidden;
+    }
+
+.partner-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Menjaga logo tetap proporsional tanpa merusak/membuatnya gepeng */
+}
+
+.footer h5.fw-bold {
+    font-size: 16px !important; /* Ubah angka ini (misal: 14px untuk lebih kecil, 18px untuk lebih besar) */
+    letter-spacing: 0.5px;      /* Memberikan sedikit jarak antar huruf agar elegan */
+}
+
+/* Mengatur Ukuran Link Menu (Cara Pesan, Hubungi Kami, dll) */
+.footer ul.list-unstyled,
+.footer .list-unstyled li a {
+    font-size: 14px !important; /* Ubah angka ini sesuai selera kamu */
+}
+
+/* Mengatur Ukuran Teks Sosial Media (Facebook, Instagram, dll) */
+.footer .list-unstyled li {
+    font-size: 14px !important; /* Pastikan ukurannya senada dengan link menu */
+    color: #ffffff;
+}
+
+/* Mengatur Ukuran Icon Sosmed di Samping Teks */
+.footer .list-unstyled li img {
+    width: 18px !important;
+    height: auto;
+}
