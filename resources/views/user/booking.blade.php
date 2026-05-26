@@ -15,7 +15,7 @@
             <form id="booking-search-form" method="GET" action="{{ route('bookingdua.index') }}">
                 <div class="booking-form-row">
                     <div class="booking-field booking-field--wide">
-                        <label class="booking-field__label" for="date-range">Check-in & Check-out Dates</label>
+                        <label class="booking-field__label" for="date-range">Tanggal Check-in & Check-out</label>
                         <div class="booking-input">
                             <img src="{{ asset('assets/img/icons/calender.svg') }}" alt="Calendar">
                             <input type="text" id="date-range" readonly placeholder="12 Mar 2026 - 13 Mar 2026">
@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="booking-field booking-field--wide">
-                        <label class="booking-field__label" for="guest-room">Guests and Rooms</label>
+                        <label class="booking-field__label" for="guest-room">Tamu dan Kamar</label>
                         <div class="booking-input">
                             <img src="{{ asset('assets/img/icons/user.svg') }}" alt="Guests">
                             <input type="text" id="guest-room" readonly placeholder="2 Adult(s), 0 Child, 1 Room">
@@ -36,7 +36,7 @@
 
                     <button class="btn btn-gold booking-search-button" type="submit">
                         <i class="fa-solid fa-search"></i>
-                        <span>Search Available</span>
+                        <span>Cari Kamar</span>
                     </button>
                 </div>
             </form>
