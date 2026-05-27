@@ -1,0 +1,170 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background: #0f0f0f;
+    color: white;
+    position: fixed;
+    padding: 20px;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.menu {
+    list-style: none;
+}
+
+.menu-item a {
+    display: flex;
+    padding: 10px;
+    color: #ccc;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+.menu-item a:hover {
+    background: #1f1f1f;
+}
+
+.menu-item.active a {
+    background: #f4a62a;
+    color: black;
+}
+
+/* MAIN */
+.main-content {
+    margin-left: 240px;
+    padding: 20px;
+    background: #f5f6fa;
+    min-height: 100vh;
+}
+
+/* CARDS */
+.cards {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    flex: 1;
+}
+
+.card.highlight {
+    border: 2px solid #3b82f6;
+}
+
+.up {
+    color: green;
+    font-size: 12px;
+}
+
+.down {
+    color: red;
+    font-size: 12px;
+}
+
+/* CHARTS */
+.charts {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.chart-box {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.fake-chart {
+    height: 200px;
+    background: linear-gradient(to top, #ddd, #fff);
+    border-radius: 10px;
+}
+
+.fake-chart.bar {
+    background: repeating-linear-gradient(
+        to right,
+        #f4a62a,
+        #f4a62a 20px,
+        transparent 20px,
+        transparent 40px
+    );
+}
+
+/* BOTTOM */
+.bottom {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.recent {
+    flex: 2;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.booking {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    background: #f4a62a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.confirmed {
+    background: #fde68a;
+}
+
+.occupancy {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.circle {
+    width: 120px;
+    height: 120px;
+    background: conic-gradient(#f4a62a 75%, #eee 0);
+    border-radius: 50%;
+    margin: 20px auto;
+}
