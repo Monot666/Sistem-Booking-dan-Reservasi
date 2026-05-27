@@ -1,0 +1,117 @@
+/* ================= CSS HALAMAN HUBUNGI KAMI ================= */
+
+/* Bagian Header Emas */
+.header-hubungi {
+    background-color: #df9e45; /* Warna emas Roomly */
+    padding: 50px 20px 100px 20px; /* Padding bawah lebih besar untuk efek melengkung */
+    color: white;
+}
+
+/* Kontainer Utama (Melengkung & Menimpa Header) */
+.content-hubungi {
+    background-color: #ffffff;
+    border-radius: 40px 40px 0 0; /* Lengkungan di kiri & kanan atas */
+    margin-top: -50px; /* Menarik kontainer ke atas agar menimpa header emas */
+    position: relative;
+    z-index: 2;
+    padding: 60px 0;
+    min-height: 500px;
+}
+
+/* Judul Kiri */
+.contact-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 15px;
+}
+
+/* Kartu FAQ (Kiri) */
+.faq-card {
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.faq-wrapper {
+    background-color: #fdfaf6; /* Warna krem tipis khas Roomly */
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden; /* Menjaga agar konten dropdown tetap di dalam lengkungan */
+}
+
+.faq-item {
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    color: #df9e45;
+}
+
+/* Animasi rotasi panah lambat */
+.faq-item i {
+    color: #999;
+    transition: transform 0.3s ease;
+}
+
+/* Ini kunci rahasianya! 
+   Saat dropdown terbuka (aria-expanded="true"), panah muter ke bawah 
+   dan teks berubah menjadi tebal & warna emas.
+*/
+.faq-item[aria-expanded="true"] {
+    color: #df9e45;
+    font-weight: 600;
+}
+
+.faq-item[aria-expanded="true"] i {
+    transform: rotate(90deg); /* Memutar chevron-right menjadi ke bawah */
+    color: #df9e45;
+}
+
+/* Desain teks jawaban di dalam dropdown */
+.faq-answer {
+    padding: 0 20px 15px 20px;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    border-top: 1px solid rgba(223, 158, 69, 0.1);
+    margin-top: 5px;
+    padding-top: 10px;
+}
+
+.faq-item i {
+    color: #999;
+}
+
+/* Kartu Chat CS (Kanan) */
+.chat-card {
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.btn-chat {
+    background-color: #df9e45;
+    color: white;
+    width: 100%;
+    border-radius: 8px;
+    padding: 12px;
+    border: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-chat:hover {
+    background-color: #c78938;
+    color: white;
+}

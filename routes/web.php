@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminController\TesterController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\EwalletController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\PageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,8 +42,8 @@ Route::middleware('auth')->group(function () {
     // Saya mengambil versi 'Incoming Change' karena biasanya logic booking ada di Controller
 Route::get('/booking', [BookingController::class, 'index'])->name('booking');
 Route::get('/user/booking', [BookingController::class, 'index'])->name('user.booking');
-    Route::post('/booking', [BookingController::class, 'store'])->name('bookings.store');
-    Route::get('/user/booking/{id}', [BookingController::class, 'show'])->name('bookings.show');
+Route::post('/booking', [BookingController::class, 'store'])->name('bookings.store');
+Route::get('/user/booking/{id}', [BookingController::class, 'show'])->name('bookings.show');
 
     // --- PROFILE ---
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
@@ -76,7 +77,16 @@ Route::get('/user/booking', [BookingController::class, 'index'])->name('user.boo
 
 
     Route::get('/resources/{resource}', [ResourceController::class, 'show'])
+
         ->name('pilih-kamar.show');
+
+// Footer
+Route::get('/cara-pesan', [PageController::class, 'caraPesan'])->name('cara-pesan');
+Route::get('/hubungi-kami', [App\Http\Controllers\PageController::class, 'hubungiKami'])->name('hubungi-kami');
+Route::get('/pusat-bantuan', [App\Http\Controllers\PageController::class, 'pusatBantuan'])->name('pusat-bantuan');
+Route::get('/tentang-kami', [App\Http\Controllers\PageController::class, 'tentangKami'])->name('tentang-kami');
+Route::get('/pemberitahuan-privasi', [App\Http\Controllers\PageController::class, 'privasi'])->name('privasi');
+Route::get('/syarat-ketentuan', [App\Http\Controllers\PageController::class, 'syaratKetentuan'])->name('syarat-ketentuan');
 
 
 
