@@ -1,0 +1,277 @@
+:root {
+    --gold-primary: #d48c34;
+    --dark-overlay: rgba(0, 0, 0, 0.65);
+    --line-color: rgba(193, 154, 107, 0.4);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f5f5;
+}
+
+.font-serif { font-family: 'Playfair Display', serif; }
+
+/* --- Navbar --- */
+.navbar {
+    width: 100%;
+    height: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--gold-primary);
+}
+
+/* --- Sinkronisasi Ukuran Tombol Navbar --- */
+.btn-login-outline, 
+.navbar .btn-gold {
+    width: 95px !important;
+    padding: 7px 0 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px !important; 
+    border-radius: 6px !important;
+    text-align: center;
+    display: inline-block;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+/* Tombol Login (Outline) */
+.btn-login-outline {
+    background-color: transparent !important;
+    --gold-primary: #d48c34;
+    border: 1px solid var(--gold-primary) !important;
+    color: var(--gold-primary) !important;
+}
+
+.btn-login-outline:hover {
+    background-color: var(--gold-primary) !important;
+    color: #ffffff !important;
+}
+
+/* Tombol Register  */
+.navbar .btn-gold {
+    background: linear-gradient(135deg, #c5a002 0%, #7e6301 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    line-height: 1.5; 
+}
+
+.navbar .btn-gold:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+/* --- Posisi & Ukuran Logo --- */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    padding: 0 !important; 
+    height: 100%; 
+}
+
+.navbar-brand img {
+    height: 95px;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand img:hover {
+    transform: scale(1.05);
+}
+/* NAVBAR END */
+
+/* --- 1. Gaya Dasar Tombol Gold Mewah (Berlaku untuk SEMUA) --- */
+.btn-gold {
+    background: linear-gradient(135deg, #c5a002 0%, #7e6301 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none !important;
+    text-align: center;
+}
+
+/* --- 2. Khusus Tombol "BOOK NOW" --- */
+.hero-section .btn-gold {
+    padding: 15px 50px !important;
+    font-size: 1.1rem !important;
+    width: auto !important;
+}
+
+/* --- 3. Khusus Tombol di Navbar (Kecil & Seragam) --- */
+.navbar .btn-gold, 
+.btn-login-outline {
+    width: 130px !important;
+    padding: 10px 0 !important;
+    font-size: 14px !important;
+}
+
+/* --- 4. Efek Hover --- */
+.btn-gold:hover {
+    filter: brightness(1.1);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    color: #ffffff !important;
+}
+
+/* --- Profile Nav Styling --- */
+.user-profile-nav {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px 18px;
+    border-radius: 50px;
+    border: 1px solid rgba(212, 140, 52, 0.3);
+    transition: 0.3s;
+}
+
+.profile-link {
+    transition: 0.3s;
+}
+
+.profile-link:hover {
+    opacity: 0.8;
+}
+
+.avatar-circle {
+    width: 38px;
+    height: 38px;
+    background-color: var(--gold-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(212, 140, 52, 0.4);
+}
+
+.btn-logout-minimal {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.1rem;
+    transition: 0.3s;
+}
+
+.btn-logout-minimal:hover {
+    color: #ff4d4d;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    min-height: 100vh;
+    background: linear-gradient(var(--dark-overlay), var(--dark-overlay)), url('../img/bg.png');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    padding-top: 140px;
+}
+
+/* Teks Hero */
+.hero-text-wrapper {
+    margin-bottom: 50px;
+}
+
+.hero-title {
+    font-size: 4.6rem !important;
+    color: var(--gold-primary);
+    line-height: 1.1 !important;
+    margin-bottom: 20px !important;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+.hero-description {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 0.9rem !important;
+    line-height: 1.8 !important;
+    max-width: 550px;
+    margin-bottom: 40px !important;
+    letter-spacing: 0.5px;
+}
+
+.hero-title { font-size: 5rem; color: var(--gold-primary); line-height: 1.1; }
+.hero-divider { width: 100%; height: 1px; background-color: var(--line-color); margin: 40px 0; }
+
+
+.room-type-item {
+    text-align: center;
+    padding: 0 25px;
+}
+
+.room-type-item .icon-container {
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.room-type-item h6 { color: var(--gold-primary); font-weight: 700; margin-top: 10px; }
+.room-type-item p { color: rgba(212, 140, 52, 0.7); font-size: 0.8rem; }
+.divider-left { border-left: 1px solid var(--line-color); }
+
+.hotel-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; transition: 0.3s; }
+.hotel-card img:hover { transform: scale(1.03); }
+
+/* --- Styling Hover Hotel --- */
+.hotel-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.hotel-wrapper img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+/* Layer Hitam Transparan */
+.hotel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+/* Teks Keterangan */
+.hotel-text {
+    color: var(--gold-primary);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    transform: translateY(20px);
+    transition: transform 0.4s ease;
+}
+
+/* --- Efek Saat Hover --- */
+.hotel-wrapper:hover img {
+    transform: scale(1.1);
+}
+
+.hotel-wrapper:hover .hotel-overlay {
+    opacity: 1;
+}
+
+.hotel-wrapper:hover .hotel-text {
+    transform: translateY(0);
+}
+
+.footer { background-color: #0a0a0a; padding: 40px 0; border-top: 2px solid var(--gold-primary); }

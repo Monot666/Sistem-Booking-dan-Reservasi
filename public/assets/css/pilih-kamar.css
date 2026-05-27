@@ -1,0 +1,191 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+}
+
+body {
+    background-color: #fcfcfc;
+}
+
+/* NAVBAR */
+.room-navbar {
+    background-color: #e49a43; /* Menyesuaikan warna orange-coklat figma */
+    padding: 18px 40px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.back-link {
+    color: #1e293b;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* CONTAINER UTAMA */
+.room-main-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* CARD LAYOUT */
+.room-card {
+    background: #ffffff;
+    border: 1px solid #f1f3f5;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    margin-bottom: 35px;
+}
+
+.room-title {
+    color: #e49a43;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+/* FLEXBODY KOLOM KANAN KIRI */
+.room-card-body {
+    display: flex;
+    gap: 30px;
+}
+
+/* KOLOM KIRI: DETAIL */
+.room-details-column {
+    flex: 1;
+    max-width: 300px;
+}
+
+.room-image-wrapper {
+    width: 100%;
+    height: 180px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.room-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.room-spec {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 15px;
+}
+
+.room-facilities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 15px;
+    margin-bottom: 20px;
+}
+
+.facility-item {
+    font-size: 12px;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.see-detail-link {
+    color: #e49a43;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* KOLOM KANAN: TABEL */
+.room-table-column {
+    flex: 3;
+}
+
+.prices-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #edf2f7;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.prices-table th {
+    background-color: #fafafa;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #edf2f7;
+    border-right: 1px solid #edf2f7;
+}
+
+.prices-table td {
+    padding: 20px 14px;
+    border-bottom: 1px solid #edf2f7;
+    border-right: 1px solid #edf2f7;
+    vertical-align: top;
+}
+
+.prices-table th:last-child, 
+.prices-table td:last-child {
+    border-right: none;
+}
+
+/* DETAIL ISI TABEL */
+.option-info .sub-title {
+    font-size: 10px;
+    color: #94a3b8;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.option-info h4 {
+    font-size: 15px;
+    color: #1e293b;
+    margin-bottom: 6px;
+}
+
+.bed-info, .policy-info {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.price-amount {
+    color: #ff8a00;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+/* UTILITY CLASSES */
+.text-center { text-align: center; }
+.text-xl { font-size: 20px; }
+.text-muted { color: #94a3b8; }
+
+/* TOMBOL CHOOSE */
+.btn-choose {
+    background-color: #e49a43;
+    color: white;
+    border: none;
+    padding: 8px 24px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-choose:hover {
+    background-color: #d2842c;
+}

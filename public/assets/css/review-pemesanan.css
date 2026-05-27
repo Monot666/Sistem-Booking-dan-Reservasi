@@ -1,0 +1,287 @@
+:root {
+    --primary-color: #333333;
+    --brand-gold: #e19e47;
+    --bg-light: #fdfdfd;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+    --text-muted: #666666;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f7f9fa;
+    color: var(--primary-color);
+    margin: 0;
+    padding: 30px 20px;
+}
+
+/* Header Judul Utama */
+.page-header {
+    max-width: 1200px;
+    margin: 0 auto 25px auto;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.back-arrow {
+    font-size: 1.8rem;
+    color: var(--brand-gold);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.page-header h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0;
+    color: #4a4a4a;
+}
+
+/* Main Layout Grid */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 7fr 4fr;
+    gap: 25px;
+    align-items: start;
+}
+
+@media (max-width: 992px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Card Wrapper */
+.card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 25px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 6px;
+    color: #2d3748;
+}
+
+.card-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    margin-top: 0;
+}
+
+/* Input Form Row Grid */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group.full-width {
+    grid-column: span 2;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2d3748;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background-color: #f8fafc;
+    box-sizing: border-box;
+    color: #333;
+}
+
+.form-control::placeholder {
+    color: #cbd5e1;
+}
+
+.input-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* Checkbox Items */
+.checkbox-single {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #2d3748;
+    margin-top: 15px;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+    margin-top: 15px;
+}
+
+@media (max-width: 600px) {
+    .checkbox-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* Kebijakan Items */
+.policy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.policy-item h4 {
+    margin: 0 0 4px 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.policy-item p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Info Checkin Box (Sidebar) */
+.checkin-checkout-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.time-box h5 {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.time-box p {
+    margin: 4px 0 2px 0;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.time-box span {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.arrow-divider {
+    font-size: 1.2rem;
+    color: #a0aec0;
+}
+
+.room-meta-icons {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 12px 0;
+}
+
+/* Total Price Highlight Box dengan Gradasi Hijau */
+.total-highlight-box {
+    background: linear-gradient(to right, #ffffff 40%, #4ade80 100%);
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.total-left h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #2d3748;
+}
+
+.total-left p {
+    margin: 2px 0 0 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.total-right {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #166534;
+}
+
+/* Submit Button Emas */
+.btn-submit-booking {
+    background-color: var(--brand-gold);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 25px; /* Bulat lonjong sesuai mockup */
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 20px;
+}
+
+.btn-submit-booking:hover {
+    background-color: #cd8732;
+}
+
+.submit-footer-notice {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.4;
+    margin-top: 15px;
+}
+
+/* Banner Space */
+.banner-container {
+    margin-top: 20px;
+}
+
+.banner-container img {
+    width: 100%;
+    border-radius: 8px;
+    display: block;
+    margin-bottom: 15px;
+}

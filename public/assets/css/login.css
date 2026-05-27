@@ -1,0 +1,142 @@
+/* public/assets/css/login.css */
+
+.login-wrapper {
+    min-height: 100vh;
+    /* Background dengan overlay yang lebih cantik */
+    background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 100%), 
+                url("../img/bg login.png") no-repeat center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+}
+
+.btn-back {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    color: #C19A6B;
+    font-size: 1.5rem;
+    transition: 0.3s;
+}
+
+.btn-back:hover {
+    color: #fff;
+    transform: translateX(-5px);
+}
+
+/* Efek Glassmorphism yang ditingkatkan */
+.glass-card {
+    background: rgba(255, 255, 255, 0.08); /* Sedikit lebih terang */
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    /* Border gradient supaya terlihat seperti pinggiran kaca */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    padding: 50px 40px;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+}
+
+.login-logo {
+    width: 80px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+}
+
+.form-group-custom {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.form-group-custom label {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    display: block;
+    color: rgba(255,255,255,0.9);
+    font-weight: 500;
+}
+
+/* Input Styling */
+.input-dark {
+    background: rgba(0, 0, 0, 0.4) !important; /* Tidak hitam pekat agar tetap ada nuansa glass */
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    color: white !important;
+    border-radius: 12px;
+    padding: 12px 15px;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.input-dark:focus {
+    border-color: #C19A6B !important;
+    background: rgba(0, 0, 0, 0.6) !important;
+    box-shadow: 0 0 15px rgba(193, 154, 107, 0.3);
+    outline: none;
+}
+
+/* Container & Icon Show Password */
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    color: rgba(255,255,255,0.5);
+    transition: 0.3s;
+    z-index: 10;
+}
+
+.toggle-password:hover {
+    color: #C19A6B;
+}
+
+/* Tambahkan padding kanan pada input password agar teks tidak tertutup ikon */
+#password {
+    padding-right: 45px;
+}
+
+.btn-login-submit {
+    background: linear-gradient(45deg, #d68f37, #a8855a);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.btn-login-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+    filter: brightness(1.1);
+}
+
+.reg-link {
+    font-size: 0.9rem;
+    margin-top: 30px;
+    color: rgba(255,255,255,0.7);
+}
+
+.reg-link a {
+    color: #C19A6B; /* Mengikuti warna tema emas/coklat */
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.reg-link a:hover {
+    text-decoration: underline;
+}
