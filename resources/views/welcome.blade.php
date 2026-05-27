@@ -98,7 +98,7 @@
 
 <section class="py-5 bg-white text-center">
     <div class="container py-4">
-        <h2 class="section-title font-serif mb-5 text-dark">magnificent building</h2>
+        <h2 class="section-title font-serif mb-5 text-dark">Magnificent Building</h2>
         <div class="row g-4">
             <!-- Gambar 1 -->
             <div class="col-md-3 hotel-card">
@@ -171,11 +171,11 @@
     </div>
 </section>
 
-<footer class="footer py-5" style="background-color: #8C5E23; color: #ffffff;">
+<footer class="footer py-4" style="background-color: #8C5E23; color: #ffffff;">
     <div class="container">
         <div class="row g-4">
             <div class="col-lg-4 col-md-6">
-                <div class="footer-logo mb-4">
+                <div class="footer-logo mb-2">
                     <img src="{{ asset('assets/img/icons/logo.svg') }}" alt="Roomly Logo" width="170">
                 </div>
                 
@@ -268,7 +268,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-between">
+            <div class="col-lg-4 col-md-6">
                 <div class="mb-4">
                     <h5 class="fw-bold mb-3 text-white">Tentang Roomly</h5>
                     <ul class="list-unstyled">
