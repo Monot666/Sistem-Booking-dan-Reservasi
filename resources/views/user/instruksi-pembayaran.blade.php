@@ -15,7 +15,6 @@
     $bank = strtoupper(request('bank', 'BCA'));
     $mart = strtoupper(request('mart', 'ALFAMART'));
 
-    // Penentuan generator nomor invoice tiruan sesuai metode klik user
     $nomorKodeBayar = "8837308775931586"; 
     if ($method === 'VA') {
         if ($bank === 'MANDIRI') $nomorKodeBayar = "8950808775931586";
@@ -28,10 +27,15 @@
         $nomorKodeBayar = "RM-987759315";
     } elseif ($method === 'ATM') {
         $nomorKodeBayar = "KODE-ATM-9875";
-    } else {
-        $nomorKodeBayar = "PROCESSED-BY-GATEWAY";
     }
 @endphp
+
+<div class="page-header" style="padding: 20px; display: flex; align-items: center; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+    <a href="{{ route('user.pembayaran', ['id' => session('current_booking_id', 1)]) }}" class="back-arrow" style="text-decoration: none; color: #333; font-size: 1.2rem; margin-right: 15px;">
+        <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <h1 style="font-size: 1.2rem; margin: 0;">Selesaikan Pembayaran</h1>
+</div>
 
 <div class="status-page-wrapper">
     <div class="status-container">
@@ -44,20 +48,19 @@
             <h1 class="main-status-title">Selesaikan Pembayaran</h1>
             <p class="status-subtitle">Kamar pilihan Anda telah dikunci. Silakan lakukan penyelesaian transaksi sesuai detail petunjuk tagihan di bawah ini.</p>
 
-            <!-- KOTAK CORES: REKENING / VA / KODE TAGIHAN -->
             <div class="payment-code-highlight-box">
                 @if($method === 'MINIMARKET')
                     <span class="code-label">KODE PEMBAYARAN KASIR ({{ $mart }})</span>
                 @elseif($method === 'TRANSFER')
-                    <span class="code-label">NOMOR REKENING MANUAL (MANDIRI)</span>
+                    <span class="code-label">NOMOR REKENING MANUAL</span>
                 @elseif($method === 'VA')
                     <span class="code-label">NOMOR VIRTUAL ACCOUNT ({{ $bank }})</span>
                 @else
-                    <span class="code-label">KODE INVOICE TRANSAKSI ({{ $method }})</span>
+                    <span class="code-label">KODE INVOICE ({{ $method }})</span>
                 @endif
                 
                 <div class="code-numeric-flex">
-                    <input type="text" id="target-pay-code" value="{{ $nomorKodeBayar }}" readonly>
+                    <input type="text" id="target-pay-code" value="{{ $nomorKodeBayar }}" readonly style="width: 100%; border: none; font-weight: bold; font-size: 1.2rem;">
                     <button type="button" class="btn-copy-code" onclick="copyPaymentCode()">
                         <i class="fa-regular fa-copy"></i> Salin
                     </button>
@@ -65,13 +68,11 @@
                 <p class="merchant-notice">Total Tagihan: <strong>Rp. 535.000</strong></p>
             </div>
 
-            <!-- DEADLINE BANNER TIMER -->
             <div class="deadline-timer-banner">
                 <div class="dl-left"><i class="fa-regular fa-clock"></i> Batas Waktu Penyelesaian</div>
                 <div class="dl-right" id="deadline-clock">23:59:59</div>
             </div>
 
-            <!-- DETAIL STEP INSTRUKSI BERDASARKAN METODE -->
             <div class="guide-steps-box">
                 <h3><i class="fa-solid fa-list-check"></i> Panduan Langkah Transfer:</h3>
                 <ol>
@@ -79,30 +80,24 @@
                         <li>Kunjungi gerai <strong>{{ $mart }}</strong> terdekat sebelum waktu batas habis.</li>
                         <li>Sampaikan pada kasir: <em>"Mau bayar tagihan transaksi Roomly"</em>.</li>
                         <li>Tunjukkan <strong>Kode Pembayaran</strong> di atas ke kasir.</li>
-                        <li>Bayar tunai/debit sebesar Rp 535.000 dan simpan struk fisik dari kasir.</li>
                     @elseif($method === 'TRANSFER')
-                        <li>Lakukan transfer manual ke Rekening Mandiri Roomly: <strong>1234567890987</strong>.</li>
-                        <li>Pastikan nama penerima: <strong>PT Roomly Global Indonesia</strong>.</li>
-                        <li>Masukkan nominal presisi sebesar Rp 535.000.</li>
-                        <li>Simpan bukti transfer untuk divalidasi oleh tim keuangan Roomly.</li>
+                        <li>Transfer ke Rekening Mandiri: <strong>1234567890987</strong>.</li>
+                        <li>Pastikan nominal presisi sebesar Rp 535.000.</li>
                     @elseif($method === 'VA')
-                        <li>Buka M-Banking atau kunjungi mesin ATM bank <strong>{{ $bank }}</strong> Anda.</li>
-                        <li>Masuk ke menu <strong>Transfer > Virtual Account</strong>.</li>
-                        <li>Masukkan nomor VA resmi Anda: <strong>{{ $nomorKodeBayar }}</strong>.</li>
-                        <li>Konfirmasi nama penerima (<strong>Roomly - Dimas S.</strong>) lalu masukkan PIN transaksi Anda.</li>
+                        <li>Buka M-Banking/ATM <strong>{{ $bank }}</strong>.</li>
+                        <li>Pilih menu <strong>Transfer > Virtual Account</strong>.</li>
+                        <li>Masukkan nomor: <strong>{{ $nomorKodeBayar }}</strong>.</li>
                     @else
-                        <li>Gunakan kode invoice transaksi untuk menyelesaikan pemesanan lewat kanal merchant terpilih.</li>
-                        <li>Pastikan jumlah nominal dana tidak kurang dan tidak lebih dari Rp 535.000.</li>
+                        <li>Selesaikan pembayaran melalui metode yang Anda pilih.</li>
                     @endif
                 </ol>
             </div>
 
-            <!-- ACTION REDIRECT BUTTONS -->
             <div class="action-footer-group" style="margin-top: 25px;">
-                <a href="{{ route('user.pembayaran.sukses', ['method' => $method]) }}" class="btn-status-primary" style="background-color: #10b981; border-color: #10b981;">
+                <a href="{{ route('user.pembayaran.sukses', ['method' => $method]) }}" class="btn-status-primary" style="display:block; text-align:center; padding: 12px; background-color: #10b981; color: #fff; text-decoration: none; border-radius: 8px;">
                     <i class="fa-solid fa-circle-check"></i> Saya Sudah Bayar
                 </a>
-                <a href="{{ route('booking') }}" class="btn-status-secondary">Bayar Nanti (Ke Beranda)</a>
+                <a href="{{ route('booking') }}" style="display:block; text-align:center; margin-top: 10px; color: #666; text-decoration: none;">Bayar Nanti (Ke Beranda)</a>
             </div>
 
         </div>
@@ -113,12 +108,10 @@
     function copyPaymentCode() {
         const copyText = document.getElementById("target-pay-code");
         copyText.select();
-        copyText.setSelectionRange(0, 99999);
         navigator.clipboard.writeText(copyText.value);
         alert("Berhasil disalin: " + copyText.value);
     }
 
-    // Hitung mundur tiruan 24 Jam
     let hours = 23, minutes = 59, seconds = 59;
     setInterval(() => {
         seconds--;

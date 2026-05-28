@@ -12,7 +12,7 @@
 <body>
 
 <div class="page-header">
-    <a href="javascript:void(0)" onclick="window.history.back()" class="back-arrow">&#10094;</a>
+    <a href="{{ route('pilih-kamar') }}" class="back-arrow">&#10094;</a>
     <h1>Review Pemesanan</h1>
 </div>
 
