@@ -1,98 +1,89 @@
-<div class="glass-card p-3 shadow-sm" style="border-radius: 15px; background: white; border: 1px solid #f0f0f0; min-height: 100%;">
-    <div class="text-center mb-4 mt-2">
-        <div class="position-relative d-inline-block">
-            <div class="rounded-circle d-flex align-items-center justify-content-center shadow-sm" 
-                 style="width: 110px; height: 110px; background-color: #f3a94a; color: white; border: 4px solid #fff; overflow: hidden;">
-                
-                @if(Auth::user()->image)
-                    <img src="{{ asset('storage/'.Auth::user()->image) }}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
-                @else
-                    <span style="font-size: 35px; font-weight: bold;">JS</span>
-                @endif
-            </div>
+<div class="profile-card">
+    <div class="avatar-section">
+        <div class="avatar-wrapper">
+            <img id="avatar-preview" 
+                 src="{{ Auth::user()->profile_photo_url ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=f3f4f6&color=333' }}" 
+                 alt="Foto Profil"
+                 onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=333'">
+            
+            <label for="avatar_upload" class="camera-btn" title="Ubah Foto">
+                <i class="fas fa-camera"></i>
+            </label>
 
-            <div class="position-absolute bottom-0 end-0 bg-dark rounded-circle d-flex align-items-center justify-content-center shadow" 
-                 style="width: 30px; height: 30px; border: 2px solid white; cursor: pointer;">
-                <i class="fas fa-camera text-white" style="font-size: 12px;"></i>
-            </div>
+            <input type="file" id="avatar_upload" name="avatar" class="d-none" accept="image/*" form="profile-form" onchange="previewAvatar(event)">
         </div>
     </div>
 
-    <ul class="nav flex-column profile-menu">
-        <li class="nav-item mb-1">
-            <a href="{{ route('profile.cards') }}" 
-               class="nav-link d-flex align-items-center {{ Request::is('profile/cards*') ? 'active-orange' : 'text-dark' }}" 
-               style="padding: 12px 15px; border-radius: 8px; text-decoration: none; transition: 0.3s;">
-                <i class="fas fa-credit-card me-3" style="width: 20px;"></i> 
-                <span>Kartu Saya</span>
+    <ul class="sidebar-menu">
+        <li>
+            <a href="{{ route('profile.cards') }}" class="{{ request()->routeIs('profile.cards') ? 'active' : '' }}">
+                <i class="fa-regular fa-credit-card"></i> Kartu Saya
             </a>
         </li>
-        
-        <li class="nav-item mb-1">
-            <a href="{{ route('profile.ewallet') }}" 
-               class="nav-link d-flex align-items-center {{ Request::is('profile/e-wallet*') ? 'active-orange' : 'text-dark' }}" 
-               style="padding: 12px 15px; border-radius: 8px; text-decoration: none; transition: 0.3s;">
-                <i class="fas fa-wallet me-3" style="width: 20px;"></i> 
-                <span>E-Wallet Saya</span>
+        <li>
+            <a href="{{ route('profile.ewallet') }}" class="{{ request()->routeIs('profile.ewallet') ? 'active' : '' }}">
+                <i class="fa-solid fa-wallet"></i> E-Wallet Saya
             </a>
         </li>
-
-        <li class="nav-item mb-1">
-            <a href="{{ route('profile.orders') }}" 
-               class="nav-link d-flex align-items-center {{ Request::is('profile/orders*') ? 'active-orange' : 'text-dark' }}" 
-               style="padding: 12px 15px; border-radius: 8px; text-decoration: none; transition: 0.3s;">
-                <i class="fas fa-file-alt me-3" style="width: 20px;"></i> 
-                <span>Pesanan Saya</span>
+        <li>
+            <a href="{{ route('profile.orders') }}" class="{{ request()->routeIs('profile.orders') ? 'active' : '' }}">
+                <i class="fa-solid fa-file-invoice"></i> Pesanan Saya
             </a>
         </li>
-
-        <li class="nav-item mb-1">
-            <a href="#" 
-               class="nav-link d-flex align-items-center text-dark" 
-               style="padding: 12px 15px; border-radius: 8px; text-decoration: none; transition: 0.3s;">
-                <i class="fas fa-undo me-3" style="width: 20px;"></i> 
-                <span>Refunds</span>
+        <li>
+            <a href="{{ route('profile.refunds') ?? '#' }}" class="{{ request()->routeIs('profile.refunds') ? 'active' : '' }}">
+                <i class="fa-solid fa-hand-holding-dollar"></i> Refunds
             </a>
         </li>
-
-        <li class="nav-item mb-1">
-            <a href="{{ route('profile') }}" 
-               class="nav-link d-flex align-items-center {{ Request::is('profile') ? 'active-orange' : 'text-dark' }}" 
-               style="padding: 12px 15px; border-radius: 8px; text-decoration: none; transition: 0.3s;">
-                <i class="fas fa-user-cog me-3" style="width: 20px;"></i> 
-                <span>My Account</span>
+        <li>
+            <a href="{{ route('profile') }}" class="{{ request()->routeIs('profile') ? 'active' : '' }}">
+                <i class="fa-solid fa-gear"></i> My Account
             </a>
         </li>
-
-        <li class="nav-item mt-3">
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="nav-link d-flex align-items-center text-danger border-0 bg-transparent w-100" 
-                        style="padding: 12px 15px; border-radius: 8px; transition: 0.3s;">
-                    <i class="fas fa-power-off me-3" style="width: 20px;"></i> 
-                    <span>Log Out</span>
-                </button>
-            </form>
+        <li>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                <i class="fa-solid fa-power-off"></i> Log Out
+            </button>
         </li>
     </ul>
 </div>
 
-<style>
-    /* Style untuk menu yang aktif */
-    .active-orange {
-        background-color: #f3a94a !important;
-        color: white !important;
-        font-weight: 500;
-        box-shadow: 0 4px 10px rgba(243, 169, 74, 0.2);
-    }
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            
+            <div class="modal-header border-0 pb-0">
+                <h5 class="fw-bold mb-0">Konfirmasi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body text-center pt-2 pb-4">
+                <i class="fa-solid fa-arrow-right-from-bracket mb-3" style="font-size: 3.5rem; color: #df9e38;"></i>
+                <p class="mb-0" style="font-size: 1.1rem; color: #4b5563;">Apakah Anda yakin ingin logout?</p>
+            </div>
+            
+            <div class="modal-footer border-0 pt-0 d-flex justify-content-center gap-2 pb-4">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal" style="border-radius: 6px; font-weight: 500;">Batal</button>
+                
+                <form action="{{ route('logout') }}" method="POST" class="m-0">
+                    @csrf
+                    <button type="submit" class="btn px-4" style="background-color: #ef4444; color: white; border-radius: 6px; font-weight: 500;">Ya, Keluar</button>
+                </form>
+            </div>
 
-    /* Hover effect untuk menu yang tidak aktif */
-    .nav-link:hover:not(.active-orange):not(.text-danger) {
-        background-color: #fff5e6;
-        color: #f3a94a !important;
-    }
+        </div>
+    </div>
+</div>
 
-    .nav-link i {
-        font-size: 1.1rem;
+<script>
+    function previewAvatar(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('avatar-preview').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
     }
-</style>
+</script>

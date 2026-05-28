@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+@endpush
+
 @section('content')
 @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3" style="z-index: 9999;" role="alert">
@@ -26,23 +30,19 @@
                 <a href="{{ url('/send-tester') }}" class="btn btn-outline-light me-3 btn-sm">
                     📧 Kirim Report User
                 </a>
+                
                 @auth
-                    {{-- Tampilan saat User SUDAH Login --}}
-                    <div class="user-profile-nav d-flex align-items-center">
-                        <a href="{{ route('profile') }}" class="d-flex align-items-center text-decoration-none profile-link">
-                            <span class="text-white me-3 fw-light">Hi, {{ Auth::user()->name }}</span>
-                            <div class="avatar-circle">
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                            </div>
-                        </a>
-                        
-                        <form action="{{ route('logout') }}" method="POST" class="ms-3">
-                            @csrf
-                            <button type="submit" class="btn-logout-minimal" title="Logout">
-                                <i class="fas fa-sign-out-alt"></i>
-                            </button>
-                        </form>
-                    </div>
+                    {{-- Tampilan Profil Profesional saat User SUDAH Login --}}
+                    <a href="{{ route('profile') }}" class="nav-profile-pill">
+                        <span class="nav-greeting">Hi, {{ strtok(Auth::user()->name, " ") }}</span>
+                        <div class="nav-avatar">
+                            @if(Auth::user()->profile_photo_url)
+                                <img src="{{ Auth::user()->profile_photo_url }}" alt="Avatar">
+                            @else
+                                <span>{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
+                            @endif
+                        </div>
+                    </a>
                 @else
                     {{-- Tampilan saat User BELUM Login --}}
                     <a href="{{ route('login') }}" class="btn-login-outline me-3">Login</a> 
@@ -139,8 +139,49 @@
     </div>
 </section>
 
+<section class="py-2 bg-white">
+    <div class="container">
+        
+        <!-- Benefit Boxes -->
+        <div class="row g-4 mt-2">
+            <div class="col-md-4">
+                <div class="benefit-box">
+                    <div class="benefit-icon"><i class="fa-regular fa-calendar-check"></i></div>
+                    <div class="benefit-text">
+                        <h6>Refund & reschedule mudah</h6>
+                        <p>Lebih mudah batalkan atau ubah pesanan hotel kamu</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="benefit-box">
+                    <div class="benefit-icon"><i class="fa-solid fa-car-side"></i></div>
+                    <div class="benefit-text">
+                        <h6>Perjalanan yang Mudah</h6>
+                        <p>Keuntungan eksklusif, diskon, dan fasilitas tambahan</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="benefit-box">
+                    <div class="benefit-icon"><i class="fa-solid fa-headset"></i></div>
+                    <div class="benefit-text">
+                        <h6>Pusat bantuan 24/7</h6>
+                        <p>Hubungi kami kapan pun Anda membutuhkan bantuan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-banner">
+            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80" alt="Banner Iklan Roomly">
+        </div>
+
+    </div>
+</section>
+
 <section class="py-5 bg-white text-center">
-    <div class="container pb-5">
+    <div class="container pb-2">
         <h2 class="section-title font-serif mb-5 text-dark">Hotels Services</h2>
         <div class="row g-5">
             @php
@@ -163,6 +204,42 @@
                 <p class="text-muted small px-3">{{ $service['desc'] }}</p>
             </div>
             @endforeach
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-white">
+    <div class="container pb-5">
+        <h4 class="extra-section-title">Kami tidak hanya menyediakan kamar</h4>
+        <div class="row g-4">
+            
+            <div class="col-md-4">
+                <a href="https://example.com/wisata" target="_blank" class="extra-card">
+                    <img src="{{ asset('assets/img/wisata-solo.png') }}" alt="Wisata Solo">
+                    <div class="extra-overlay">
+                        <h6>Wisata terbaik di Solo</h6>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="https://example.com/resep" target="_blank" class="extra-card">
+                    <img src="{{ asset('assets/img/makanan-oriental.png') }}" alt="Makanan">
+                    <div class="extra-overlay">
+                        <h6>Resep makanan enak</h6>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="https://example.com/ikan" target="_blank" class="extra-card">
+                    <img src="{{ asset('assets/img/ikan-sapu.png') }}" alt="Menimbun Ikan">
+                    <div class="extra-overlay">
+                        <h6>Cara menimbun ikan</h6>
+                    </div>
+                </a>
+            </div>
+
         </div>
     </div>
 </section>

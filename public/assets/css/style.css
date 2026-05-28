@@ -126,48 +126,6 @@ body {
     color: #ffffff !important;
 }
 
-/* --- Profile Nav Styling --- */
-.user-profile-nav {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 6px 18px;
-    border-radius: 50px;
-    border: 1px solid rgba(212, 140, 52, 0.3);
-    transition: 0.3s;
-}
-
-.profile-link {
-    transition: 0.3s;
-}
-
-.profile-link:hover {
-    opacity: 0.8;
-}
-
-.avatar-circle {
-    width: 38px;
-    height: 38px;
-    background-color: var(--gold-primary);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    box-shadow: 0 0 10px rgba(212, 140, 52, 0.4);
-}
-
-.btn-logout-minimal {
-    background: none;
-    border: none;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 1.1rem;
-    transition: 0.3s;
-}
-
-.btn-logout-minimal:hover {
-    color: #ff4d4d;
-}
-
 /* --- Hero Section --- */
 .hero-section {
     min-height: 100vh;
@@ -202,7 +160,6 @@ body {
 
 .hero-title { font-size: 5rem; color: var(--gold-primary); line-height: 1.1; }
 .hero-divider { width: 100%; height: 1px; background-color: var(--line-color); margin: 40px 0; }
-
 
 .room-type-item {
     text-align: center;
@@ -278,36 +235,36 @@ body {
 
 .partner-box {
     width: 100%;
-    aspect-ratio: 16 / 10; /* Mengunci bentuk proporsi semua kotak agar kembar */
+    aspect-ratio: 16 / 10;
     background-color: #ffffff;
-    border-radius: 8px; /* Sudut melengkung yang konsisten */
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6px; /* Menjaga logo tidak menempel ke pinggir kotak */
+    padding: 6px;
     overflow: hidden;
-    }
+}
 
 .partner-box img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; /* Menjaga logo tetap proporsional tanpa merusak/membuatnya gepeng */
+    object-fit: contain;
 }
 
 .footer h5.fw-bold {
-    font-size: 14px !important; /* Ubah angka ini (misal: 14px untuk lebih kecil, 18px untuk lebih besar) */
-    letter-spacing: 0.5px;      /* Memberikan sedikit jarak antar huruf agar elegan */
+    font-size: 14px !important;
+    letter-spacing: 0.5px;
 }
 
-/* Mengatur Ukuran Link Menu (Cara Pesan, Hubungi Kami, dll) */
+/* Mengatur Ukuran Link Menu */
 .footer ul.list-unstyled,
 .footer .list-unstyled li a {
-    font-size: 14px !important; /* Ubah angka ini sesuai selera kamu */
+    font-size: 14px !important;
 }
 
-/* Mengatur Ukuran Teks Sosial Media (Facebook, Instagram, dll) */
+/* Mengatur Ukuran Teks Sosial Media */
 .footer .list-unstyled li {
-    font-size: 14px !important; /* Pastikan ukurannya senada dengan link menu */
+    font-size: 14px !important;
     color: #ffffff;
 }
 
@@ -316,4 +273,163 @@ body {
     width: 18px !important;
     height: auto;
 }
-.footer { background-color: #0a0a0a; padding: 40px 0; border-top: 2px solid var(--gold-primary); }
+
+/* ==========================================================================
+   TAMBAHAN BARU: Navbar Profile Pill, Benefit Boxes, Iklan Gambar, & Extra Cards
+   ========================================================================== */
+
+/* Styling untuk Navbar Profile Pill yang Profesional */
+.nav-profile-pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 5px 6px 5px 18px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.nav-profile-pill:hover {
+    background: rgba(0, 0, 0, 0.7);
+    border-color: var(--gold-primary);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.nav-greeting {
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.nav-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--gold-primary);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+}
+
+.nav-profile-pill:hover .nav-avatar {
+    border-color: #ffffff;
+}
+
+.nav-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Styling Benefit */
+.benefit-box {
+    border: 1px solid #9ca3af;
+    border-radius: 6px;
+    padding: 20px 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #fff;
+    text-align: left;
+    height: 100%;
+    transition: box-shadow 0.2s;
+}
+
+.benefit-box:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.benefit-icon {
+    font-size: 2rem;
+    color: #111827;
+}
+
+.benefit-text h6 {
+    font-weight: 700;
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+    color: #111827;
+}
+
+.benefit-text p {
+    font-size: 0.75rem;
+    color: #4b5563;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* --- Banner Iklan --- */
+.ad-banner {
+    width: 100%;
+    margin: 50px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    display: block;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.ad-banner img {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Extra Cards */
+.extra-section-title {
+    font-weight: 800;
+    text-align: left;
+    margin-bottom: 20px;
+    color: #111827;
+    font-size: 1.3rem;
+}
+
+.extra-card {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 180px;
+    display: block;
+    text-decoration: none;
+}
+
+.extra-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.extra-card:hover img {
+    transform: scale(1.05);
+}
+
+.extra-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.7) 100%);
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.extra-overlay h6 {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 0;
+    text-align: left;
+}

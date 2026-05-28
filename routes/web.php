@@ -10,7 +10,8 @@ use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PilihKamarController;
 use App\Http\Controllers\PembayaranController;
-use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\AdminPaymentController;
 use App\Http\Controllers\AdminController\TesterController;
 use App\Http\Controllers\user\PemesananController;
@@ -101,25 +102,40 @@ Route::middleware('auth')->group(function () {
     Route::get('/pilih-kamar', [PilihKamarController::class, 'index'])->name('pilih-kamar');
     Route::get('/resources/{resource}', [ResourceController::class, 'show'])->name('pilih-kamar.show');
 
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    
+    // Rute untuk halaman Orders
+    Route::get('/profile/orders', function () {
+        return view('profile.orders');
+    })->name('profile.orders');
+
+    // BARU: Rute untuk halaman Refunds
+    Route::get('/profile/refunds', function () {
+        return view('profile.refunds');
+    })->name('profile.refunds');
+
     /*
     |--------------------------------------------------------------------------
     | ADMIN ONLY
     |--------------------------------------------------------------------------
     */
-    Route::middleware('admin')->group(function () {
-        Route::post('/resources', [ResourceController::class, 'store'])->name('resources.store');
-        Route::put('/resources/{resource}', [ResourceController::class, 'update'])->name('resources.update');
-        Route::delete('/resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy');
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+    // Route Resource (ResourceController)
+    Route::post('/resources', [ResourceController::class, 'store'])->name('resources.store');
+    Route::put('/resources/{resource}', [ResourceController::class, 'update'])->name('resources.update');
+    Route::delete('/resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy');
 
-        Route::prefix('admin')->name('admin.')->group(function () {
-            Route::post('/payments', [PembayaranController::class, 'store'])->name('payments.store');
-            Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-            Route::get('/rooms', fn() => view('admin.kamar'))->name('rooms');
-            Route::get('/bookings', fn() => view('admin.bookings'))->name('bookings');
-            Route::get('/guests', fn() => view('admin.guests'))->name('guests');
-            Route::get('/finance', [AdminPaymentController::class, 'index'])->name('finance');
-        });
-    });
+    // Route Admin (Dashboard, Kamar, dll)
+    // Nama route di bawah ini otomatis menjadi: admin.dashboard, admin.kamar, dst.
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/kamar', [RoomController::class, 'index'])->name('kamar');
+    Route::get('/bookings', fn() => view('admin.bookings'))->name('bookings');
+    Route::get('/guests', fn() => view('admin.guests'))->name('guests');
+    Route::get('/finance', [AdminPaymentController::class, 'index'])->name('finance');
+    
+    Route::post('/payments', [PembayaranController::class, 'store'])->name('payments.store');
+});
 
 });
 
