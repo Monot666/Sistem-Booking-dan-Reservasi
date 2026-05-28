@@ -1,287 +1,406 @@
-:root {
-    --primary-color: #333333;
-    --brand-gold: #e19e47;
-    --bg-light: #fdfdfd;
-    --card-bg: #ffffff;
-    --border-color: #e2e8f0;
-    --text-muted: #666666;
-}
+/* ==========================================================================
+   REVIEW PEMESANAN STYLE SHEET - ROOMLY PREMIUM LAYOUT (COMPLETE V2)
+   ========================================================================== */
 
 body {
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f7f9fa;
-    color: var(--primary-color);
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #1a1f2c;
     margin: 0;
-    padding: 30px 20px;
+    padding: 0;
 }
 
-/* Header Judul Utama */
+/* HEADER ELEGAN */
 .page-header {
-    max-width: 1200px;
-    margin: 0 auto 25px auto;
+    background: #ffffff;
+    border-bottom: 1px solid #eef2f5;
+    padding: 16px 40px;
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.back-arrow {
-    font-size: 1.8rem;
-    color: var(--brand-gold);
+.page-header .back-arrow {
     text-decoration: none;
+    color: #e69c24;
+    font-size: 1.2rem;
     font-weight: bold;
+    transition: transform 0.2s;
+}
+
+.page-header .back-arrow:hover {
+    transform: translateX(-3px);
 }
 
 .page-header h1 {
-    font-size: 1.6rem;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 700;
     margin: 0;
-    color: #4a4a4a;
+    color: #1a1f2c;
+    letter-spacing: -0.3px;
 }
 
-/* Main Layout Grid */
+/* CONTAINER DUA KOLOM */
 .container {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.booking-layout {
     display: grid;
-    grid-template-columns: 7fr 4fr;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+/* KARTU FORMULIR (KOLOM KIRI) */
+.main-content {
+    display: flex;
+    flex-direction: column;
     gap: 25px;
-    align-items: start;
 }
 
-@media (max-width: 992px) {
-    .container {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Card Wrapper */
 .card {
-    background: var(--card-bg);
-    border-radius: 8px;
-    padding: 24px;
-    margin-bottom: 25px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #eef2f5;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    padding: 28px;
 }
 
 .card-title {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    margin-top: 0;
-    margin-bottom: 6px;
-    color: #2d3748;
+    color: #1a1f2c;
+    margin: 0 0 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .card-subtitle {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-bottom: 20px;
-    margin-top: 0;
+    font-size: 0.82rem;
+    color: #8c94a0;
+    margin: 0 0 24px 0;
+    font-weight: 400;
 }
 
-/* Input Form Row Grid */
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
+/* FORM CONTROLS */
 .form-group {
-    margin-bottom: 16px;
-}
-
-.form-group.full-width {
-    grid-column: span 2;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
+    color: #333d4e;
     margin-bottom: 8px;
-    color: #2d3748;
 }
 
 .form-control {
     width: 100%;
-    padding: 12px 14px;
-    font-size: 0.95rem;
-    border: 1px solid #cbd5e1;
+    padding: 11px 14px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    color: #1a1f2c;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 6px;
-    background-color: #f8fafc;
     box-sizing: border-box;
-    color: #333;
+    outline: none;
+    transition: border-color 0.2s;
 }
 
-.form-control::placeholder {
-    color: #cbd5e1;
+.form-control:focus {
+    border-color: #e69c24;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
 .input-desc {
     font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-top: 4px;
+    color: #a0aec0;
+    margin-top: 6px;
 }
 
-/* Checkbox Items */
 .checkbox-single {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
-    color: #2d3748;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: #4a5568;
+    cursor: pointer;
     margin-top: 15px;
+    font-weight: 500;
 }
 
+/* GRID CHECKBOX PERMINTAAN KHUSUS */
 .checkbox-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 18px;
-    margin-top: 15px;
-}
-
-@media (max-width: 600px) {
-    .checkbox-grid {
-        grid-template-columns: 1fr;
-    }
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
 }
 
 .checkbox-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
-    color: #333;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #333d4e;
+    cursor: pointer;
+    font-weight: 500;
 }
 
-/* Kebijakan Items */
+.checkbox-item input, .checkbox-single input {
+    accent-color: #e69c24;
+    width: 16px;
+    height: 16px;
+}
+
+/* ATURAN INPUT KONDISIONAL (EFEK MELUNCUR JALAN) */
+.request-item-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.conditional-input-field {
+    display: none;
+    margin-top: 10px;
+    padding-left: 26px;
+    animation: fieldFadeIn 0.2s ease-out;
+}
+
+.conditional-input-field textarea {
+    resize: none;
+    font-size: 0.85rem;
+    border: 1px solid #cbd5e1;
+}
+
+.time-picker-style {
+    width: 140px !important;
+    font-weight: 600;
+    color: #1a1f2c;
+    text-align: center;
+    border: 1px solid #cbd5e1;
+}
+
+@keyframes fieldFadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* KEBIJAKAN AKOMODASI */
 .policy-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 18px;
 }
 
 .policy-item h4 {
-    margin: 0 0 4px 0;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 600;
-    color: #2d3748;
+    color: #1a1f2c;
+    margin: 0 0 4px 0;
 }
 
 .policy-item p {
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.5;
     margin: 0;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    line-height: 1.4;
 }
 
-/* Info Checkin Box (Sidebar) */
+/* KOLOM SIDEBAR RINGKASAN (KOLOM KANAN) */
+.sidebar-sticky {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    position: sticky;
+    top: 30px;
+}
+
+/* KARTU TIMELINE CHECK-IN */
 .checkin-checkout-box {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #f8fafc;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 12px;
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 12px 15px;
     margin-top: 15px;
-    margin-bottom: 15px;
+    border: 1px solid #f0f0f0;
 }
 
 .time-box h5 {
-    margin: 0;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    font-weight: 500;
+    margin: 0 0 2px 0;
+    font-size: 0.72rem;
+    color: #8c94a0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .time-box p {
-    margin: 4px 0 2px 0;
-    font-size: 0.85rem;
-    font-weight: bold;
+    margin: 0 0 2px 0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #1a1f2c;
 }
 
 .time-box span {
-    font-size: 0.7rem;
-    color: var(--text-muted);
+    font-size: 0.72rem;
+    color: #64748b;
 }
 
 .arrow-divider {
-    font-size: 1.2rem;
-    color: #a0aec0;
+    color: #cbd5e1;
+    font-size: 1.1rem;
 }
 
 .room-meta-icons {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin: 12px 0;
+    font-size: 0.82rem;
+    color: #64748b;
+    margin-top: 15px;
+    display: flex;
+    gap: 15px;
 }
 
-/* Total Price Highlight Box dengan Gradasi Hijau */
+/* HIGHLIGHT BOX TOTAL GREEN GRADIENT */
 .total-highlight-box {
-    background: linear-gradient(to right, #ffffff 40%, #4ade80 100%);
-    border: 1px solid #bbf7d0;
-    border-radius: 6px;
-    padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: linear-gradient(to right, #edfbf3 50%, #4ebd74 100%);
+    border-radius: 8px;
+    padding: 12px 20px;
     margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(78, 189, 116, 0.15);
 }
 
 .total-left h4 {
     margin: 0;
-    font-size: 1rem;
-    color: #2d3748;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a1f2c;
 }
 
 .total-left p {
     margin: 2px 0 0 0;
-    font-size: 0.8rem;
-    color: var(--text-muted);
+    font-size: 0.75rem;
+    color: #64748b;
 }
 
 .total-right {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #166534;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+    padding-right: 5px;
 }
 
-/* Submit Button Emas */
+/* TOMBOL SUBMIT ORANGE CAPSULE ELIPS */
 .btn-submit-booking {
-    background-color: var(--brand-gold);
-    color: white;
-    border: none;
     width: 100%;
-    padding: 14px;
-    font-size: 1.1rem;
+    background: #e69c24;
+    color: #ffffff;
+    border: none;
+    padding: 13px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
     font-weight: 600;
-    border-radius: 25px; /* Bulat lonjong sesuai mockup */
+    border-radius: 25px;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(230, 156, 36, 0.2);
     transition: background 0.2s;
-    margin-top: 20px;
 }
 
 .btn-submit-booking:hover {
-    background-color: #cd8732;
+    background: #cc851a;
 }
 
 .submit-footer-notice {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    text-align: center;
-    line-height: 1.4;
+    font-size: 0.72rem;
+    color: #94a3b8;
+    line-height: 1.5;
     margin-top: 15px;
+    text-align: justify;
 }
 
-/* Banner Space */
+/* BANNER IKLAN VERTIKAL */
 .banner-container {
-    margin-top: 20px;
+    width: 100%;
+    border-radius: 4px; /* Sesuai prototype: sudut lengkungan lebih tipis dan tegas */
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px; /* Memberikan jeda jarak antara gambar atas dan bawah */
 }
 
-.banner-container img {
+/* Bentuk 1: Banner Atas (Landscape Tipis Mendaftar) */
+.banner-horizontal img {
     width: 100%;
-    border-radius: 8px;
+    height: 140px; /* Dikunci tingginya agar memanjang horizontal */
+    object-fit: cover; /* Mencegah gambar menjadi gepeng saat ditarik */
     display: block;
-    margin-bottom: 15px;
+}
+
+/* Bentuk 2: Banner Bawah (Kotak Proporsional / Tinggi) */
+.banner-vertical img {
+    width: 100%;
+    height: 340px; /* Dikunci lebih tinggi ke bawah sesuai mockup asli */
+    object-fit: cover;
+    display: block;
+}
+
+/* ==========================================================================
+   FORCE BANNER CONFIGURATION - MATCHING PROTOTYPE SPECIFICATION
+   ========================================================================== */
+
+/* Bersihkan aturan global banner lama agar tidak tabrakan */
+.banner-container img {
+    width: 100% !important;
+    height: auto; 
+    display: block !important;
+}
+
+/* 1. Banner Atas: Model Landscape Tipis Sesuai Prototype */
+.sidebar-sticky .banner-horizontal img {
+    width: 100% !important;
+    height: 110px !important; /* Dipangkas tipis horizontal sesuai foto prototype */
+    object-fit: cover !important;
+    display: block !important;
+    
+    /* Memaksa gambar keluar 100% tanpa opacity pudar dari CSS */
+    opacity: 1 !important;
+    filter: grayscale(0%) brightness(100%) contrast(100%) !important;
+}
+
+/* 2. Banner Bawah: Model Kotak Tinggi Sesuai Prototype */
+.sidebar-sticky .banner-vertical img {
+    width: 100% !important;
+    height: 320px !important; /* Dibuat tinggi ke bawah sesuai foto prototype */
+    object-fit: cover !important;
+    display: block !important;
+    
+    /* Memaksa gambar keluar 100% tanpa opacity pudar dari CSS */
+    opacity: 1 !important;
+    filter: grayscale(0%) brightness(100%) contrast(100%) !important;
+}
+
+/* RESPONSIVE LAYOUT */
+@media (max-width: 991px) {
+    .booking-layout {
+        grid-template-columns: 1fr;
+    }
+    .sidebar-sticky {
+        position: static;
+    }
+    .conditional-input-field {
+        padding-left: 0;
+    }
 }

@@ -19,13 +19,11 @@ use App\Http\Controllers\user\PemesananController;
 |--------------------------------------------------------------------------
 | PUBLIC & INFORMATIONAL ROUTES
 |--------------------------------------------------------------------------
-| Halaman umum yang bisa diakses oleh siapa saja tanpa harus login.
 */
 Route::get('/', function () {
     return view('welcome');
 })->name('landing');
 
-// Rute Informasi & Fitur Footer Roomly
 Route::get('/cara-pesan', [PageController::class, 'caraPesan'])->name('cara-pesan');
 Route::get('/hubungi-kami', [PageController::class, 'hubungiKami'])->name('hubungi-kami');
 Route::get('/pusat-bantuan', [PageController::class, 'pusatBantuan'])->name('pusat-bantuan');
@@ -57,14 +55,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/booking', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/user/booking/{id}', [BookingController::class, 'show'])->name('bookings.show');
 
-    // --- USER ROUTE GROUP (Review Pemesanan & Pembayaran) ---
+    // --- USER ROUTE GROUP (Review, Pilih Pembayaran, Instruksi, & Sukses) ---
     Route::prefix('user')->name('user.')->group(function () {
-        // Halaman Review Pemesanan
         Route::get('/review-pemesanan', [PemesananController::class, 'review'])->name('review');
         Route::post('/review-pemesanan', [PemesananController::class, 'store'])->name('review.store');
 
-        // Halaman Pembayaran (Membawa ID dari database Pemesanan)
         Route::get('/pembayaran/{id}', [PemesananController::class, 'pembayaran'])->name('pembayaran');
+
+        // Halaman Perantara: Instruksi Pembayaran (Menampilkan Nomor VA / Rekening / Kode Kasir)
+        Route::get('/instruksi-pembayaran', function () {
+            return view('user.instruksi-pembayaran');
+        })->name('pembayaran.instruksi');
+
+        // Halaman Akhir: Status Sukses Terverifikasi (Diakses setelah klik "Saya Sudah Bayar")
+        Route::get('/sukses-pembayaran', function () {
+            return view('user.sukses-pembayaran');
+        })->name('pembayaran.sukses');
     });
 
     // --- PROFILE ---
@@ -101,17 +107,12 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::middleware('admin')->group(function () {
-        // Management Resource oleh Admin
         Route::post('/resources', [ResourceController::class, 'store'])->name('resources.store');
         Route::put('/resources/{resource}', [ResourceController::class, 'update'])->name('resources.update');
         Route::delete('/resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy');
 
-        // Admin Panel Group (Sudah Digabung & Dirapikan)
         Route::prefix('admin')->name('admin.')->group(function () {
-            // User Payment Management oleh Admin
             Route::post('/payments', [PembayaranController::class, 'store'])->name('payments.store');
-
-            // Dashboard & Ringkasan Performa Bisnis Roomly
             Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
             Route::get('/rooms', fn() => view('admin.kamar'))->name('rooms');
             Route::get('/bookings', fn() => view('admin.bookings'))->name('bookings');
@@ -120,7 +121,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-}); // TUTUP MIDDLEWARE AUTH
+});
 
 /*
 |--------------------------------------------------------------------------

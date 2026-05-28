@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pembayaran - Roomly</title>
-    <link rel="stylesheet" href="{{ asset('assets/css/pembayaran.css') }}">
-   
+    <!-- Google Fonts & FontAwesome CDN -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/pembayaran.css') }}?v={{ time() }}">
 </head>
 <body>
 
+<!-- NAVBAR ATAS -->
 <div class="page-header">
     <a href="{{ route('user.review') }}" class="back-arrow">&#10094;</a>
     <h1>Pembayaran</h1>
@@ -16,217 +19,335 @@
 
 <div class="container">
     
+    <!-- KOLOM KIRI: FORM PILIHAN METODE & RINCIAN HARGA -->
     <div class="main-content">
         
+        <!-- ALERT TIMER COUNTDOWN -->
         <div class="timer-alert">
             <span>Tenang, harganya tidak akan berubah. Yuk selesaikan pembayaran dalam</span>
-            <span class="timer-count" id="countdown-timer">00:15:00</span>
+            <span class="timer-count" id="countdown-timer" data-redirect="{{ route('user.review') }}">00:15:20</span>
         </div>
 
         <form action="#" method="POST">
             @csrf
 
+            <!-- GRUP METODE PEMBAYARAN BER-ACCORDION LENGKAP -->
             <div class="card">
                 <h3 class="card-title">Mau bayar pakai metode apa?</h3>
                 
-                <div class="accordion-group">
+                <div class="payment-list-group">
                     
-                    <details class="accordion-item" open>
-                        <summary class="accordion-header">
-                            <div class="accordion-header-left">
-                                <span>💳 Virtual Account</span>
+                    <!-- METODE 1: VIRTUAL ACCOUNT (Terbuka Secara Bawaan) -->
+                    <div class="payment-group-item active">
+                        <div class="payment-header-trigger">
+                            <div class="row-left">
+                                <input type="radio" name="payment_method" value="VA" class="parent-radio" checked>
+                                <label>Virtual Account</label>
                             </div>
-                            <span class="arrow-indicator">&blacktriangledown;</span>
-                        </summary>
-                        <div class="accordion-content">
-                            <label class="payment-option">
-                                <span>BCA Virtual Account</span>
-                                <input type="radio" name="payment_method" value="BCA_VA" checked>
-                            </label>
-                            <label class="payment-option">
-                                <span>Mandiri Virtual Account</span>
-                                <input type="radio" name="payment_method" value="MANDIRI_VA">
-                            </label>
-                            <label class="payment-option">
-                                <span>BRI Virtual Account (BRIVA)</span>
-                                <input type="radio" name="payment_method" value="BRI_VA">
-                            </label>
                         </div>
-                    </details>
-
-                    <details class="accordion-item">
-                        <summary class="accordion-header">
-                            <div class="accordion-header-left">
-                                <span>🏦 Transfer dari semua bank</span>
-                            </div>
-                            <span class="arrow-indicator">&blacktriangledown;</span>
-                        </summary>
-                        <div class="accordion-content">
-                            <p style="font-size: 0.85rem; color: #666; margin-bottom: 12px;">
-                                Kamu bisa mentransfer secara manual dari mesin ATM atau m-Banking ke rekening penampungan Roomly.
-                            </p>
-                            <label class="payment-option" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #edf2f7; cursor: pointer;">
-                                <span>Transfer Bank Mandiri</span>
-                                <input type="radio" name="payment_method" value="TRANSFER_MANDIRI">
-                            </label>
-                            <label class="payment-option" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #edf2f7; cursor: pointer;">
-                                <span>Transfer Bank BNI</span>
-                                <input type="radio" name="payment_method" value="TRANSFER_BNI">
-                            </label>
-                            <label class="payment-option" style="display: flex; justify-content: space-between; padding: 10px 0; cursor: pointer;">
-                                <span>Transfer Bank Permata</span>
-                                <input type="radio" name="payment_method" value="TRANSFER_PERMATA">
-                            </label>
-                        </div>
-                    </details>
-
-                    <details class="accordion-item">
-                        <summary class="accordion-header">
-                            <div class="accordion-header-left">
-                                <span>💳 Kartu Kredit/Debit</span>
-                            </div>
-                            <span class="arrow-indicator">&blacktriangledown;</span>
-                        </summary>
-                        <div class="accordion-content">
-                            <p style="font-size: 0.85rem; color: #666; margin-bottom: 12px;">
-                                Mendukung pembayaran aman menggunakan kartu berlogo Visa, MasterCard, dan JCB.
-                            </p>
-                            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
-                                <label style="font-size: 0.85rem; color: #4a5568; display: flex; align-items: center; gap: 8px;">
-                                    <input type="radio" name="payment_method" value="CREDIT_CARD">
-                                    <span>Gunakan Kartu Kredit / Debit</span>
-                                </label>
-                                <input type="text" name="card_number" placeholder="Nomor Kartu (16 digit)" maxlength="16" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.85rem; box-sizing: border-box;">
-                                <div style="display: flex; gap: 10px;">
-                                    <input type="text" name="card_expiry" placeholder="MM/YY" maxlength="5" style="width: 50%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.85rem; box-sizing: border-box;">
-                                    <input type="password" name="card_cvv" placeholder="CVV (3 digit)" maxlength="3" style="width: 50%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.85rem; box-sizing: border-box;">
+                        <div class="payment-dropdown-content" style="display: block;">
+                            <div class="va-sub-container">
+                                <div class="va-sub-row">
+                                    <div class="sub-left">
+                                        <input type="radio" name="va_bank_selected" value="BCA" checked>
+                                        <span>BCA Virtual Account</span>
+                                    </div>
+                                    <img src="{{ asset('assets/img/partners/bank_bca.png') }}" alt="BCA" class="va-bank-logo">
+                                </div>
+                                <div class="va-sub-row">
+                                    <div class="sub-left">
+                                        <input type="radio" name="va_bank_selected" value="MANDIRI">
+                                        <span>Mandiri Virtual Account</span>
+                                    </div>
+                                    <img src="{{ asset('assets/img/partners/bank_mandiri.png') }}" alt="Mandiri" class="va-bank-logo">
+                                </div>
+                                <div class="va-sub-row">
+                                    <div class="sub-left">
+                                        <input type="radio" name="va_bank_selected" value="BRI">
+                                        <span>BRI Virtual Account</span>
+                                    </div>
+                                    <img src="{{ asset('assets/img/partners/bank_bri.png') }}" alt="BRI" class="va-bank-logo">
+                                </div>
+                                <div class="va-sub-row">
+                                    <div class="sub-left">
+                                        <input type="radio" name="va_bank_selected" value="BNI">
+                                        <span>BNI Virtual Account</span>
+                                    </div>
+                                    <img src="{{ asset('assets/img/partners/bank_bni.png') }}" alt="BNI" class="va-bank-logo">
+                                </div>
+                                <div class="va-sub-row">
+                                    <div class="sub-left">
+                                        <input type="radio" name="va_bank_selected" value="CIMB">
+                                        <span>CIMB Niaga Virtual Account</span>
+                                    </div>
+                                    <img src="{{ asset('assets/img/partners/bank_cimb.svg') }}" alt="CIMB" class="va-bank-logo">
                                 </div>
                             </div>
                         </div>
-                    </details>
+                    </div>
+
+                    <!-- METODE 2: TRANSFER DARI SEMUA BANK (MANUAL) -->
+                    <div class="payment-group-item">
+                        <div class="payment-header-trigger">
+                            <div class="row-left">
+                                <input type="radio" name="payment_method" value="TRANSFER" class="parent-radio">
+                                <label>Transfer dari semua bank</label>
+                            </div>
+                            <div class="row-right"><i class="fa-solid fa-building-columns bank-right-icon"></i></div>
+                        </div>
+                        <div class="payment-dropdown-content">
+                            <div class="transfer-info-block">
+                                <label>Transfer ke rekening resmi Roomly:</label>
+                                <div class="copy-field-wrapper">
+                                    <input type="text" id="rekening-number" value="1234567890987" readonly>
+                                    <button type="button" class="btn-copy-rekening" onclick="copyAccountNumber()">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                </div>
+                                <span class="input-desc-alt">Bank Mandiri a.n PT Roomly Global Indonesia</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- METODE 3: ATM -->
+                    <div class="payment-group-item">
+                        <div class="payment-header-trigger">
+                            <div class="row-left">
+                                <input type="radio" name="payment_method" value="ATM" class="parent-radio">
+                                <label>ATM</label>
+                            </div>
+                            <div class="row-right logos-flex">
+                                <img src="{{ asset('assets/img/partners/logo_atm_bersama.png') }}" alt="ATM Bersama" class="method-header-logo">
+                                <img src="{{ asset('assets/img/partners/logo_prima.png') }}" alt="Prima" class="method-header-logo">
+                                <img src="{{ asset('assets/img/partners/logo_alto.png') }}" alt="Alto" class="method-header-logo">
+                                <img src="{{ asset('assets/img/partners/logo_link.png') }}" alt="Link" class="method-header-logo">
+                            </div>
+                        </div>
+                        <div class="payment-dropdown-content">
+                            <div class="transfer-info-block">
+                                <label style="font-weight: 600; margin-bottom: 5px;">Panduan Transfer ATM:</label>
+                                <ol style="margin: 0; padding-left: 20px; font-size: 0.82rem; color: #64748b; line-height: 1.6;">
+                                    <li>Masukkan kartu ATM dan PIN Anda.</li>
+                                    <li>Pilih menu <strong>Transfer > Ke Rekening Bank Lain</strong>.</li>
+                                    <li>Masukkan kode bank penampung resmi Roomly yang akan terbit di invoice.</li>
+                                    <li>Simpan resi ATM sebagai bukti pembayaran sah.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- METODE 4: KARTU KREDIT/DEBIT -->
+                    <div class="payment-group-item">
+                        <div class="payment-header-trigger">
+                            <div class="row-left">
+                                <input type="radio" name="payment_method" value="CC" class="parent-radio">
+                                <label>Kartu Kredit/Debit</label>
+                            </div>
+                            <div class="row-right logos-flex">
+                                <img src="{{ asset('assets/img/partners/logo_visa.png') }}" alt="Visa" class="method-header-logo">
+                                <img src="{{ asset('assets/img/partners/logo_mastercard.png') }}" alt="Mastercard" class="method-header-logo">
+                                <img src="{{ asset('assets/img/partners/logo_jcb.png') }}" alt="JCB" class="method-header-logo">
+                                <img src="{{ asset('assets/img/partners/logo_amex.png') }}" alt="Amex" class="method-header-logo">
+                            </div>
+                        </div>
+                        <div class="payment-dropdown-content">
+                            <div class="cc-form-container">
+                                <div class="cc-field">
+                                    <input type="text" name="cc_number" class="form-control-cc" placeholder="Nomor Kartu (16 Digit)" maxlength="16">
+                                </div>
+                                <div class="cc-field-row">
+                                    <input type="text" name="cc_expiry" class="form-control-cc" placeholder="MM/YY" maxlength="5">
+                                    <input type="password" name="cc_cvv" class="form-control-cc" placeholder="CVV" maxlength="3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- METODE 5: MINIMARKET -->
+                    <div class="payment-group-item">
+                        <div class="payment-header-trigger">
+                            <div class="row-left">
+                                <input type="radio" name="payment_method" value="MINIMARKET" class="parent-radio">
+                                <label>Minimarket</label>
+                            </div>
+                            <div class="row-right logos-flex">
+                                <img src="{{ asset('assets/img/partners/logo_alfamart.png') }}" alt="Alfamart" class="method-header-logo">
+                                <img src="{{ asset('assets/img/partners/logo_alfamidi.png') }}" alt="Alfamidi" class="method-header-logo">
+                                <img src="{{ asset('assets/img/partners/logo_indomaret.png') }}" alt="Indomaret" class="method-header-logo">
+                            </div>
+                        </div>
+                        <div class="payment-dropdown-content">
+                            <div class="va-sub-container">
+                                <div class="va-sub-row">
+                                    <div class="sub-left">
+                                        <input type="radio" name="mart_selected" value="ALFAMART" checked>
+                                        <span>Alfamart / Alfamidi</span>
+                                    </div>
+                                </div>
+                                <div class="va-sub-row">
+                                    <div class="sub-left">
+                                        <input type="radio" name="mart_selected" value="INDOMARET">
+                                        <span>Indomaret</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>
 
-            <div class="card" style="padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
-                <span style="font-weight: 600; color: #4a5568;">🎟️ Pakai kupon/kode promo</span>
-                <span style="color: #a0aec0; font-weight: bold;">&rsaquo;</span>
+            <!-- KARTU KUPON -->
+            <div class="card coupon-card-layout">
+                <div class="coupon-left">
+                    <span class="coupon-icon-tag">🎟️</span>
+                    <div class="coupon-text-block">
+                        <h4>Pakai Kupon</h4>
+                        <p>Masukkan kode kupon (jika ada)</p>
+                    </div>
+                </div>
+                <a href="javascript:void(0)" class="coupon-action-trigger">Pakai</a>
             </div>
 
-            <div class="card">
-                <h3 class="card-title">Rincian harga</h3>
+            <!-- KARTU RINCIAN HARGA -->
+            <div class="card price-summary-card">
+                <h3 class="summary-section-title">Rincian Harga</h3>
                 
-                <div class="price-row">
-                    <span>Harga kamar</span>
-                    <strong>Rp. {{ number_format($pemesanan->price_per_night, 0, ',', '.') }}</strong>
+                <div class="price-data-line">
+                    <span class="label-text">Aston Solo Hotel, {{ $pemesanan->room_name }} - {{ $pemesanan->option_type }} (1x)</span>
+                    <span class="value-text">Rp. {{ number_format($pemesanan->price_per_night, 0, ',', '.') }}</span>
                 </div>
-                <div style="font-size: 0.8rem; color: #888; margin-top: -10px; margin-bottom: 15px;">
-                    (1x) {{ $pemesanan->room_name }} - {{ $pemesanan->option_type }}
+                <div class="price-data-line">
+                    <span class="label-text">Pajak dan Biaya</span>
+                    <span class="value-text">Rp. {{ number_format($pemesanan->tax_and_fee, 0, ',', '.') }}</span>
                 </div>
-
-                <div class="price-row">
-                    <span>Pajak dan Biaya</span>
-                    <strong>Rp. {{ number_format($pemesanan->tax_and_fee, 0, ',', '.') }}</strong>
-                </div>
-
-                <div class="total-highlight-box">
-                    <div class="total-left">
-                        <h4>Total</h4>
-                        <p>1 kamar, 1 malam</p>
-                    </div>
-                    <div class="total-right">
-                        Rp. {{ number_format($pemesanan->total_price, 0, ',', '.') }}
-                    </div>
+                <div class="price-data-line coupon-discount-line">
+                    <span class="label-text">Kupon</span>
+                    <span class="value-text">-Rp. 50.000</span>
                 </div>
 
-                <button type="submit" class="btn-primary-booking">Lanjutkan</button>
+                <div class="divider-line-th"></div>
+
+                <div class="price-data-line total-price-final-row">
+                    <span class="total-label">Harga Total</span>
+                    <span class="total-value">Rp. {{ number_format($pemesanan->total_price - 50000, 0, ',', '.') }}</span>
+                </div>
+
+                <!-- FAIL-SAFE BUTTON: Memicu fungsi redirect client-side aman -->
+                <button type="button" onclick="executePaymentRedirect()" class="btn-execute-payment">Bayar</button>
                 
-                <p class="notice-text">
-                    Dengan lanjut ke pembayaran, kamu telah menyetujui Syarat dan Ketentuan, Kebijakan Privasi, dan Prosedur Refund Akomodasi dari Roomly.
+                <p class="payment-legal-notice">
+                    Dengan melanjutkan, Kamu menyetujui Syarat &amp; Ketentuan kami serta memahami bahwa detail pesananmu dapat dibagikan dan diproses oleh mitra terpercaya kami, seperti yang tertera di pemberitahuan privasi.
                 </p>
             </div>
         </form>
 
     </div>
 
+    <!-- KOLOM KANAN: REKAP SIDEBAR -->
     <div class="sidebar-sticky">
-        <div class="card">
-            <div class="hotel-header-box">
-                <h3 class="hotel-title">Aston Hotel Solo</h3>
-                <div class="booking-id-text">No. Pesanan: <strong>{{ $pemesanan->no_pesanan }}</strong></div>
+        <div class="card sidebar-hotel-card">
+            <div class="hotel-orange-top-header">
+                <div class="header-left-title">
+                    <i class="fa-solid fa-hotel building-icon"></i>
+                    <div class="text-h">
+                        <h3>Rincian Hotel</h3>
+                        <p>No. Pesanan {{ $pemesanan->no_pesanan }}</p>
+                    </div>
+                </div>
             </div>
 
-            <div class="room-type-title">(1x) {{ $pemesanan->room_name }} - {{ $pemesanan->option_type }}</div>
-            
-            <div class="room-meta-info">
-                <strong>Nama Pengunjung:</strong> {{ $pemesanan->nama_pengunjung }} <br>
-                <strong>Permintaan:</strong> {{ $pemesanan->permintaan_khusus }}
-            </div>
+            <div class="sidebar-card-body">
+                <h2 class="hotel-main-name">Aston Hotel Solo</h2>
+                <h4 class="room-sub-detail">(1x) {{ $pemesanan->room_name }} - {{ $pemesanan->option_type }}</h4>
+                
+                <div class="timeline-horizontal-box">
+                    <div class="t-node">
+                        <span class="t-label">Check-in</span>
+                        <strong class="t-date">Kamis, 12 Maret 2026</strong>
+                        <span class="t-sub">Dari 14:00</span>
+                    </div>
+                    <div class="t-arrow-center"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="t-node text-right">
+                        <span class="t-label">Check-out</span>
+                        <strong class="t-date">Jumat, 13 Maret 2026</strong>
+                        <span class="t-sub">Sebelum 12:00</span>
+                    </div>
+                </div>
 
-            <div style="background-color: #f8fafc; border-radius: 6px; padding: 12px; font-size: 0.85rem; line-height: 1.5; color: #4a5568;">
-                <span style="font-weight: 600; display: block; margin-bottom: 4px; color: #2d3748;">Detail Kontak Pemesan:</span>
-                👤 {{ $pemesanan->nama_pemesan }} <br>
-                📞 {{ $pemesanan->no_hp }} <br>
-                ✉️ {{ $pemesanan->email }}
+                <div class="info-meta-vertical-list">
+                    <div class="meta-item-row"><i class="fa-solid fa-users"></i> 2 Tamu &nbsp;|&nbsp; <i class="fa-solid fa-bed"></i> &nbsp;|&nbsp; <i class="fa-solid fa-wifi"></i></div>
+                    <div class="meta-item-row text-danger-style"><i class="fa-solid fa-calendar-xmark"></i> Pemesanan ini tidak bisa di-refund.</div>
+                    <div class="meta-item-row text-muted-style"><i class="fa-solid fa-ban"></i> Non-reschedulable</div>
+                </div>
+
+                <div class="divider-inside-sidebar"></div>
+
+                <div class="guest-specs-summary">
+                    <div class="spec-block">
+                        <strong>Permintaan khusus (jika ada)</strong>
+                        <p>{{ $pemesanan->permintaan_khusus ?? '-' }}</p>
+                    </div>
+                    <div class="spec-block">
+                        <strong>Nama Tamu</strong>
+                        <p>{{ $pemesanan->nama_pengunjung ?? 'Dimas Sudarmono' }}</p>
+                    </div>
+                </div>
+
+                <div class="divider-inside-sidebar"></div>
+
+                <div class="buyer-profile-section">
+                    <h5 class="sect-heading">Data Pemesan</h5>
+                    <div class="buyer-info-flex">
+                        <div class="avatar-circle-icon"><i class="fa-regular fa-user"></i></div>
+                        <div class="buyer-text">
+                            <h4>{{ $pemesanan->nama_pemesan ?? 'Dimas Sudarmono' }}</h4>
+                            <p>{{ $pemesanan->no_hp ?? '087759315863' }}</p>
+                            <p class="email-subtext">{{ $pemesanan->email ?? 'monotxploit@gmail.com' }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="banner-container">
-            <img src="{{ asset('assets/img/bg login.png') }}" alt="Banner 1">
-            <img src="{{ asset('assets/img/bg login.png') }}" alt="Banner 2">
+        <div class="banner-container single-wide-ad-box">
+            <img src="{{ asset('assets/img/bg login.png') }}" alt="Teh Botol Sosro Landscape Banner">
         </div>
     </div>
 
 </div>
 
-</body>
-</html>
+<!-- MEMANGGIL FILE JAVASCRIPT ACCORDION & TIMING -->
+<script src="{{ asset('assets/js/pembayaran.js') }}?v={{ time() }}"></script>
 
+<!-- RE-ROUTING ACTION INTEGRATOR SCRIPT -->
 <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let timeInMinutes = 15;
-            let currentTime = timeInMinutes * 60;
+    function executePaymentRedirect() {
+        const selectedMethodElement = document.querySelector('input[name="payment_method"]:checked');
+        
+        if (!selectedMethodElement) {
+            alert("Silakan pilih metode pembayaran terlebih dahulu.");
+            return;
+        }
 
-            const timerElement = document.getElementById('countdown-timer');
+        const selectedMethod = selectedMethodElement.value;
+        
+        // Diarahkan ke rute instruksi-pembayaran terlebih dahulu dengan prefix /user
+        let targetUrl = '/user/instruksi-pembayaran?method=' + selectedMethod;
 
-            if (timerElement) {
-                function startTimer() {
-                    let minutes = Math.floor(currentTime / 60);
-                    let seconds = currentTime % 60;
+        if (selectedMethod === 'VA') {
+            const selectedBankElement = document.querySelector('input[name="va_bank_selected"]:checked');
+            const bankName = selectedBankElement ? selectedBankElement.value : 'BCA';
+            targetUrl += '&bank=' + bankName;
+        } else if (selectedMethod === 'MINIMARKET') {
+            const selectedMartElement = document.querySelector('input[name="mart_selected"]:checked');
+            const martName = selectedMartElement ? selectedMartElement.value : 'ALFAMART';
+            targetUrl += '&mart=' + martName;
+        }
 
-                    minutes = minutes < 10 ? '0' + minutes : minutes;
-                    seconds = seconds < 10 ? '0' + seconds : seconds;
+        window.location.href = targetUrl;
+    }
+</script>
 
-                    timerElement.innerHTML = `00:${minutes}:${seconds}`;
-                    
-                    if (currentTime > 0) {
-                        currentTime--;
-                    } else {
-                        clearInterval(timerInterval);
-                        timerElement.innerHTML = "WAKTU HABIS";
-                        alert("Waktu pembayaran telah habis. Silakan lakukan pemesanan ulang.");
-                        window.location.href = "{{ route('user.review') }}";
-                    }
-                }
-                
-                startTimer(); 
-                let timerInterval = setInterval(startTimer, 1000);
-            }
-
-            // Logika Akordion Otomatis
-            const accordions = document.querySelectorAll('.accordion-item');
-            accordions.forEach(item => {
-                item.addEventListener('toggle', function() {
-                    if (this.open) {
-                        accordions.forEach(otherItem => {
-                            if (otherItem !== this) {
-                                otherItem.removeAttribute('open');
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 </html>

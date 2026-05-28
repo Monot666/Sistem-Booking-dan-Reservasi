@@ -14,12 +14,9 @@
 
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
-<<<<<<< HEAD
     <link rel="stylesheet" href="{{ asset('assets/css/booking2.css') }}">
-=======
     <link rel="stylesheet" href="{{ asset('assets/css/pilih-kamar.css') }}">
 
->>>>>>> 31351c54d56f5bfc7d457284b3059713341fa7f9
     @stack('styles')
 </head>
 <body>
