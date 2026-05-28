@@ -98,9 +98,8 @@
 
 <section class="py-5 bg-white text-center">
     <div class="container py-4">
-        <h2 class="section-title font-serif mb-5 text-dark">Magnificent Building</h2>
+        <h2 class="section-title font-serif mb-5 text-dark">Wide Choice of Hotels</h2>
         <div class="row g-4">
-            <!-- Gambar 1 -->
             <div class="col-md-3 hotel-card">
                 <div class="hotel-wrapper">
                     <img src="{{ asset('assets/img/hotel_aston 1.png') }}" alt="Gedung">
@@ -110,7 +109,6 @@
                 </div>
             </div>
 
-            <!-- Gambar 2 -->
             <div class="col-md-3 hotel-card">
                 <div class="hotel-wrapper">
                     <img src="{{ asset('assets/img/aston-solo-hotel.jpg') }}" alt="Kamar">
@@ -120,7 +118,6 @@
                 </div>
             </div>
 
-            <!-- Gambar 3 -->
             <div class="col-md-3 hotel-card">
                 <div class="hotel-wrapper">
                     <img src="{{ asset('assets/img/1d3b438d_z.jpg') }}" alt="Lobby">
@@ -130,7 +127,6 @@
                 </div>
             </div>
 
-            <!-- Gambar 4 -->
             <div class="col-md-3 hotel-card">
                 <div class="hotel-wrapper">
                     <img src="{{ asset('assets/img/images (1).jpg') }}" alt="Swimming Pool">

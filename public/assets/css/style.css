@@ -274,6 +274,7 @@ body {
     transform: translateY(0);
 }
 
+<<<<<<< HEAD
 .footer { background-color: #0a0a0a; padding: 40px 0; border-top: 2px solid var(--gold-primary); }
 
 .partner-box {
@@ -316,3 +317,6 @@ body {
     width: 18px !important;
     height: auto;
 }
+=======
+.footer { background-color: #0a0a0a; padding: 40px 0; border-top: 2px solid var(--gold-primary); }
+>>>>>>> 31351c54d56f5bfc7d457284b3059713341fa7f9

@@ -4,16 +4,18 @@
 <section class="booking-page">
     <div class="booking-overlay"></div>
     <div class="booking-container">
+        
         <div class="booking-header">
             <button class="booking-back" type="button" onclick="window.history.back()">
                 &lt;
             </button>
-            <h2>Pilih Tanggal Reservasi Anda</h2>
+            <h2 class="booking-title">Pilih Tanggal Reservasi Anda</h2>
         </div>
 
         <div class="booking-panel">
-            <form id="booking-search-form" method="GET" action="{{ route('bookingdua.index') }}">
+            <form id="booking-search-form" method="GET" action="{{ route('pilih-kamar') }}">
                 <div class="booking-form-row">
+                    
                     <div class="booking-field booking-field--wide">
                         <label class="booking-field__label" for="date-range">Tanggal Check-in & Check-out</label>
                         <div class="booking-input">
@@ -38,6 +40,7 @@
                         <i class="fa-solid fa-search"></i>
                         <span>Cari Kamar</span>
                     </button>
+                    
                 </div>
             </form>
         </div>
@@ -45,6 +48,7 @@
         <div class="booking-ad">
             <img src="{{ asset('assets/img/novotel 1.png') }}" alt="Promo Novotel">
         </div>
+        
     </div>
 </section>
 @endsection

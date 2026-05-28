@@ -1,177 +1,136 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pilih Kamar</title>
+@extends('layouts.app')
 
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-
-<body class="bg-gray-100 font-sans antialiased">
-
-    <!-- HEADER -->
-    <div class="bg-[#e69c24] text-white p-4 flex items-center gap-4">
-
-        <a href="{{ url()->previous() }}"
-           class="text-xl hover:opacity-80">
-            <i class="fa-solid fa-chevron-left"></i>
-        </a>
-
-        <h1 class="text-lg font-bold">
-            Pilih Kamar
-        </h1>
-
+@section('content')
+<div class="room-selection-wrapper">
+    
+    <div class="room-navbar bg-white py-3 px-4 border-bottom shadow-sm">
+        <div class="navbar-content container-fluid d-flex align-items-center">
+            <a href="{{ route('booking') }}" class="back-link text-decoration-none fw-bold" style="color: #df9e45;">
+                <span class="back-arrow me-2">&#10094;</span> PILIH KAMAR
+            </a>
+        </div>
     </div>
 
-    <!-- CONTENT -->
-    <div class="max-w-6xl mx-auto p-6">
-
-        <!-- INFO BOOKING -->
-        <div class="bg-white rounded-xl shadow-sm p-5 mb-6">
-
-            <div class="grid md:grid-cols-4 gap-4 text-sm">
-
-                <div>
-                    <p class="text-gray-400">Checkin</p>
-                    <h3 class="font-bold">
-                        {{ $checkin ?? '-' }}
-                    </h3>
+    <div class="room-main-container container py-5">
+        
+        <div class="bg-white rounded-4 border p-4 mb-5 shadow-sm">
+            <div class="row text-center text-md-start g-3 text-sm">
+                <div class="col-6 col-md-3 border-end">
+                    <p class="text-muted mb-1 small text-uppercase fw-bold">Check-in</p>
+                    <h5 class="fw-bold text-dark mb-0">{{ request('checkin') ?? '-' }}</h5>
                 </div>
-
-                <div>
-                    <p class="text-gray-400">Checkout</p>
-                    <h3 class="font-bold">
-                        {{ $checkout ?? '-' }}
-                    </h3>
+                <div class="col-6 col-md-3 border-end">
+                    <p class="text-muted mb-1 small text-uppercase fw-bold">Check-out</p>
+                    <h5 class="fw-bold text-dark mb-0">{{ request('checkout') ?? '-' }}</h5>
                 </div>
-
-                <div>
-                    <p class="text-gray-400">Guests</p>
-                    <h3 class="font-bold">
-                        {{ $guests ?? 0 }} Orang
-                    </h3>
+                <div class="col-6 col-md-3 border-end">
+                    <p class="text-muted mb-1 small text-uppercase fw-bold">Tamu</p>
+                    <h5 class="fw-bold text-dark mb-0">{{ request('guests') ?? '2' }} Orang</h5>
                 </div>
-
-                <div>
-                    <p class="text-gray-400">Rooms</p>
-                    <h3 class="font-bold">
-                        {{ $rooms ?? 0 }} Kamar
-                    </h3>
+                <div class="col-6 col-md-3">
+                    <p class="text-muted mb-1 small text-uppercase fw-bold">Kamar</p>
+                    <h5 class="fw-bold text-dark mb-0">{{ request('rooms') ?? '1' }} Kamar</h5>
                 </div>
-
             </div>
-
         </div>
-
-        <!-- DATA KAMAR -->
+        
         @forelse($resources as $resource)
-
-        <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm mb-6">
-
-            <div class="flex flex-col lg:flex-row gap-6">
-
-                <!-- GAMBAR -->
-                <div class="w-full lg:w-1/3">
-
-                    <img src="{{ $resource->image }}"
-                         alt="{{ $resource->name }}"
-                         class="w-full h-64 object-cover rounded-xl">
-
-                </div>
-
-                <!-- DETAIL -->
-                <div class="w-full lg:w-2/3 flex flex-col justify-between">
-
-                    <div>
-
-                        <h2 class="text-2xl font-bold text-[#e69c24] mb-2">
-                            {{ $resource->name }}
-                        </h2>
-
-                        <p class="text-gray-500 mb-4">
-                            {{ $resource->description }}
-                        </p>
-
-                        <div class="grid grid-cols-2 gap-4 text-sm text-gray-600 mb-5">
-
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-user-group text-[#e69c24]"></i>
-                                Kapasitas {{ $resource->capacity }} Orang
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-bed text-[#e69c24]"></i>
-                                {{ $resource->type }}
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-wifi text-[#e69c24]"></i>
-                                WiFi Gratis
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-snowflake text-[#e69c24]"></i>
-                                AC
-                            </div>
-
-                        </div>
-
+        <div class="room-card bg-white rounded-4 border p-4 mb-4 shadow-sm">
+            <h2 class="room-title fw-bold mb-3" style="color: #df9e45;">{{ $resource->name }}</h2>
+            
+            <div class="room-card-body row g-4">
+                <div class="col-lg-4 col-md-5 d-flex flex-column">
+                    <div class="room-image-wrapper mb-3">
+                        <img src="{{ $resource->image ?? asset('assets/img/bg.png') }}" alt="{{ $resource->name }}" class="room-img img-fluid rounded-3 w-100 object-cover" style="height: 200px;">
+                    </div>
+                    
+                    <div class="room-spec mb-3">
+                        <span class="spec-size fw-bold text-dark">📐 Tipe: {{ $resource->type }}</span>
                     </div>
 
-                    <!-- HARGA -->
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <p class="text-muted small text-justify mb-3">
+                        {{ $resource->description }}
+                    </p>
 
-                        <div>
-
-                            <p class="text-gray-400 text-sm">
-                                Harga / malam
-                            </p>
-
-                            <h3 class="text-3xl font-bold text-[#e69c24]">
-                                Rp {{ number_format($resource->price_per_hour, 0, ',', '.') }}
-                            </h3>
-
-                        </div>
-
-                        <a href="{{ route('pilih-kamar.show', $resource->id) }}"
-                           class="bg-[#e69c24] hover:bg-[#cc851a] transition text-white px-6 py-3 rounded-lg text-center font-semibold">
-
-                            Pilih Kamar
-
-                        </a>
-
+                    <div class="room-facilities-grid d-flex flex-wrap gap-2 mb-3 text-muted small">
+                        <span class="badge bg-light text-dark p-2 border">🚿 Shower</span>
+                        <span class="badge bg-light text-dark p-2 border">❄️ AC</span>
+                        <span class="badge bg-light text-dark p-2 border">📶 Free WiFi</span>
+                        <span class="badge bg-light text-dark p-2 border">👥 Max {{ $resource->capacity }} Orang</span>
                     </div>
-
                 </div>
 
+                <div class="col-lg-8 col-md-7">
+                    <div class="table-responsive border rounded-3">
+                        <table class="table prices-table mb-0 align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="50%">Opsi Kamar</th>
+                                    <th width="15%" class="text-center">Kapasitas</th>
+                                    <th width="20%" class="text-end">Harga / Malam</th>
+                                    <th width="15%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="option-info p-3">
+                                        <span class="sub-title d-block fw-bold text-dark">{{ $resource->name }} - Tanpa Sarapan</span>
+                                        <p class="policy-info text-danger small mb-0 mt-1">🔄 Non-Refundable</p>
+                                    </td>
+                                    <td class="text-center p-3 text-xl">👥</td>
+                                    <td class="price-amount text-end p-3 fw-bold text-dark">
+                                        Rp {{ number_format($resource->price_per_hour, 0, ',', '.') }}
+                                    </td>
+                                    <td class="text-center p-3">
+                                        <form action="{{ route('user.review') }}" method="GET">
+                                            @csrf
+                                            <input type="hidden" name="room_id" value="{{ $resource->id }}">
+                                            <input type="hidden" name="room_name" value="{{ $resource->name }}">
+                                            <input type="hidden" name="option_type" value="Room Only">
+                                            <input type="hidden" name="price" value="{{ $resource->price_per_hour }}">
+                                            <button type="submit" class="btn btn-sm btn-choose text-white px-3 fw-bold" style="background-color: #df9e45;">Pilih</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="option-info p-3">
+                                        <span class="sub-title d-block fw-bold text-dark">{{ $resource->name }} - Termasuk Sarapan</span>
+                                        <p class="policy-info text-success small mb-0 mt-1">✅ Free Cancellation</p>
+                                    </td>
+                                    <td class="text-center p-3 text-xl">👥</td>
+                                    <td class="price-amount text-end p-3 fw-bold text-dark">
+                                        Rp {{ number_format($resource->price_per_hour + 75000, 0, ',', '.') }}
+                                    </td>
+                                    <td class="text-center p-3">
+                                        <form action="{{ route('user.review') }}" method="GET">
+                                            @csrf
+                                            <input type="hidden" name="room_id" value="{{ $resource->id }}">
+                                            <input type="hidden" name="room_name" value="{{ $resource->name }}">
+                                            <input type="hidden" name="option_type" value="Termasuk Sarapan">
+                                            <input type="hidden" name="price" value="{{ $resource->price_per_hour + 75000 }}">
+                                            <button type="submit" class="btn btn-sm btn-choose text-white px-3 fw-bold" style="background-color: #df9e45;">Pilih</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-
         </div>
-
         @empty
-
-        <!-- JIKA TIDAK ADA KAMAR -->
-        <div class="bg-white rounded-xl shadow-sm p-10 text-center">
-
-            <i class="fa-solid fa-bed text-5xl text-gray-300 mb-4"></i>
-
-            <h2 class="text-xl font-bold text-gray-700 mb-2">
-                Kamar Tidak Tersedia
-            </h2>
-
-            <p class="text-gray-500">
-                Tidak ada kamar yang tersedia untuk tanggal tersebut.
-            </p>
-
+        <div class="bg-white rounded-4 border p-5 text-center shadow-sm">
+            <i class="fa-solid fa-bed text-muted mb-3" style="font-size: 4rem;"></i>
+            <h4 class="fw-bold text-dark">Kamar Tidak Tersedia</h4>
+            <p class="text-muted mb-0">Maaf, tidak ada tipe kamar yang cocok dengan parameter pencarian Anda.</p>
         </div>
-
         @endforelse
 
     </div>
+</div>
 
-</body>
-</html>
+<link rel="stylesheet" href="{{ asset('assets/css/pilih-kamar.css') }}?v={{ time() }}">
+
+@include('layouts.footer')
+@endsection
