@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <title>Manajemen Keuangan - Roomly Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{{ asset('assets/css/admin/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/admin/finance.css') }}">
+</head>
+<body>
+
+@php
+$transactions = [
+    ['id' => 1, 'date' => '12-03-2026', 'desc' => 'Room Booking - BK001', 'category' => 'Revenue', 'amount' => 535000, 'method' => 'Virtual Account'],
+    ['id' => 2, 'date' => '12-03-2026', 'desc' => 'Staff Salaries - Praya', 'category' => 'Expense', 'amount' => 5000000, 'method' => 'Bank Transfer'],
+    ['id' => 3, 'date' => '11-03-2026', 'desc' => 'Room Booking - BK002', 'category' => 'Revenue', 'amount' => 890000, 'method' => 'Paypal'],
+    ['id' => 4, 'date' => '10-03-2026', 'desc' => 'Maintenance Supplies', 'category' => 'Expense', 'amount' => 1000000, 'method' => 'Virtual Account'],
+    ['id' => 5, 'date' => '09-03-2026', 'desc' => 'Booking Cancellation - BK004', 'category' => 'Refund', 'amount' => 450000, 'method' => 'Credit Card'],
+    ['id' => 6, 'date' => '08-03-2026', 'desc' => 'Room Booking - BK003', 'category' => 'Revenue', 'amount' => 600000, 'method' => 'Virtual Account'],
+];
+@endphp
+
+<div class="admin-wrapper">
+    <aside class="sidebar">
+        <div class="logo-area">
+            <img src="{{ asset('assets/img/icons/logo.svg') }}" alt="Logo">
+            <div class="logo-text">
+                <h4>Roomly Admin</h4>
+                <small>Portal Manajemen</small>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                <a href="{{ route('admin.dashboard') }}"><i class="fas fa-th-large"></i> Dasbor</a>
+            </li>
+            <li class="{{ request()->routeIs('admin.kamar') ? 'active' : '' }}">
+                <a href="{{ route('admin.kamar') }}"><i class="fas fa-bed"></i> Kamar</a>
+            </li>
+            <li class="{{ request()->routeIs('admin.bookings') ? 'active' : '' }}">
+                <a href="{{ route('admin.bookings') }}"><i class="fas fa-calendar-alt"></i> Pesanan</a>
+            </li>
+            <li class="{{ request()->routeIs('admin.guests') ? 'active' : '' }}">
+                <a href="{{ route('admin.guests') }}"><i class="fas fa-users"></i> Tamu</a>
+            </li>
+            <li class="{{ request()->routeIs('admin.finance') ? 'active' : '' }}">
+                <a href="{{ route('admin.finance') }}"><i class="fas fa-wallet"></i> Keuangan</a>
+            </li>
+            
+            <li class="nav-logout">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                    <i class="fas fa-sign-out-alt"></i> Keluar
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="page-title">Financial Management</h1>
+                <p class="page-subtitle mb-0">Track revenue, expenses, and financial performance</p>
+            </div>
+            <button class="btn-save-data">
+                <i class="far fa-save me-2"></i> Save Data
+            </button>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="finance-card bg-revenue">
+                    <div class="finance-card-title">Total Revenue <i class="fas fa-arrow-trend-up"></i></div>
+                    <div class="finance-card-value"><span class="currency-symbol">Rp</span>4.390.000</div>
+                    <div class="finance-card-subtitle">+12% from last month</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="finance-card bg-expense">
+                    <div class="finance-card-title">Total Expenses <i class="fas fa-arrow-trend-down"></i></div>
+                    <div class="finance-card-value"><span class="currency-symbol">Rp</span>19.050.000</div>
+                    <div class="finance-card-subtitle">+5% from last month</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="finance-card bg-profit">
+                    <div class="finance-card-title">Net Profit <i class="fas fa-money-bill-wave"></i></div>
+                    <div class="finance-card-value"><span class="currency-symbol">Rp</span>15.200.000</div>
+                    <div class="finance-card-subtitle">Profit Margin: +67.2%</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="finance-card bg-transactions">
+                    <div class="finance-card-title">Transactions <i class="far fa-calendar-alt"></i></div>
+                    <div class="finance-card-value">58</div>
+                    <div class="finance-card-subtitle">This month</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <h5 class="chart-title">Profit Trend</h5>
+                    <div class="chart-wrapper">
+                        <canvas id="profitLineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <h5 class="chart-title">Monthly Performance</h5>
+                    <div class="chart-wrapper">
+                        <canvas id="performanceBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="finance-table-container">
+            <div class="finance-table-header">
+                <h5 class="fw-bold mb-0 text-dark">Recent Transactions</h5>
+                <div class="d-flex gap-3">
+                    <select id="catFilter" class="finance-filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="revenue">Revenue</option>
+                        <option value="expense">Expense</option>
+                        <option value="refund">Refund</option>
+                    </select>
+                    <select id="timeFilter" class="finance-filter-select">
+                        <option value="default">Berdasarkan Bulan</option>
+                        <option value="newest">Terbaru ke Terlama</option>
+                        <option value="oldest">Terlama ke Terbaru</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table custom-table text-center align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th class="text-start">Description</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionBody">
+                        @foreach($transactions as $t)
+                        <tr class="transaction-row" data-category="{{ strtolower($t['category']) }}">
+                            <td class="tx-date">{{ $t['date'] }}</td>
+                            <td class="text-start">{{ $t['desc'] }}</td>
+                            <td>
+                                @if($t['category'] == 'Revenue') <span class="badge-cat cat-revenue">Revenue</span>
+                                @elseif($t['category'] == 'Expense') <span class="badge-cat cat-expense">Expense</span>
+                                @elseif($t['category'] == 'Refund') <span class="badge-cat cat-refund">Refund</span>
+                                @endif
+                            </td>
+                            <td style="color: {{ $t['category'] == 'Expense' || $t['category'] == 'Refund' ? '#ef4444' : '#16a34a' }}">
+                                {{ $t['category'] == 'Expense' || $t['category'] == 'Refund' ? '-' : '+' }} Rp. {{ number_format($t['amount'], 0, ',', '.') }}
+                            </td>
+                            <td>{{ $t['method'] }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-modal p-4 text-center">
+            
+            <div class="mb-3">
+                <i class="fas fa-sign-out-alt text-danger" style="font-size: 3.5rem;"></i>
+            </div>
+            
+            <h4 class="fw-bold mb-2">Konfirmasi Keluar</h4>
+            <p class="text-muted mb-4">Apakah Anda yakin ingin keluar dari portal Admin Roomly? Sesi Anda akan diakhiri.</p>
+            
+            <div class="d-flex justify-content-center gap-3">
+                <button type="button" class="btn btn-light fw-bold px-4" data-bs-dismiss="modal" style="border-radius: 8px; border: 1px solid #e2e8f0;">Batal</button>
+                
+                <form action="{{ route('logout') }}" method="POST" class="m-0">
+                    @csrf
+                    <button type="submit" class="btn btn-danger fw-bold px-4" style="border-radius: 8px;">Ya, Keluar</button>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ asset('assets/js/admin/finance.js') }}"></script>
+</body>
+</html>

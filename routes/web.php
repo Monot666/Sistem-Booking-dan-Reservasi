@@ -133,7 +133,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/bookings', fn() => view('admin.bookings'))->name('bookings');
     Route::get('/guests', fn() => view('admin.guests'))->name('guests');
     Route::get('/finance', [AdminPaymentController::class, 'index'])->name('finance');
-    
     Route::post('/payments', [PembayaranController::class, 'store'])->name('payments.store');
 });
 

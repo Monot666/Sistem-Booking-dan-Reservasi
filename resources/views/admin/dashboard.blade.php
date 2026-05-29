@@ -26,9 +26,17 @@
             <li class="{{ request()->routeIs('admin.bookings') ? 'active' : '' }}">
                 <a href="{{ route('admin.bookings') }}"><i class="fas fa-calendar-alt"></i> Pesanan</a>
             </li>
-            <li><a href="#"><i class="fas fa-users"></i> Tamu</a></li>
-            <li><a href="#"><i class="fas fa-wallet"></i> Keuangan</a></li>
-            <li class="nav-logout"><a href="#"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+            <li class="{{ request()->routeIs('admin.guests') ? 'active' : '' }}">
+                <a href="{{ route('admin.guests') }}"><i class="fas fa-users"></i> Tamu</a>
+            </li>
+            <li class="{{ request()->routeIs('admin.finance') ? 'active' : '' }}">
+                <a href="{{ route('admin.finance') }}"><i class="fas fa-wallet"></i> Keuangan</a>
+            </li>
+            <li class="nav-logout">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                    <i class="fas fa-sign-out-alt"></i> Keluar
+                </a>
+            </li>
         </ul>
     </aside>
 
@@ -152,6 +160,34 @@
     </main>
 </div>
 
+<!-- ==============================================
+     MODAL LOGOUT
+     ============================================== -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4" style="border-radius: 16px; border: none;">
+            
+            <div class="mb-3">
+                <i class="fas fa-sign-out-alt text-danger" style="font-size: 3.5rem;"></i>
+            </div>
+            
+            <h4 class="fw-bold mb-2" style="color: #1e293b;">Konfirmasi Keluar</h4>
+            <p class="text-muted mb-4">Apakah Anda yakin ingin keluar dari portal Admin Roomly? Sesi Anda akan diakhiri.</p>
+            
+            <div class="d-flex justify-content-center gap-3">
+                <button type="button" class="btn btn-light fw-bold px-4" data-bs-dismiss="modal" style="border-radius: 8px; border: 1px solid #e2e8f0; color: #475569;">Batal</button>
+                <form action="{{ route('logout') }}" method="POST" class="m-0">
+                    @csrf
+                    <button type="submit" class="btn btn-danger fw-bold px-4" style="border-radius: 8px;">Ya, Keluar</button>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPT BOOTSTRAP DITAMBAHKAN AGAR POP-UP BERFUNGSI -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{{ asset('assets/js/admin/dashboard.js') }}"></script>
 </body>
