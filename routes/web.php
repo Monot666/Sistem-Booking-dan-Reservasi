@@ -138,6 +138,11 @@ Route::middleware('auth')->group(function () {
 
 });
 
+// Route khusus untuk role Finance
+Route::get('/finance/dashboard', function () {
+    return view('finance.dashboard');
+})->name('finance.dashboard');
+
 /*
 |--------------------------------------------------------------------------
 | TESTING ROUTES
