@@ -14,19 +14,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Membuat atau Memperbarui User Utama (Admin)
-        User::firstOrCreate(
-            ['email' => 'test@example.com'], 
-            [
-                'name' => 'Test User',
-                'password' => Hash::make('password'),
-                'role' => 'admin',
-                'gender' => 'Laki-laki',
-                'birthdate' => '2000-01-01',
-                'city' => 'Banyumas',
-                'phone' => '08123456789',
-            ]
-        );
+        // 1. Membuat Akun untuk Masing-masing Role
+        $roles = ['admin', 'user', 'content creator', 'finance'];
+        
+        foreach ($roles as $role) {
+            $emailPrefix = str_replace(' ', '', $role);
+            User::firstOrCreate(
+                ['email' => $emailPrefix . '@example.com'], 
+                [
+                    'name' => ucwords($role) . ' User',
+                    'password' => Hash::make('password'),
+                    'role' => $role,
+                    'gender' => 'Laki-laki',
+                    'birthdate' => '2000-01-01',
+                    'city' => 'Banyumas',
+                    'phone' => '08123456789',
+                ]
+            );
+        }
 
         // 2. Membuat 10 user tambahan secara acak
         User::factory(10)->create();

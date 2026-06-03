@@ -13,6 +13,7 @@ use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\AdminPaymentController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AdminController\TesterController;
 use App\Http\Controllers\user\PemesananController;
 
@@ -134,6 +135,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/guests', fn() => view('admin.guests'))->name('guests');
     Route::get('/finance', [AdminPaymentController::class, 'index'])->name('finance');
     Route::post('/payments', [PembayaranController::class, 'store'])->name('payments.store');
+
+    // Route Manajemen User
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::put('/users/{id}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
 });
 
 });
