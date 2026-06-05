@@ -287,9 +287,10 @@ $transactions = [
             <p class="text-muted mb-4">Are you sure you want to log out from Roomly Finance?</p>
             <div class="d-flex justify-content-center gap-3">
                 <button type="button" class="btn btn-light fw-bold px-4" data-bs-dismiss="modal" style="border-radius: 8px; border: 1px solid #e2e8f0;">Cancel</button>
-                <form action="#" method="POST" class="m-0">
+                
+                <form action="{{ url('/logout') }}" method="POST" class="m-0">
                     @csrf
-                    <button type="button" class="btn btn-danger fw-bold px-4" data-bs-dismiss="modal" style="border-radius: 8px;" onclick="alert('Anda telah berhasil keluar (Simulasi)')">Logout</button>
+                    <button type="submit" class="btn btn-danger fw-bold px-4" style="border-radius: 8px;">Logout</button>
                 </form>
             </div>
         </div>

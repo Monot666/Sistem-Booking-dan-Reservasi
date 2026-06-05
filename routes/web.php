@@ -148,6 +148,11 @@ Route::get('/finance/dashboard', function () {
     return view('finance.dashboard');
 })->name('finance.dashboard');
 
+// Route khusus untuk role Content Creator
+Route::get('/content/dashboard', function () {
+    return view('content_creator.dashboard');
+})->name('content.dashboard');
+
 /*
 |--------------------------------------------------------------------------
 | TESTING ROUTES

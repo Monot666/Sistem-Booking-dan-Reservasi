@@ -26,19 +26,29 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
+            // 1. Ambil data user yang berhasil login
+            $user = Auth::user();
+
             // --- LOGIKA REDIRECT BERDASARKAN ROLE ---
-            if (Auth::user()->role === 'admin') {
+            if ($user->role === 'admin') {
                 return redirect()->intended('/admin/dashboard'); // Ke Dashboard Admin
+            } 
+            elseif ($user->role === 'finance') {
+                return redirect()->route('finance.dashboard'); // Ke Dashboard Finance
+            } 
+            elseif ($user->role === 'content_creator') {
+                // Route untuk content creator disiapkan di sini (bisa diubah nanti)
+                return redirect()->intended('/content/dashboard'); 
             }
 
-            return redirect()->intended('/'); // User biasa ke Landing Page
+            // Default jika yang login adalah 'user' (tamu hotel biasa)
+            return redirect()->intended('/'); 
         }
 
         return back()->withErrors([
             'email' => 'Email atau password salah!',
         ]);
     }
-
 
     // --- REGISTER SECTION ---
 
@@ -75,4 +85,3 @@ class AuthController extends Controller
         return redirect('/login');
     }
 }
-

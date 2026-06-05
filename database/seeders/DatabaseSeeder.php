@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // 1. Membuat Akun untuk Masing-masing Role
-        $roles = ['admin', 'user', 'content creator', 'finance'];
+        $roles = ['admin', 'user', 'content_creator', 'finance'];
         
         foreach ($roles as $role) {
             $emailPrefix = str_replace(' ', '', $role);

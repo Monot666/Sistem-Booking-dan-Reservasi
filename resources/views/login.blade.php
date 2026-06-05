@@ -15,6 +15,12 @@
         
         <h2 class="font-serif mb-4">Welcome Back!</h2>
 
+        @if ($errors->any())
+            <div style="color: #ff4d4f; background: rgba(255, 77, 79, 0.1); border: 1px solid rgba(255, 77, 79, 0.3); padding: 10px 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; text-align: center; font-weight: 500;">
+                <i class="fas fa-exclamation-circle me-1"></i> {{ $errors->first() }}
+            </div>
+        @endif
+
         <form action="{{ route('login.action') }}" method="POST">
             @csrf
             <div class="form-group-custom">
