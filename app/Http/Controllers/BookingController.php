@@ -15,6 +15,11 @@ class BookingController extends Controller {
      */
     public function index()
     {
+        // Cek apakah user sudah verifikasi email/OTP
+        if (!auth()->user()->hasVerifiedEmail()) {
+            return redirect()->route('profile')->withErrors(['verification' => 'Silakan verifikasi akun Anda terlebih dahulu di menu profil sebelum melakukan pemesanan.']);
+        }
+
         $bookings = Booking::where('user_id', auth()->id())
             ->with('resource')
             ->orderBy('created_at', 'desc')
@@ -29,6 +34,11 @@ class BookingController extends Controller {
      */
     public function show($id)
     {
+        // Cek apakah user sudah verifikasi email/OTP
+        if (!auth()->user()->hasVerifiedEmail()) {
+            return redirect()->route('profile')->withErrors(['verification' => 'Silakan verifikasi akun Anda terlebih dahulu.']);
+        }
+
         $booking = Booking::with('resource', 'user', 'payments')->findOrFail($id);
 
         // Authorization check: ensure booking belongs to authenticated user
@@ -43,6 +53,11 @@ class BookingController extends Controller {
      * Create a new booking.
      */
     public function store(Request $request) {
+        // Cek apakah user sudah verifikasi email/OTP
+        if (!auth()->user()->hasVerifiedEmail()) {
+            return redirect()->route('profile')->withErrors(['verification' => 'Silakan verifikasi akun Anda terlebih dahulu.']);
+        }
+
         $request->validate([
             'resource_id' => 'required|exists:resources,id',
             'start_time' => 'required|date|after:now',

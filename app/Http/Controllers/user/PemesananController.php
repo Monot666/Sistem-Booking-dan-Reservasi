@@ -4,82 +4,99 @@ namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Pemesanan; // Memastikan Model Pemesanan di-import
+use App\Models\Booking;
+use App\Models\Resource;
 
 class PemesananController extends Controller
 {
     // 1. Menampilkan Halaman Review
     public function review(Request $request)
     {
-        $roomName = $request->input('room_name', 'Superior Double');
+        $resourceId = $request->input('resource_id');
+        $resource = Resource::find($resourceId);
+
+        $checkin = $request->input('checkin', now()->format('Y-m-d'));
+        $checkout = $request->input('checkout', now()->addDay()->format('Y-m-d'));
+
+        // Hitung Durasi (Malam)
+        $start = \Carbon\Carbon::parse($checkin);
+        $end = \Carbon\Carbon::parse($checkout);
+        $nights = max(1, $start->diffInDays($end));
+
+        // Format Tanggal untuk View
+        $checkinDisplay = $start->translatedFormat('D, d M Y');
+        $checkoutDisplay = $end->translatedFormat('D, d M Y');
+
+        $roomName = $resource ? $resource->name : $request->input('room_name', 'Superior Double');
         $optionType = $request->input('option_type', 'Room Only');
         $bedInfo = $request->input('bed_info', '1 double bed');
         $breakfastInfo = $request->input('breakfast_info', 'Without Breakfast');
-        $pricePerNight = (int) $request->input('price', 445000);
+        $pricePerNight = $resource ? (int)$resource->price_per_hour : (int) $request->input('price', 445000);
+        
         $taxAndFee = 140000;
-        $totalPrice = $pricePerNight + $taxAndFee;
+        $totalRoomPrice = $pricePerNight * $nights;
+        $totalPrice = $totalRoomPrice + $taxAndFee;
 
-        // Mengarah ke file resources/views/user/review-pemesanan.blade.php
         return view('user.review-pemesanan', compact(
-            'roomName', 'optionType', 'bedInfo', 'breakfastInfo', 'pricePerNight', 'taxAndFee', 'totalPrice'
+            'roomName', 'optionType', 'bedInfo', 'breakfastInfo', 'pricePerNight', 
+            'taxAndFee', 'totalPrice', 'resourceId', 'checkin', 'checkout', 
+            'nights', 'checkinDisplay', 'checkoutDisplay'
         ));
     }
 
     // 2. Memproses Data Form & REDIRECT ke Pembayaran
     public function store(Request $request)
     {
-        // Validasi input form dari user
-        // (price & total_price diturunkan dari frontend; kita hitung ulang total pada backend agar aman)
         $request->validate([
             'nama_pemesan' => 'required|string|max:255',
             'no_hp' => 'required',
             'email' => 'required|email',
-            'room_name' => 'required|string|max:255',
-            'option_type' => 'nullable|string|max:255',
+            'resource_id' => 'nullable|exists:resources,id',
             'price' => 'required|numeric|min:0',
+            'checkin' => 'required|date',
+            'checkout' => 'required|date|after:checkin',
             'request' => 'nullable|array',
             'request.*' => 'string|max:255',
         ]);
 
-        // Generate No. Pesanan unik acak 9 digit
         $noPesanan = rand(100000000, 999999999);
-
-        // Satukan array checkbox permintaan khusus menjadi teks string biasa
         $permintaan = $request->has('request') ? implode(', ', $request->input('request')) : '-';
 
-        // Mengambil nilai price_per_night dari request, jika kosong gunakan default 445000
+        $checkin = $request->input('checkin');
+        $checkout = $request->input('checkout');
+        $start = \Carbon\Carbon::parse($checkin);
+        $end = \Carbon\Carbon::parse($checkout);
+        $nights = max(1, $start->diffInDays($end));
+
         $pricePerNight = (int) ($request->price ?? 445000);
         $taxAndFee = 140000;
-        $totalPrice = $pricePerNight + $taxAndFee;
+        $totalPrice = ($pricePerNight * $nights) + $taxAndFee;
 
-        // PROSES INSERT: Simpan data ke database MySQL dengan nilai backup (??) jika field opsional kosong
-        $pemesanan = Pemesanan::create([
+        // Gunakan model Booking
+        $booking = Booking::create([
             'no_pesanan' => $noPesanan,
-            'user_id' => auth()->id(), // Mengisi ID user yang sedang login
+            'user_id' => auth()->id(),
+            'resource_id' => $request->resource_id, 
             'nama_pemesan' => $request->nama_pemesan,
             'no_hp' => $request->no_hp,
             'email' => $request->email,
             'nama_pengunjung' => $request->nama_pengunjung ?? $request->nama_pemesan,
             'permintaan_khusus' => $permintaan,
-            'room_name' => $request->room_name ?? 'Superior Double',
-            'option_type' => $request->option_type ?? 'Room Only',
-            'price_per_night' => $pricePerNight,
-            'tax_and_fee' => $taxAndFee,
+            'start_time' => $start,
+            'end_time' => $end,
             'total_price' => $totalPrice,
+            'tax_and_fee' => $taxAndFee,
             'status' => 'pending'
         ]);
 
-        // FIX UTAMA: Mengarahkan redirect ke rute 'user.pembayaran' sesuai isi web.php kamu
-        return redirect()->route('user.pembayaran', ['id' => $pemesanan->id]);
+        return redirect()->route('user.pembayaran', ['id' => $booking->id]);
     }
 
     // 3. Menampilkan Halaman Pembayaran Berdasarkan ID dari DB
     public function pembayaran($id)
     {
-        // Cari data di DB, jika tidak ada otomatis memunculkan error 404
-        $pemesanan = Pemesanan::findOrFail($id);
+        $pemesanan = Booking::with('resource')->findOrFail($id);
 
-        // Mengarah ke file resources/views/user/pembayaran.blade.php
         return view('user.pembayaran', compact('pemesanan'));
     }
 }

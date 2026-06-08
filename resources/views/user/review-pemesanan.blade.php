@@ -21,6 +21,9 @@
     <form action="{{ route('user.review.store') }}" method="POST">
         @csrf
 
+        <input type="hidden" name="resource_id" value="{{ $resourceId }}">
+        <input type="hidden" name="checkin" value="{{ $checkin }}">
+        <input type="hidden" name="checkout" value="{{ $checkout }}">
         <input type="hidden" name="room_name" value="{{ $roomName }}">
         <input type="hidden" name="option_type" value="{{ $optionType }}">
         <input type="hidden" name="price" value="{{ $pricePerNight }}">
@@ -158,13 +161,13 @@
                     <div class="checkin-checkout-box">
                         <div class="time-box">
                             <h5>Check-in</h5>
-                            <p>Kamis, 12 Mar 2026</p>
+                            <p>{{ $checkinDisplay }}</p>
                             <span>Dari 14:00</span>
                         </div>
                         <div class="arrow-divider">&rarr;</div>
                         <div class="time-box" style="text-align: right;">
                             <h5>Check-out</h5>
-                            <p>Jumat, 13 Mar 2026</p>
+                            <p>{{ $checkoutDisplay }}</p>
                             <span>Sebelum 12:00</span>
                         </div>
                     </div>
@@ -182,8 +185,8 @@
                     <h3 class="card-title" style="font-size: 1rem; font-weight: 700;"><i class="fa-solid fa-tags" style="color: #64748b; font-size: 0.9rem;"></i> Rincian harga</h3>
                     
                     <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-top: 18px;">
-                        <span style="color: #64748b;">Harga kamar</span>
-                        <strong style="color: #1a1f2c;">Rp. {{ number_format($pricePerNight, 0, ',', '.') }}</strong>
+                        <span style="color: #64748b;">Harga kamar ({{ $nights }} malam)</span>
+                        <strong style="color: #1a1f2c;">Rp. {{ number_format($pricePerNight * $nights, 0, ',', '.') }}</strong>
                     </div>
                     <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 2px; margin-bottom: 12px;">
                         (1x) {{ $roomName }} - {{ $optionType }}
@@ -197,7 +200,7 @@
                     <div class="total-highlight-box">
                         <div class="total-left">
                             <h4>Total</h4>
-                            <p>1 kamar, 1 malam</p>
+                            <p>1 kamar, {{ $nights }} malam</p>
                         </div>
                         <div class="total-right">
                             Rp. {{ number_format($totalPrice, 0, ',', '.') }}
