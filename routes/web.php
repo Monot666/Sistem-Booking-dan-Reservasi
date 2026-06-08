@@ -35,45 +35,23 @@ Route::get('/syarat-ketentuan', [PageController::class, 'syaratKetentuan'])->nam
 
 /*
 |--------------------------------------------------------------------------
-| AUTH ROUTES
+| AUTH ROUTES (Dikelola oleh Fortify)
 |--------------------------------------------------------------------------
 */
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'loginAction'])->name('login.action');
-Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/register', [AuthController::class, 'registerAction'])->name('register.action');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// Rute login, register, logout, dll otomatis ditangani oleh Fortify
+
+// Rute Kustom Verifikasi OTP
+Route::middleware(['auth'])->group(function () {
+    Route::post('/email/verify-otp', [\App\Http\Controllers\Auth\OTPVerificationController::class, 'verify'])
+        ->name('verification.verify-otp');
+});
 
 /*
 |--------------------------------------------------------------------------
 | PROTECTED ROUTES (Harus Login)
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth')->group(function () {
-
-    // --- BOOKING SYSTEM ---
-    Route::get('/booking', [BookingController::class, 'index'])->name('booking');
-    Route::get('/user/booking', [BookingController::class, 'index'])->name('user.booking');
-    Route::post('/booking', [BookingController::class, 'store'])->name('bookings.store');
-    Route::get('/user/booking/{id}', [BookingController::class, 'show'])->name('bookings.show');
-
-    // --- USER ROUTE GROUP (Review, Pilih Pembayaran, Instruksi, & Sukses) ---
-    Route::prefix('user')->name('user.')->group(function () {
-        Route::get('/review-pemesanan', [PemesananController::class, 'review'])->name('review');
-        Route::post('/review-pemesanan', [PemesananController::class, 'store'])->name('review.store');
-
-        Route::get('/pembayaran/{id}', [PemesananController::class, 'pembayaran'])->name('pembayaran');
-
-        // Halaman Perantara: Instruksi Pembayaran (Menampilkan Nomor VA / Rekening / Kode Kasir)
-        Route::get('/instruksi-pembayaran', function () {
-            return view('user.instruksi-pembayaran');
-        })->name('pembayaran.instruksi');
-
-        // Halaman Akhir: Status Sukses Terverifikasi (Diakses setelah klik "Saya Sudah Bayar")
-        Route::get('/sukses-pembayaran', function () {
-            return view('user.sukses-pembayaran');
-        })->name('pembayaran.sukses');
-    });
+Route::middleware(['auth'])->group(function () {
 
     // --- PROFILE ---
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
@@ -81,6 +59,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/orders', function () {
         return view('profile.orders');
     })->name('profile.orders');
+    Route::get('/profile/refunds', function () {
+        return view('profile.refunds');
+    })->name('profile.refunds');
 
     // --- KARTU ---
     Route::prefix('profile/cards')->group(function () {
@@ -98,60 +79,63 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [EwalletController::class, 'destroy'])->name('profile.ewallet.destroy');
     });
 
-    // --- PILIH KAMAR ---
+    // --- PILIH KAMAR & RESOURCES ---
     Route::get('/component', [PilihKamarController::class, 'index'])->name('bookingdua.index');
     Route::get('/pilih-kamar', [PilihKamarController::class, 'index'])->name('pilih-kamar');
     Route::get('/resources/{resource}', [ResourceController::class, 'show'])->name('pilih-kamar.show');
 
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    
-    // Rute untuk halaman Orders
-    Route::get('/profile/orders', function () {
-        return view('profile.orders');
-    })->name('profile.orders');
-
-    // BARU: Rute untuk halaman Refunds
-    Route::get('/profile/refunds', function () {
-        return view('profile.refunds');
-    })->name('profile.refunds');
+    // --- BOOKING SYSTEM (Cek verifikasi di Controller) ---
+    Route::get('/booking', [BookingController::class, 'index'])->name('booking');
+    Route::get('/user/booking', [BookingController::class, 'index'])->name('user.booking');
+    Route::post('/booking', [BookingController::class, 'store'])->name('bookings.store');
+    Route::get('/user/booking/{id}', [BookingController::class, 'show'])->name('bookings.show');
 
     /*
     |--------------------------------------------------------------------------
-    | ADMIN ONLY
+    | VERIFIED ONLY ROUTES (Harus Sudah Verifikasi Email/OTP)
     |--------------------------------------------------------------------------
     */
-    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
-    // Route Resource (ResourceController)
-    Route::post('/resources', [ResourceController::class, 'store'])->name('resources.store');
-    Route::put('/resources/{resource}', [ResourceController::class, 'update'])->name('resources.update');
-    Route::delete('/resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy');
+    Route::middleware(['verified'])->group(function () {
+        
+        // --- USER ROUTE GROUP (Review, Pilih Pembayaran, dll) ---
+        Route::prefix('user')->name('user.')->group(function () {
+            Route::get('/review-pemesanan', [PemesananController::class, 'review'])->name('review');
+            Route::post('/review-pemesanan', [PemesananController::class, 'store'])->name('review.store');
+            Route::get('/pembayaran/{id}', [PemesananController::class, 'pembayaran'])->name('pembayaran');
+            Route::get('/instruksi-pembayaran', fn() => view('user.instruksi-pembayaran'))->name('pembayaran.instruksi');
+            Route::get('/sukses-pembayaran', fn() => view('user.sukses-pembayaran'))->name('pembayaran.sukses');
+        });
 
-    // Route Admin (Dashboard, Kamar, dll)
-    // Nama route di bawah ini otomatis menjadi: admin.dashboard, admin.kamar, dst.
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/kamar', [RoomController::class, 'index'])->name('kamar');
-    Route::get('/bookings', fn() => view('admin.bookings'))->name('bookings');
-    Route::get('/guests', fn() => view('admin.guests'))->name('guests');
-    Route::get('/finance', [AdminPaymentController::class, 'index'])->name('finance');
-    Route::post('/payments', [PembayaranController::class, 'store'])->name('payments.store');
+        /*
+        |--------------------------------------------------------------------------
+        | ADMIN ONLY
+        |--------------------------------------------------------------------------
+        */
+        Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+            Route::post('/resources', [ResourceController::class, 'store'])->name('resources.store');
+            Route::put('/resources/{resource}', [ResourceController::class, 'update'])->name('resources.update');
+            Route::delete('/resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy');
+            Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+            Route::get('/kamar', [RoomController::class, 'index'])->name('kamar');
+            Route::get('/bookings', fn() => view('admin.bookings'))->name('bookings');
+            Route::get('/guests', fn() => view('admin.guests'))->name('guests');
+            Route::get('/finance', [AdminPaymentController::class, 'index'])->name('finance');
+            Route::post('/payments', [PembayaranController::class, 'store'])->name('payments.store');
+            Route::get('/users', [UserController::class, 'index'])->name('users.index');
+            Route::put('/users/{id}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
+        });
 
-    // Route Manajemen User
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::put('/users/{id}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
+        // --- FINANCE ONLY ---
+        Route::middleware('finance')->group(function () {
+            Route::get('/finance/dashboard', fn() => view('finance.dashboard'))->name('finance.dashboard');
+        });
+
+        // --- CONTENT CREATOR ONLY ---
+        Route::middleware('content_creator')->group(function () {
+            Route::get('/content/dashboard', fn() => view('content_creator.dashboard'))->name('content.dashboard');
+        });
+    });
 });
-
-});
-
-// Route khusus untuk role Finance
-Route::get('/finance/dashboard', function () {
-    return view('finance.dashboard');
-})->name('finance.dashboard');
-
-// Route khusus untuk role Content Creator
-Route::get('/content/dashboard', function () {
-    return view('content_creator.dashboard');
-})->name('content.dashboard');
 
 /*
 |--------------------------------------------------------------------------

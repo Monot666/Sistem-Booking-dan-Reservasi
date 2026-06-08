@@ -22,6 +22,29 @@
             <div class="profile-card form-content-area">
                 <h4 class="section-title">Personal Data</h4>
 
+                {{-- Status Verifikasi --}}
+                @if (!Auth::user()->hasVerifiedEmail())
+                    <div class="alert alert-warning border-0 shadow-sm mb-4" style="border-radius: 12px;">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                            <div>
+                                <h6 class="fw-bold mb-1">Akun Belum Terverifikasi</h6>
+                                <p class="small mb-2">Silakan verifikasi akun Anda untuk dapat melakukan pemesanan kamar.</p>
+                                <a href="{{ route('verification.notice') }}" class="btn btn-sm btn-warning fw-bold px-3">Verifikasi Sekarang</a>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="alert alert-success border-0 shadow-sm mb-4" style="border-radius: 12px;">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-check-circle fa-2x me-3"></i>
+                            <div>
+                                <h6 class="fw-bold mb-0">Akun Terverifikasi</h6>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
