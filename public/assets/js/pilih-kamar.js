@@ -5,12 +5,28 @@
 /**
  * Fungsi Interaktif Membuka Modal Pop-up Detail Kamar
  */
-function openRoomDetail(name, type, capacity, size, description, mainImage) {
+function openRoomDetail(name, type, capacity, size, description, mainImage, facilities) {
     document.getElementById('md-room-name').textContent = name;
     document.getElementById('md-room-type').textContent = type;
-    document.getElementById('md-room-capacity').textContent = capacity + " Orang";
+    document.getElementById('md-room-capacity').textContent = capacity;
     document.getElementById('md-room-size').textContent = size;
     document.getElementById('md-room-desc').textContent = description;
+    
+    // Update Facilities in Modal
+    const facilitiesContainer = document.getElementById('md-room-facilities');
+    if (facilitiesContainer) {
+        if (facilities) {
+            const facilityArray = facilities.split(',');
+            let html = '';
+            facilityArray.forEach(f => {
+                html += `<div>${f.trim()}</div>`;
+            });
+            facilitiesContainer.innerHTML = html;
+        } else {
+            // Default facilities if none provided
+            facilitiesContainer.innerHTML = '<div>🚿 Shower</div><div>❄️ AC</div><div>📶 WiFi</div>';
+        }
+    }
     
     // PERBAIKAN: Di file .js eksternal, kita ganti {{ asset() }} menjadi path string absolut biasa
     const fallbackImg = mainImage ? mainImage : '/assets/img/bg.png';

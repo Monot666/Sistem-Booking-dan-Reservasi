@@ -59,17 +59,22 @@
                     
                     <div class="room-spec">
                         <span class="spec-size">📐 {{ $resource->size ?? '28.0 m²' }}</span>
+                        <span class="spec-capacity" style="margin-left: 10px;">👥 {{ $resource->max_adults }} Adult, {{ $resource->max_children }} Children</span>
                     </div>
 
                     <div class="room-facilities-grid">
-                        <div class="facility-item">🚿 Shower</div>
-                        <div class="facility-item">🔲 Refrigerator</div>
-                        <div class="facility-item">♨️ Hot water</div>
-                        <div class="facility-item">🔲 Air Conditioning</div>
-                        <div class="facility-item">📶 Free WiFi</div>
+                        @if($resource->facilities)
+                            @foreach(explode(',', $resource->facilities) as $facility)
+                                <div class="facility-item">{{ trim($facility) }}</div>
+                            @endforeach
+                        @else
+                            <div class="facility-item">🚿 Shower</div>
+                            <div class="facility-item">❄️ AC</div>
+                            <div class="facility-item">📶 WiFi</div>
+                        @endif
                     </div>
 
-                    <a href="javascript:void(0)" class="see-detail-link" onclick="openRoomDetail('{{ addslashes($resource->name) }}', '{{ $resource->type }}', '{{ $resource->capacity }}', '{{ $resource->size ?? '28.0 m²' }}', '{{ addslashes($resource->description) }}', '{{ $resource->image }}')">See Room Details</a>
+                    <a href="javascript:void(0)" class="see-detail-link" onclick="openRoomDetail({{ json_encode($resource->name) }}, {{ json_encode($resource->type) }}, {{ json_encode($resource->max_adults . ' Adult, ' . $resource->max_children . ' Children') }}, {{ json_encode($resource->size ?? '28.0 m²') }}, {{ json_encode($resource->description) }}, {{ json_encode($resource->image) }}, {{ json_encode($resource->facilities) }})">See Room Details</a>
                 </div>
 
                 <div class="room-table-column">
@@ -97,7 +102,9 @@
                                 <td class="text-center">
                                     <form action="{{ route('user.review') }}" method="GET">
                                         @csrf
-                                        <input type="hidden" name="room_id" value="{{ $resource->id }}">
+                                        <input type="hidden" name="resource_id" value="{{ $resource->id }}">
+                                        <input type="hidden" name="checkin" value="{{ $checkinRaw }}">
+                                        <input type="hidden" name="checkout" value="{{ $checkoutRaw }}">
                                         <input type="hidden" name="room_name" value="{{ $resource->name }}">
                                         <input type="hidden" name="option_type" value="Room Only">
                                         <input type="hidden" name="price" value="{{ $resource->price_per_hour }}">
@@ -119,7 +126,9 @@
                                 <td class="text-center">
                                     <form action="{{ route('user.review') }}" method="GET">
                                         @csrf
-                                        <input type="hidden" name="room_id" value="{{ $resource->id }}">
+                                        <input type="hidden" name="resource_id" value="{{ $resource->id }}">
+                                        <input type="hidden" name="checkin" value="{{ $checkinRaw }}">
+                                        <input type="hidden" name="checkout" value="{{ $checkoutRaw }}">
                                         <input type="hidden" name="room_name" value="{{ $resource->name }}">
                                         <input type="hidden" name="option_type" value="Breakfast for 2">
                                         <input type="hidden" name="price" value="{{ $resource->price_per_hour + 75000 }}">
@@ -158,31 +167,31 @@
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
                 <div style="display: flex; align-items: center; gap: 10px; color: #4a5568; font-size: 0.9rem;">
-                    <span style="font-size: 1.1rem;">📐</span> <strong>Luas Kamar:</strong> <span id="md-room-size">28 m²</span>
+                    <span style="font-size: 1.1rem;">📐</span> <strong>Room Size:</strong> <span id="md-room-size">28 m²</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px; color: #4a5568; font-size: 0.9rem;">
-                    <span style="font-size: 1.1rem;">👥</span> <strong>Kapasitas:</strong> <span id="md-room-capacity">2 Orang</span>
+                    <span style="font-size: 1.1rem;">👥</span> <strong>Capacity:</strong> <span id="md-room-capacity">2 Adult, 1 Children</span>
                 </div>
             </div>
 
-            <h5 style="font-size: 0.95rem; font-weight: 700; color: #333; margin-bottom: 8px;">Deskripsi Kamar</h5>
-            <p id="md-room-desc" style="font-size: 0.88rem; color: #666; line-height: 1.6; text-align: justify; margin-bottom: 20px;">Deskripsi lengkap kamar.</p>
+            <h5 style="font-size: 0.95rem; font-weight: 700; color: #333; margin-bottom: 8px;">Room Description</h5>
+            <p id="md-room-desc" style="font-size: 0.88rem; color: #666; line-height: 1.6; text-align: justify; margin-bottom: 20px;">Detailed room description.</p>
             
-            <h5 style="font-size: 0.95rem; font-weight: 700; color: #333; margin-bottom: 12px;">Fasilitas Kamar Selengkapnya</h5>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem; color: #555;">
-                <div>🚿 Kamar Mandi Dalam (Shower)</div>
+            <h5 style="font-size: 0.95rem; font-weight: 700; color: #333; margin-bottom: 12px;">Room Facilities</h5>
+            <div id="md-room-facilities" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem; color: #555;">
+                <div>🚿 Private Bathroom (Shower)</div>
                 <div>❄️ Air Conditioning (AC)</div>
-                <div>📶 Wi-Fi Gratis Berkecepatan Tinggi</div>
-                <div>📺 Smart TV & Saluran Satelit</div>
-                <div>🔲 Kulkas Mini (Mini Fridge)</div>
-                <div>☕ Pembuat Kopi & Teh Elektrik</div>
+                <div>📶 High-Speed Free Wi-Fi</div>
+                <div>📺 Smart TV & Satellite Channels</div>
+                <div>🔲 Mini Fridge</div>
+                <div>☕ Coffee & Tea Maker</div>
                 <div>🔒 Safe Deposit Box</div>
-                <div>💨 Pengering Rambut (Hairdryer)</div>
+                <div>💨 Hairdryer</div>
             </div>
         </div>
         
         <div class="rd-right-photos" style="flex: 0.9; background: #fcfcfc; border-left: 1px solid #f0f0f0; padding: 25px; display: flex; flex-direction: column; gap: 12px; justify-content: center; max-height: 85vh;">
-            <p style="margin: 0; font-size: 0.75rem; font-weight: 700; color: #999; text-uppercase; letter-spacing: 0.5px;">Galeri Foto Properti</p>
+            <p style="margin: 0; font-size: 0.75rem; font-weight: 700; color: #999; text-uppercase; letter-spacing: 0.5px;">Property Photo Gallery</p>
             <div style="width: 100%; height: 240px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
                 <img id="md-main-img" src="" alt="Foto Utama" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
