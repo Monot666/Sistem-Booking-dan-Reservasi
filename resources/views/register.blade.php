@@ -16,7 +16,7 @@
         
         <h2 class="font-serif mb-4">Create Account</h2>
 
-        <form action="{{ route('register.action') }}" method="POST">
+        <form action="{{ route('register') }}" method="POST">
             @csrf
             <div class="form-group-custom">
                 <label>Full Name</label>

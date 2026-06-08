@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\SendOTPNotification;
+
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -23,11 +26,28 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'gender',    // Tambahkan ini
-        'birthdate', // Tambahkan ini
-        'city',      // Tambahkan ini
-        'phone',     // Tambahkan ini
+        'otp_code',
+        'otp_expires_at',
     ];
+
+    /**
+     * Generate and save a new OTP for the user.
+     */
+    public function generateOTP()
+    {
+        $this->otp_code = rand(100000, 999999);
+        $this->otp_expires_at = now()->addMinutes(10);
+        $this->save();
+    }
+
+    /**
+     * Send the email verification notification.
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->generateOTP();
+        $this->notify(new SendOTPNotification($this->otp_code));
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -49,7 +69,6 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'birthdate' => 'date', // Tambahkan cast date agar mudah diolah
         ];
     }
 
