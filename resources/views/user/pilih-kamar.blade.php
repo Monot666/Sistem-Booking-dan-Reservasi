@@ -18,7 +18,7 @@
     
     <div class="room-navbar" style="background: #ffffff; border-bottom: 1px solid #eef2f5; padding: 12px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
         <div class="navbar-content container" style="max-width: 1160px; margin: 0 auto; padding: 0 1rem; display: flex; align-items: center;">
-            <a href="{{ route('booking') }}" class="back-link" style="text-decoration: none; color: #e69c24; font-weight: 700; font-size: 0.95rem; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 8px;">
+            <a href="{{ route('bookings.index') }}" class="back-link" style="text-decoration: none; color: #e69c24; font-weight: 700; font-size: 0.95rem; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 8px;">
                 <span class="back-arrow" style="font-size: 1.1rem;">&#10094;</span> PILIH KAMAR
             </a>
         </div>
@@ -100,7 +100,7 @@
                                 <td class="price-amount">Rp {{ number_format($resource->price_per_hour, 0, ',', '.') }}</td>
                                 <td class="text-center text-muted">x1</td>
                                 <td class="text-center">
-                                    <form action="{{ route('user.review') }}" method="GET">
+                                    <form action="{{ route('bookings.review') }}" method="GET">
                                         @csrf
                                         <input type="hidden" name="resource_id" value="{{ $resource->id }}">
                                         <input type="hidden" name="checkin" value="{{ $checkinRaw }}">
@@ -124,7 +124,7 @@
                                 <td class="price-amount">Rp {{ number_format($resource->price_per_hour + 75000, 0, ',', '.') }}</td>
                                 <td class="text-center text-muted">x1</td>
                                 <td class="text-center">
-                                    <form action="{{ route('user.review') }}" method="GET">
+                                    <form action="{{ route('bookings.review') }}" method="GET">
                                         @csrf
                                         <input type="hidden" name="resource_id" value="{{ $resource->id }}">
                                         <input type="hidden" name="checkin" value="{{ $checkinRaw }}">

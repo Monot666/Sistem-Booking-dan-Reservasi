@@ -83,12 +83,39 @@ document.addEventListener("DOMContentLoaded", function() {
         btnUpload.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Menyimpan Perubahan...';
         btnUpload.disabled = true;
 
-        setTimeout(() => {
-            alert('Semua pembaruan untuk layout ' + document.getElementById('selected-layout-title').innerText + ' berhasil disimpan dan diperbarui ke sistem pengguna!');
+        const formData = new FormData();
+        formData.append('layout_name', document.getElementById('selected-layout-title').innerText);
+        formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+        
+        if (document.getElementById('file-input-1').files[0]) formData.append('file_1', document.getElementById('file-input-1').files[0]);
+        if (document.getElementById('link-input-1')) formData.append('link_1', document.getElementById('link-input-1').value);
+        
+        if (document.getElementById('file-input-2').files[0]) formData.append('file_2', document.getElementById('file-input-2').files[0]);
+        if (document.getElementById('link-input-2')) formData.append('link_2', document.getElementById('link-input-2').value);
+        
+        if (document.getElementById('file-input-3').files[0]) formData.append('file_3', document.getElementById('file-input-3').files[0]);
+        if (document.getElementById('link-input-3')) formData.append('link_3', document.getElementById('link-input-3').value);
+
+        fetch('/content/upload', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
             btnUpload.innerHTML = originalText;
             btnUpload.disabled = false;
             showLayoutSelection(); 
-        }, 1500);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat mengunggah gambar.');
+            btnUpload.innerHTML = originalText;
+            btnUpload.disabled = false;
+        });
     });
 
     // Menampilkan Preview di dalam kotak putus-putus

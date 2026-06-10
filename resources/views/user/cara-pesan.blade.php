@@ -10,7 +10,7 @@
     <div class="hero-overlay"></div>
     
     <!-- Tombol Kembali Kiri Atas -->
-    <a href="{{ route('landing') }}" class="btn-back-gold">
+    <a href="{{ route('home') }}" class="btn-back-gold">
         <i class="fas fa-chevron-left"></i>
     </a>
     

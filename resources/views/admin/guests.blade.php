@@ -11,17 +11,7 @@
 <body>
 
 @php
-// DUMMY DATA TAMU BERVARIASI
-$guests = [
-    ['id' => 1, 'initial' => 'DS', 'name' => 'Dimas Sudarmono', 'email' => 'monotxploit@gmail.com', 'phone' => '087759315863', 'city' => 'Solo', 'total_bookings' => 5, 'last_booking' => '13-03-2026'],
-    ['id' => 2, 'initial' => 'BS', 'name' => 'Bayu Skak', 'email' => 'bayu.yowisben@gmail.com', 'phone' => '081234567890', 'city' => 'Malang', 'total_bookings' => 12, 'last_booking' => '20-04-2026'],
-    ['id' => 3, 'initial' => 'BP', 'name' => 'Baskara Putra', 'email' => 'baskara.hindia@yahoo.com', 'phone' => '085678901234', 'city' => 'Jakarta', 'total_bookings' => 3, 'last_booking' => '05-05-2026'],
-    ['id' => 4, 'initial' => 'AW', 'name' => 'Andi Wijaya', 'email' => 'andi.wijaya@outlook.com', 'phone' => '081122334455', 'city' => 'Surabaya', 'total_bookings' => 1, 'last_booking' => '10-01-2026'],
-    ['id' => 5, 'initial' => 'SN', 'name' => 'Siti Nurhaliza', 'email' => 'siti.nur@gmail.com', 'phone' => '089988776655', 'city' => 'Bandung', 'total_bookings' => 7, 'last_booking' => '25-12-2025'],
-    ['id' => 6, 'initial' => 'RO', 'name' => 'Reza Oktovian', 'email' => 'reza.arap@gmail.com', 'phone' => '082233445566', 'city' => 'Jakarta', 'total_bookings' => 2, 'last_booking' => '14-02-2026'],
-    ['id' => 7, 'initial' => 'MA', 'name' => 'Maudy Ayunda', 'email' => 'maudy.ayunda@gmail.com', 'phone' => '087711223344', 'city' => 'Yogyakarta', 'total_bookings' => 4, 'last_booking' => '28-03-2026'],
-    ['id' => 8, 'initial' => 'RD', 'name' => 'Raditya Dika', 'email' => 'raditya.dika@gmail.com', 'phone' => '081344556677', 'city' => 'Jakarta', 'total_bookings' => 8, 'last_booking' => '15-04-2026'],
-];
+// $guests passed from controller
 @endphp
 
 <div class="admin-wrapper">
@@ -79,38 +69,42 @@ $guests = [
 
         <div class="row g-4" id="guestsGrid">
             @foreach($guests as $g)
+            @php
+                // Hitung inisial nama
+                $initial = collect(explode(' ', $g->name))->map(fn($n) => substr($n, 0, 1))->take(2)->join('');
+            @endphp
             <div class="col-md-6 col-lg-3 guest-item">
                 <div class="guest-card">
                     
                     <div class="d-flex align-items-center">
-                        <div class="guest-avatar">{{ $g['initial'] }}</div>
+                        <div class="guest-avatar">{{ strtoupper($initial) }}</div>
                         <div class="ms-3">
-                            <h6 class="guest-name">{{ $g['name'] }}</h6>
+                            <h6 class="guest-name">{{ $g->name }}</h6>
                         </div>
                     </div>
 
                     <div class="guest-contact">
-                        <div class="guest-email"><i class="far fa-envelope"></i> <span>{{ $g['email'] }}</span></div>
-                        <div class="guest-phone"><i class="fas fa-phone-alt"></i> <span>{{ $g['phone'] }}</span></div>
+                        <div class="guest-email"><i class="far fa-envelope"></i> <span>{{ $g->email }}</span></div>
+                        <div class="guest-phone"><i class="fas fa-phone-alt"></i> <span>{{ $g->phone ?? '-' }}</span></div>
                     </div>
 
                     <div class="guest-details">
                         <div class="detail-row">
                             <span class="label">City of residence</span>
-                            <span class="val">{{ $g['city'] }}</span>
+                            <span class="val">{{ $g->city ?? '-' }}</span>
                         </div>
                         <div class="detail-row">
                             <span class="label">Total bookings</span>
-                            <span class="val">{{ $g['total_bookings'] }}</span>
+                            <span class="val">{{ $g->bookings_count }}</span>
                         </div>
                         <div class="detail-row">
                             <span class="label">Last booking</span>
-                            <span class="val">{{ $g['last_booking'] }}</span>
+                            <span class="val">{{ $g->bookings_max_start_time ? \Carbon\Carbon::parse($g->bookings_max_start_time)->format('d-m-Y') : '-' }}</span>
                         </div>
                     </div>
 
                     @php
-                        $wa_number = preg_replace('/^0/', '62', $g['phone']);
+                        $wa_number = preg_replace('/^0/', '62', $g->phone ?? '0');
                         $pesan = "Hallo, kami dari Roomly";
                     @endphp
                     

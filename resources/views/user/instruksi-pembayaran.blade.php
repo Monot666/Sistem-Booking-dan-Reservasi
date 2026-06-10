@@ -31,7 +31,7 @@
 @endphp
 
 <div class="page-header" style="padding: 20px; display: flex; align-items: center; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-    <a href="{{ route('user.pembayaran', ['id' => session('current_booking_id', 1)]) }}" class="back-arrow" style="text-decoration: none; color: #333; font-size: 1.2rem; margin-right: 15px;">
+    <a href="{{ route('bookings.payment', ['id' => session('current_booking_id', 1)]) }}" class="back-arrow" style="text-decoration: none; color: #333; font-size: 1.2rem; margin-right: 15px;">
         <i class="fa-solid fa-arrow-left"></i>
     </a>
     <h1 style="font-size: 1.2rem; margin: 0;">Selesaikan Pembayaran</h1>
@@ -94,10 +94,10 @@
             </div>
 
             <div class="action-footer-group" style="margin-top: 25px;">
-                <a href="{{ route('user.pembayaran.sukses', ['method' => $method]) }}" class="btn-status-primary" style="display:block; text-align:center; padding: 12px; background-color: #10b981; color: #fff; text-decoration: none; border-radius: 8px;">
+                <a href="{{ route('bookings.payment.success', ['method' => $method]) }}" class="btn-status-primary" style="display:block; text-align:center; padding: 12px; background-color: #10b981; color: #fff; text-decoration: none; border-radius: 8px;">
                     <i class="fa-solid fa-circle-check"></i> Saya Sudah Bayar
                 </a>
-                <a href="{{ route('booking') }}" style="display:block; text-align:center; margin-top: 10px; color: #666; text-decoration: none;">Bayar Nanti (Ke Beranda)</a>
+                <a href="{{ route('bookings.index') }}" style="display:block; text-align:center; margin-top: 10px; color: #666; text-decoration: none;">Bayar Nanti (Ke Beranda)</a>
             </div>
 
         </div>

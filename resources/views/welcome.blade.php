@@ -22,7 +22,7 @@
 <section class="hero-section">
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
-            <a class="navbar-brand" href="{{ route('landing') }}">
+            <a class="navbar-brand" href="{{ route('home') }}">
                 <img src="{{ asset('assets/img/icons/logo.svg') }}" alt="Logo">
             </a>
             
@@ -61,7 +61,7 @@
                         Selamat datang di website Roomly, dimana kamu bisa memesan kamar yang mewah dan elegan. 
                         Yang pastinya cocok untuk melepas penat Anda, bahkan keluarga dan pasangan Anda.
                     </p>
-                    <a href="{{ route('booking') }}" class="btn btn-gold btn-lg px-5">BOOK NOW</a>
+                    <a href="{{ route('bookings.index') }}" class="btn btn-gold btn-lg px-5">BOOK NOW</a>
                 </div>
 
                 <div class="hero-divider"></div>

@@ -11,14 +11,7 @@
 <body>
 
 @php
-// DUMMY DATA (Status Pending dihapus)
-$bookings = [
-    ['id' => 1, 'ref' => 'BK001', 'guest' => 'Dimas Sudarmono', 'room' => '212', 'checkin' => '12-03-2026', 'checkout' => '13-03-2026', 'pax' => 2, 'amount' => 535000, 'status' => 'Confirmed'],
-    ['id' => 2, 'ref' => 'BK002', 'guest' => 'Baskara Putra', 'room' => '104', 'checkin' => '14-03-2026', 'checkout' => '16-03-2026', 'pax' => 1, 'amount' => 890000, 'status' => 'Confirmed'],
-    ['id' => 3, 'ref' => 'BK003', 'guest' => 'Nereus', 'room' => '305', 'checkin' => '10-03-2026', 'checkout' => '11-03-2026', 'pax' => 2, 'amount' => 600000, 'status' => 'Completed'],
-    ['id' => 4, 'ref' => 'BK004', 'guest' => 'Praya', 'room' => '210', 'checkin' => '15-03-2026', 'checkout' => '15-03-2026', 'pax' => 1, 'amount' => 450000, 'status' => 'Cancelled'],
-    ['id' => 5, 'ref' => 'BK005', 'guest' => 'Andi Wijaya', 'room' => '101', 'checkin' => '16-03-2026', 'checkout' => '18-03-2026', 'pax' => 2, 'amount' => 750000, 'status' => 'Confirmed'],
-];
+// $bookings passed from controller
 @endphp
 
 <div class="admin-wrapper">
@@ -70,13 +63,13 @@ $bookings = [
             <div class="col-md-4">
                 <div class="booking-stat-card">
                     <div class="booking-stat-title">Confirmed <i class="fas fa-check-double"></i></div>
-                    <div class="booking-stat-value">3</div>
+                    <div class="booking-stat-value">{{ $bookings->where('status', \App\Enums\BookingStatus::Confirmed)->count() }}</div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="booking-stat-card">
                     <div class="booking-stat-title">Total Revenue <i class="fas fa-dollar-sign"></i></div>
-                    <div class="booking-stat-value">$7,760</div>
+                    <div class="booking-stat-value">Rp.{{ number_format($bookings->whereIn('status', [\App\Enums\BookingStatus::Confirmed, \App\Enums\BookingStatus::Completed])->sum('total_price'), 0, ',', '.') }}</div>
                 </div>
             </div>
         </div>
@@ -117,21 +110,22 @@ $bookings = [
                     <tbody>
                         @foreach($bookings as $b)
                         <tr class="booking-row">
-                            <td class="fw-bold text-dark booking-ref">{{ $b['ref'] }}</td>
-                            <td class="guest-name">{{ $b['guest'] }}</td>
-                            <td>{{ $b['room'] }}</td>
-                            <td>{{ $b['checkin'] }}</td>
-                            <td>{{ $b['checkout'] }}</td>
-                            <td>{{ $b['pax'] }}</td>
-                            <td>Rp.{{ number_format($b['amount'], 0, ',', '.') }}</td>
-                            <td class="booking-status" data-status="{{ strtolower($b['status']) }}">
-                                @if($b['status'] == 'Confirmed') <span class="status-badge badge-confirmed">Confirmed</span>
-                                @elseif($b['status'] == 'Completed') <span class="status-badge badge-completed">Completed</span>
-                                @elseif($b['status'] == 'Cancelled') <span class="status-badge badge-cancelled">Cancelled</span>
+                            <td class="fw-bold text-dark booking-ref">#{{ $b->id }}</td>
+                            <td class="guest-name">{{ $b->nama_pemesan }}</td>
+                            <td>{{ $b->room_name }}</td>
+                            <td>{{ \Carbon\Carbon::parse($b->start_time)->format('d-m-Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($b->end_time)->format('d-m-Y') }}</td>
+                            <td>{{ $b->guest_count }}</td>
+                            <td>Rp.{{ number_format($b->total_price, 0, ',', '.') }}</td>
+                            <td class="booking-status" data-status="{{ strtolower($b->status->value ?? $b->status) }}">
+                                @if($b->status === \App\Enums\BookingStatus::Confirmed) <span class="status-badge badge-confirmed">Confirmed</span>
+                                @elseif($b->status === \App\Enums\BookingStatus::Completed) <span class="status-badge badge-completed">Completed</span>
+                                @elseif($b->status === \App\Enums\BookingStatus::Cancelled) <span class="status-badge badge-cancelled">Cancelled</span>
+                                @else <span class="status-badge badge-pending bg-warning text-dark px-2 rounded">Pending</span>
                                 @endif
                             </td>
                             <td>
-                                <button class="btn-action" data-bs-toggle="modal" data-bs-target="#bookingModal{{ $b['id'] }}">
+                                <button class="btn-action" data-bs-toggle="modal" data-bs-target="#bookingModal{{ $b->id }}">
                                     <i class="far fa-eye"></i>
                                 </button>
                             </td>
@@ -146,7 +140,7 @@ $bookings = [
 </div>
 
 @foreach($bookings as $b)
-<div class="modal fade" id="bookingModal{{ $b['id'] }}" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="bookingModal{{ $b->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content custom-modal p-2">
             
@@ -158,13 +152,14 @@ $bookings = [
             <div class="modal-body p-4">
                 <div class="modal-header-black">
                     <div>
-                        <small>Booking Reference</small>
-                        <h3>{{ $b['ref'] }}</h3>
+                        <small>Booking ID</small>
+                        <h3>#{{ $b->id }}</h3>
                     </div>
                     <div>
-                        @if($b['status'] == 'Confirmed') <span class="status-badge badge-confirmed">Confirmed</span>
-                        @elseif($b['status'] == 'Completed') <span class="status-badge badge-completed">Completed</span>
-                        @elseif($b['status'] == 'Cancelled') <span class="status-badge badge-cancelled">Cancelled</span>
+                        @if($b->status === \App\Enums\BookingStatus::Confirmed) <span class="status-badge badge-confirmed">Confirmed</span>
+                        @elseif($b->status === \App\Enums\BookingStatus::Completed) <span class="status-badge badge-completed">Completed</span>
+                        @elseif($b->status === \App\Enums\BookingStatus::Cancelled) <span class="status-badge badge-cancelled">Cancelled</span>
+                        @else <span class="status-badge badge-pending bg-warning text-dark px-2 rounded">Pending</span>
                         @endif
                     </div>
                 </div>
@@ -172,34 +167,34 @@ $bookings = [
                 <div class="row">
                     <div class="col-6">
                         <div class="detail-label">Guest Name</div>
-                        <div class="detail-value">{{ $b['guest'] }}</div>
+                        <div class="detail-value">{{ $b->nama_pemesan }}</div>
                     </div>
                     <div class="col-6">
                         <div class="detail-label">Hotel & Room Number</div>
-                        <div class="detail-value">Aston Solo Hotel ({{ $b['room'] }})</div>
+                        <div class="detail-value">Roomly ({{ $b->room_name }})</div>
                     </div>
                     
                     <div class="col-6">
                         <div class="detail-label">Check-In Date</div>
-                        <div class="detail-value">{{ $b['checkin'] }}</div>
+                        <div class="detail-value">{{ \Carbon\Carbon::parse($b->start_time)->format('d-m-Y') }}</div>
                     </div>
                     <div class="col-6">
                         <div class="detail-label">Check-Out Date</div>
-                        <div class="detail-value">{{ $b['checkout'] }}</div>
+                        <div class="detail-value">{{ \Carbon\Carbon::parse($b->end_time)->format('d-m-Y') }}</div>
                     </div>
                     
                     <div class="col-6">
                         <div class="detail-label">Guest</div>
-                        <div class="detail-value">{{ $b['pax'] }}</div>
+                        <div class="detail-value">{{ $b->guest_count }} Pax</div>
                     </div>
                     <div class="col-6">
                         <div class="detail-label">Total Amount</div>
-                        <div class="detail-value">Rp.{{ number_format($b['amount'], 0, ',', '.') }}</div>
+                        <div class="detail-value">Rp.{{ number_format($b->total_price, 0, ',', '.') }}</div>
                     </div>
 
                     <div class="col-12">
                         <div class="detail-label">Permintaan Khusus</div>
-                        <div class="detail-value mb-0">Smoking area, 1 ranjang besar</div>
+                        <div class="detail-value mb-0">{{ $b->permintaan_khusus ?? '-' }}</div>
                     </div>
                 </div>
             </div>

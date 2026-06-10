@@ -16,16 +16,7 @@
 <body>
 
 @php
-$transactions = [
-    ['id' => 1, 'date' => '12-03-2026', 'desc' => 'Room Booking - BK001', 'category' => 'Revenue', 'amount' => 535000, 'method' => 'Virtual Account', 'status' => 'Completed'],
-    ['id' => 2, 'date' => '12-03-2026', 'desc' => 'Staff Salaries - Praya', 'category' => 'Expense', 'amount' => 5000000, 'method' => 'Bank Transfer', 'status' => 'Completed'],
-    ['id' => 3, 'date' => '12-03-2026', 'desc' => 'Room Booking - BK002', 'category' => 'Revenue', 'amount' => 535000, 'method' => 'Paypal', 'status' => 'Completed'],
-    ['id' => 4, 'date' => '12-03-2026', 'desc' => 'Maintenance Supplies', 'category' => 'Expense', 'amount' => 1000000, 'method' => 'Virtual Account', 'status' => 'Completed'],
-    ['id' => 5, 'date' => '12-03-2026', 'desc' => 'Room Booking - BK001', 'category' => 'Revenue', 'amount' => 535000, 'method' => 'Virtual Account', 'status' => 'Completed'],
-    ['id' => 6, 'date' => '12-03-2026', 'desc' => 'Room Booking - BK001', 'category' => 'Revenue', 'amount' => 535000, 'method' => 'Virtual Account', 'status' => 'Completed'],
-    ['id' => 7, 'date' => '12-03-2026', 'desc' => 'Booking Cancellation', 'category' => 'Refund', 'amount' => 535000, 'method' => 'Credit Card', 'status' => 'Completed'],
-    ['id' => 8, 'date' => '12-03-2026', 'desc' => 'Room Booking - BK001', 'category' => 'Revenue', 'amount' => 535000, 'method' => 'Virtual Account', 'status' => 'Completed'],
-];
+// $transactions, $totalRevenue, $totalExpense, $netProfit passed from controller
 @endphp
 
 <div class="admin-wrapper">
@@ -74,7 +65,7 @@ $transactions = [
                         <span class="stat-title">Total Revenue</span>
                         <i class="fas fa-arrow-trend-up"></i>
                     </div>
-                    <div class="stat-amount">Rp 4.390.000</div>
+                    <div class="stat-amount">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</div>
                     <div class="stat-desc">+12% from last month</div>
                 </div>
             </div>
@@ -84,7 +75,7 @@ $transactions = [
                         <span class="stat-title">Total Expenses</span>
                         <i class="fas fa-arrow-trend-down"></i>
                     </div>
-                    <div class="stat-amount">Rp 19.050.000</div>
+                    <div class="stat-amount">Rp {{ number_format($totalExpense, 0, ',', '.') }}</div>
                     <div class="stat-desc">+5% from last month</div>
                 </div>
             </div>
@@ -94,7 +85,7 @@ $transactions = [
                         <span class="stat-title">Net Profit</span>
                         <i class="fas fa-wallet"></i>
                     </div>
-                    <div class="stat-amount">Rp 15.200.000</div>
+                    <div class="stat-amount">Rp {{ number_format($netProfit, 0, ',', '.') }}</div>
                     <div class="stat-desc">Profit Margin: +67.2%</div>
                 </div>
             </div>
@@ -104,7 +95,7 @@ $transactions = [
                         <span class="stat-title">Transactions</span>
                         <i class="far fa-calendar-alt"></i>
                     </div>
-                    <div class="stat-amount">58</div>
+                    <div class="stat-amount">{{ $transactions->count() }}</div>
                     <div class="stat-desc">This month</div>
                 </div>
             </div>
@@ -160,20 +151,20 @@ $transactions = [
                     <tbody>
                         @foreach($transactions as $t)
                         <tr>
-                            <td>{{ $t['date'] }}</td>
-                            <td class="text-start fw-medium" style="color: #334155;">{{ $t['desc'] }}</td>
+                            <td>{{ \Carbon\Carbon::parse($t->date)->format('d-m-Y') }}</td>
+                            <td class="text-start fw-medium" style="color: #334155;">{{ $t->description }}</td>
                             <td>
-                                <span class="badge-cat {{ strtolower($t['category']) }}">{{ $t['category'] }}</span>
+                                <span class="badge-cat {{ strtolower($t->type->value ?? $t->type) }}">{{ $t->type->value ?? $t->type }}</span>
                             </td>
-                            <td class="fw-semibold" style="color: {{ $t['category'] == 'Expense' || $t['category'] == 'Refund' ? '#ef4444' : '#10b981' }}">
-                                Rp. {{ number_format($t['amount'], 0, ',', '.') }}
+                            <td class="fw-semibold" style="color: {{ ($t->type->value ?? $t->type) === 'Expense' || ($t->type->value ?? $t->type) === 'Refund' ? '#ef4444' : '#10b981' }}">
+                                Rp. {{ number_format($t->amount, 0, ',', '.') }}
                             </td>
-                            <td>{{ $t['method'] }}</td>
+                            <td>{{ $t->method }}</td>
                             <td>
-                                <span class="badge-status">Completed</span>
+                                <span class="badge-status">{{ $t->status }}</span>
                             </td>
                             <td>
-                                <button class="btn-action-detail" data-bs-toggle="modal" data-bs-target="#detailModal{{ $t['id'] }}">
+                                <button class="btn-action-detail" data-bs-toggle="modal" data-bs-target="#detailModal{{ $t->id }}">
                                     <i class="fas fa-ellipsis-h"></i>
                                 </button>
                             </td>
@@ -187,7 +178,7 @@ $transactions = [
 </div>
 
 @foreach($transactions as $t)
-<div class="modal fade" id="detailModal{{ $t['id'] }}" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="detailModal{{ $t->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
             <div class="modal-header border-0 pb-0 pt-4 px-4">
@@ -197,32 +188,32 @@ $transactions = [
             <div class="modal-body p-4">
                 <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
                     <span class="text-muted" style="font-size: 0.9rem;">Transaction ID:</span>
-                    <span class="fw-bold text-dark">#TXN-00{{ $t['id'] }}</span>
+                    <span class="fw-bold text-dark">#TXN-00{{ $t->id }}</span>
                 </div>
                 <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
                     <span class="text-muted" style="font-size: 0.9rem;">Date:</span>
-                    <span class="fw-bold text-dark">{{ $t['date'] }}</span>
+                    <span class="fw-bold text-dark">{{ \Carbon\Carbon::parse($t->date)->format('d-m-Y') }}</span>
                 </div>
                 <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
                     <span class="text-muted" style="font-size: 0.9rem;">Description:</span>
-                    <span class="fw-bold text-dark text-end">{{ $t['desc'] }}</span>
+                    <span class="fw-bold text-dark text-end">{{ $t->description }}</span>
                 </div>
                 <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
                     <span class="text-muted" style="font-size: 0.9rem;">Category:</span>
-                    <span class="badge-cat {{ strtolower($t['category']) }}">{{ $t['category'] }}</span>
+                    <span class="badge-cat {{ strtolower($t->type->value ?? $t->type) }}">{{ $t->type->value ?? $t->type }}</span>
                 </div>
                 <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
                     <span class="text-muted" style="font-size: 0.9rem;">Payment Method:</span>
-                    <span class="fw-bold text-dark">{{ $t['method'] }}</span>
+                    <span class="fw-bold text-dark">{{ $t->method }}</span>
                 </div>
                 <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
                     <span class="text-muted" style="font-size: 0.9rem;">Status:</span>
-                    <span class="badge-status">{{ $t['status'] }}</span>
+                    <span class="badge-status">{{ $t->status }}</span>
                 </div>
                 <div class="d-flex justify-content-between mt-4">
                     <span class="text-muted fw-bold">Total Amount:</span>
-                    <span class="fw-bold fs-5" style="color: {{ $t['category'] == 'Expense' || $t['category'] == 'Refund' ? '#ef4444' : '#10b981' }}">
-                        Rp. {{ number_format($t['amount'], 0, ',', '.') }}
+                    <span class="fw-bold fs-5" style="color: {{ ($t->type->value ?? $t->type) === 'Expense' || ($t->type->value ?? $t->type) === 'Refund' ? '#ef4444' : '#10b981' }}">
+                        Rp. {{ number_format($t->amount, 0, ',', '.') }}
                     </span>
                 </div>
             </div>
@@ -242,7 +233,7 @@ $transactions = [
                 <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="#" method="POST">
+                <form action="{{ route('finance.transactions.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label class="custom-form-label">Date</label>
@@ -254,10 +245,11 @@ $transactions = [
                     </div>
                     <div class="mb-3">
                         <label class="custom-form-label">Category</label>
-                        <select class="form-select custom-form-input" name="category" required>
+                        <select class="form-select custom-form-input" name="type" required>
                             <option value="" disabled selected hidden>Select Category</option>
                             <option value="Revenue">Revenue</option>
                             <option value="Expense">Expense</option>
+                            <option value="Refund">Refund</option>
                         </select>
                     </div>
                     <div class="mb-3">

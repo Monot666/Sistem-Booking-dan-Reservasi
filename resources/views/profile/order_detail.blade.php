@@ -59,7 +59,7 @@
 
             @if($booking->status === 'pending')
                 <div class="d-flex gap-2">
-                    <a href="{{ route('user.pembayaran', $booking->id) }}" class="btn btn-save text-decoration-none">
+                    <a href="{{ route('bookings.payment', $booking->id) }}" class="btn btn-save text-decoration-none">
                         <i class="fas fa-credit-card me-1"></i> Lanjutkan Pembayaran
                     </a>
                 </div>

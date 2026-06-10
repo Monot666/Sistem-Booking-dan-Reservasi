@@ -6,7 +6,7 @@
     <div class="booking-container">
         
         <div class="booking-header">
-            <a href="{{ route('landing') }}" class="booking-back-link">
+            <a href="{{ route('home') }}" class="booking-back-link">
                 <i class="fa-solid fa-chevron-left"></i> Pilih Tanggal Reservasi Anda
             </a>
         </div>
@@ -16,7 +16,7 @@
 
     <div class="booking-container">
         <div class="booking-panel">
-            <form id="booking-search-form" method="GET" action="{{ route('pilih-kamar') }}">
+            <form id="booking-search-form" method="GET" action="{{ route('rooms.index') }}">
                 <div class="booking-search-bar">
                     
                     <div class="booking-search-field border-right-divider">

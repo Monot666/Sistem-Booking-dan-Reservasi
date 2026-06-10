@@ -30,7 +30,7 @@
 <div class="container-fluid px-4 px-lg-5 py-4" style="max-width: 1440px;">
     
     <div class="profile-page-title mb-4">
-        <a href="{{ route('landing') }}"><i class="fa-solid fa-angle-left"></i></a>
+        <a href="{{ route('home') }}"><i class="fa-solid fa-angle-left"></i></a>
         <h2>Pesanan Saya</h2>
     </div>
 
@@ -42,7 +42,7 @@
         <div class="col-md-8 col-lg-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h4 class="section-title mb-0" style="border: none;">Riwayat Pemesanan</h4>
-                <a href="{{ route('booking') }}" class="btn-save" style="text-decoration: none; padding: 8px 16px; font-size: 0.85rem; margin-top: 0;">
+                <a href="{{ route('bookings.index') }}" class="btn-save" style="text-decoration: none; padding: 8px 16px; font-size: 0.85rem; margin-top: 0;">
                     <i class="fas fa-plus"></i> Pesan Kamar
                 </a>
             </div>
@@ -53,7 +53,7 @@
                         <i class="fas fa-calendar-alt"></i>
                         <h5 class="fw-bold mt-2 text-dark">Belum Ada Pesanan</h5>
                         <p class="small">Mulai perjalanan Anda dengan memesan kamar hari ini!</p>
-                        <a href="{{ route('booking') }}" class="btn-save mt-2 d-inline-block text-decoration-none">Cari Kamar</a>
+                        <a href="{{ route('bookings.index') }}" class="btn-save mt-2 d-inline-block text-decoration-none">Cari Kamar</a>
                     </div>
                 </div>
             @else
@@ -96,7 +96,7 @@
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('bookings.show', $booking->id) }}" class="btn-maps">Detail</a>
                                     @if($booking->status === 'pending')
-                                        <a href="{{ route('user.pembayaran', $booking->id) }}" class="btn-pay">Bayar Sekarang</a>
+                                        <a href="{{ route('bookings.payment', $booking->id) }}" class="btn-pay">Bayar Sekarang</a>
                                     @endif
                                 </div>
                             </div>

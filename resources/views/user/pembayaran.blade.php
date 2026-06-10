@@ -13,7 +13,7 @@
 
 <!-- NAVBAR ATAS -->
 <div class="page-header">
-    <a href="{{ route('user.review') }}" class="back-arrow">&#10094;</a>
+    <a href="{{ route('bookings.review') }}" class="back-arrow">&#10094;</a>
     <h1>Pembayaran</h1>
 </div>
 
@@ -25,7 +25,7 @@
         <!-- ALERT TIMER COUNTDOWN -->
         <div class="timer-alert">
             <span>Tenang, harganya tidak akan berubah. Yuk selesaikan pembayaran dalam</span>
-            <span class="timer-count" id="countdown-timer" data-redirect="{{ route('user.review') }}">00:15:20</span>
+            <span class="timer-count" id="countdown-timer" data-redirect="{{ route('bookings.review') }}">00:15:20</span>
         </div>
 
         <form action="#" method="POST">

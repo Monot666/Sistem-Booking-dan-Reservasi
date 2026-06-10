@@ -135,10 +135,10 @@
                 <div class="mb-4">
                     <h5 class="fw-bold mb-3 text-white">Tentang Roomly</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="{{ route('cara-pesan') }}" class="text-white text-decoration-none opacity-75">Cara Pesan</a></li>
-                        <li class="mb-2"><a href="{{ route('hubungi-kami') }}" class="text-white text-decoration-none opacity-75">Hubungi Kami</a></li>
-                        <li class="mb-2"><a href="{{ route('pusat-bantuan') }}" class="text-white text-decoration-none opacity-75">Pusat Bantuan</a></li>
-                        <li class="mb-2"><a href="{{ route('tentang-kami') }}" class="text-white text-decoration-none opacity-75">Tentang Kami</a></li>
+                        <li class="mb-2"><a href="{{ route('how-to-book') }}" class="text-white text-decoration-none opacity-75">Cara Pesan</a></li>
+                        <li class="mb-2"><a href="{{ route('contact') }}" class="text-white text-decoration-none opacity-75">Hubungi Kami</a></li>
+                        <li class="mb-2"><a href="{{ route('help') }}" class="text-white text-decoration-none opacity-75">Pusat Bantuan</a></li>
+                        <li class="mb-2"><a href="{{ route('about') }}" class="text-white text-decoration-none opacity-75">Tentang Kami</a></li>
                     </ul>
                 </div>
 
@@ -172,8 +172,8 @@
             <div class="col-lg-4 col-md-6">
                 <h5 class="fw-bold mb-3 text-white">Lainnya</h5>
                 <ul class="list-unstyled">
-                    <li class="mb-2"><a href="{{ route('privasi') }}" class="text-white text-decoration-none opacity-75">Pemberitahuan Privasi</a></li>
-                    <li class="mb-2"><a href="{{ route('syarat-ketentuan') }}" class="text-white text-decoration-none opacity-75">Syarat & Ketentuan</a></li>
+                    <li class="mb-2"><a href="{{ route('privacy') }}" class="text-white text-decoration-none opacity-75">Pemberitahuan Privasi</a></li>
+                    <li class="mb-2"><a href="{{ route('terms') }}" class="text-white text-decoration-none opacity-75">Syarat & Ketentuan</a></li>
                 </ul>
             </div>
 

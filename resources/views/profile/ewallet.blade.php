@@ -9,7 +9,7 @@
 <div class="container-fluid px-4 px-lg-5 py-4" style="max-width: 1440px;">
     
     <div class="profile-page-title mb-4">
-        <a href="{{ route('landing') }}"><i class="fa-solid fa-angle-left"></i></a>
+        <a href="{{ route('home') }}"><i class="fa-solid fa-angle-left"></i></a>
         <h2>E-Wallet Saya</h2>
     </div>
 

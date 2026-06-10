@@ -12,13 +12,13 @@
 <body>
 
 <div class="page-header">
-    <a href="{{ route('pilih-kamar') }}" class="back-arrow">&#10094;</a>
+    <a href="{{ route('rooms.index') }}" class="back-arrow">&#10094;</a>
     <h1>Review Pemesanan</h1>
 </div>
 
 <div class="container">
     
-    <form action="{{ route('user.review.store') }}" method="POST">
+    <form action="{{ route('bookings.store') }}" method="POST">
         @csrf
 
         <input type="hidden" name="resource_id" value="{{ $resourceId }}">

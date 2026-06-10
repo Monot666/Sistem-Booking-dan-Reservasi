@@ -50,7 +50,7 @@
                 <a href="#" class="btn-status-primary" onclick="alert('E-Voucher berhasil diunduh ke folder download!')">
                     <i class="fa-solid fa-download"></i> Unduh Voucher Hotel
                 </a>
-                <a href="{{ route('booking') }}" class="btn-status-secondary">Kembali ke Beranda</a>
+                <a href="{{ route('bookings.index') }}" class="btn-status-secondary">Kembali ke Beranda</a>
             </div>
         </div>
 

@@ -6,7 +6,7 @@
 
 <!-- Navigasi Atas (Putih) -->
 <div class="bg-white py-3 px-4 shadow-sm position-relative" style="z-index: 3;">
-    <a href="{{ route('landing') }}" class="text-decoration-none" style="color: #df9e45; font-size: 1.5rem;">
+    <a href="{{ route('home') }}" class="text-decoration-none" style="color: #df9e45; font-size: 1.5rem;">
         <i class="fas fa-chevron-left"></i>
     </a>
 </div>

@@ -15,7 +15,7 @@
     
     <!-- HEADER PROFIL (Seragam & Kembali ke Landing Page) -->
     <div class="profile-page-title mb-4">
-        <a href="{{ route('landing') }}"><i class="fa-solid fa-angle-left"></i></a>
+        <a href="{{ route('home') }}"><i class="fa-solid fa-angle-left"></i></a>
         <h2>Riwayat Refunds</h2>
     </div>
 
