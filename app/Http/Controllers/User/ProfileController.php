@@ -1,40 +1,40 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Handles user profile display and updates.
+ */
 class ProfileController extends Controller
 {
     /**
-     * Menampilkan halaman profil (Personal Data).
+     * Show the user's profile page.
      */
     public function index()
     {
-        // Masuk ke folder profile, cari file profile.blade.php
         return view('profile.profile');
     }
 
     /**
-     * Memperbarui data profil user.
+     * Update the user's profile data.
      */
     public function update(Request $request)
     {
         $user = Auth::user();
 
-        // 1. Validasi Input
         $request->validate([
             'name' => 'required|string|max:255',
         ], [
-            'name.required' => 'Nama lengkap tidak boleh kosong.',
+            'name.required' => 'Full name is required.',
         ]);
 
-        // 2. Update Data
         $user->name = $request->name;
         $user->save();
 
-        return back()->with('success', 'Profil kamu berhasil diperbarui!');
+        return back()->with('success', 'Profile updated successfully!');
     }
 }
-

@@ -1,6 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\AdminController;
+/**
+ * @deprecated This controller is for testing/development only.
+ * Kept for reference — do NOT use in production routes.
+ */
+
+namespace App\Http\Controllers\_Deprecated;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
