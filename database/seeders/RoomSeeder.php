@@ -5,7 +5,10 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class ResourceSeeder extends Seeder
+/**
+ * Seeds sample room data into the resources table.
+ */
+class RoomSeeder extends Seeder
 {
     /**
      * Run the database seeds.

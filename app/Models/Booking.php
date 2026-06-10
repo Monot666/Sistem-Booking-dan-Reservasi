@@ -4,7 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Booking extends Model {
+/**
+ * Booking model — represents a room reservation made by a user.
+ */
+class Booking extends Model
+{
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
     protected $fillable = [
         'no_pesanan',
         'user_id',
@@ -14,26 +23,63 @@ class Booking extends Model {
         'email',
         'nama_pengunjung',
         'permintaan_khusus',
+        'room_name',
+        'room_price',
         'start_time',
         'end_time',
+        'guest_count',
         'total_price',
         'tax_and_fee',
-        'status'
+        'status',
     ];
 
-    public function resource() { 
-        return $this->belongsTo(Resource::class); 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'start_time'  => 'datetime',
+            'end_time'    => 'datetime',
+            'total_price' => 'decimal:2',
+            'tax_and_fee' => 'decimal:2',
+            'status'      => \App\Enums\BookingStatus::class,
+        ];
     }
 
-    public function user() { 
-        return $this->belongsTo(User::class); 
+    /**
+     * Get the room that this booking belongs to.
+     */
+    public function room()
+    {
+        return $this->belongsTo(Room::class, 'resource_id');
     }
 
-    public function payments() {
+    /**
+     * Get the user who made this booking.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the payments for this booking.
+     */
+    public function payments()
+    {
         return $this->hasMany(Payment::class);
     }
 
-    protected $table = 'bookings';
-
+    /**
+     * Legacy alias for the room() relationship.
+     *
+     * @deprecated Use room() instead.
+     */
+    public function resource()
+    {
+        return $this->room();
+    }
 }
-

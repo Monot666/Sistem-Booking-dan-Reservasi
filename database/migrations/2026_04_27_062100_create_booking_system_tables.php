@@ -119,6 +119,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('resource_id')->constrained()->onDelete('cascade');
+            $table->string('room_name');
+            $table->decimal('room_price', 12, 2);
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->decimal('total_price', 12, 2);

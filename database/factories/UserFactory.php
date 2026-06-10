@@ -32,11 +32,9 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
 
             // --- TAMBAHKAN KOLOM KUSTOM KAMU DI SINI ---
-            'role' => fake()->randomElement(['admin', 'user']), // Mengacak antara admin atau user
-            'gender' => fake()->randomElement(['Laki-laki', 'Perempuan']),
-            'birthdate' => fake()->date('Y-m-d', '2005-01-01'), // Tanggal lahir acak (maksimal kelahiran 2005)
-            'city' => fake()->city(),
+            'role' => fake()->randomElement([\App\Enums\UserRole::Admin, \App\Enums\UserRole::User]), // Mengacak antara admin atau user
             'phone' => fake()->phoneNumber(),
+            'city' => fake()->city(),
         ];
     }
 

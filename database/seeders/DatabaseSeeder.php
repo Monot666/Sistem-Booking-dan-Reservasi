@@ -25,10 +25,6 @@ class DatabaseSeeder extends Seeder
                     'name' => ucwords($role) . ' User',
                     'password' => Hash::make('password'),
                     'role' => $role,
-                    'gender' => 'Laki-laki',
-                    'birthdate' => '2000-01-01',
-                    'city' => 'Banyumas',
-                    'phone' => '08123456789',
                 ]
             );
         }
@@ -68,6 +64,22 @@ class DatabaseSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
+        ]);
+        
+        // 4. Dummy Transactions
+        \App\Models\Transaction::insert([
+            ['date' => '2026-03-12', 'description' => 'Room Booking - BK001', 'type' => 'Revenue', 'amount' => 535000, 'method' => 'Virtual Account', 'status' => 'Completed', 'created_at' => now(), 'updated_at' => now()],
+            ['date' => '2026-03-12', 'description' => 'Staff Salaries - Praya', 'type' => 'Expense', 'amount' => 5000000, 'method' => 'Bank Transfer', 'status' => 'Completed', 'created_at' => now(), 'updated_at' => now()],
+            ['date' => '2026-03-12', 'description' => 'Room Booking - BK002', 'type' => 'Revenue', 'amount' => 535000, 'method' => 'Paypal', 'status' => 'Completed', 'created_at' => now(), 'updated_at' => now()],
+            ['date' => '2026-03-12', 'description' => 'Maintenance Supplies', 'type' => 'Expense', 'amount' => 1000000, 'method' => 'Virtual Account', 'status' => 'Completed', 'created_at' => now(), 'updated_at' => now()],
+            ['date' => '2026-03-12', 'description' => 'Room Booking - BK003', 'type' => 'Revenue', 'amount' => 535000, 'method' => 'Virtual Account', 'status' => 'Completed', 'created_at' => now(), 'updated_at' => now()],
+            ['date' => '2026-03-12', 'description' => 'Booking Cancellation', 'type' => 'Refund', 'amount' => 535000, 'method' => 'Credit Card', 'status' => 'Completed', 'created_at' => now(), 'updated_at' => now()],
+        ]);
+
+        // 5. Dummy Banners
+        \App\Models\Banner::insert([
+            ['layout_name' => 'Dashboard', 'position' => 'Foto 1', 'image_path' => null, 'external_link' => 'https://promo1.com', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['layout_name' => 'Dashboard Explore', 'position' => 'Foto 2', 'image_path' => null, 'external_link' => 'https://promo2.com', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
         ]);
         
     }
