@@ -13,6 +13,28 @@
 </head>
 <body>
 
+@php
+    $groupedBanners = $banners->groupBy('layout_name');
+
+    $getBanner = function($layout, $pos) use ($groupedBanners) {
+        $banner = $groupedBanners->get($layout)?->firstWhere('position', $pos);
+        $image = $banner?->image_path;
+        $imageUrl = $image ? (str_starts_with($image, 'http') ? $image : asset($image)) : '';
+        $link = $banner?->external_link ?? '';
+        return ['image' => $imageUrl, 'link' => $link];
+    };
+
+    $dash = $getBanner('Dashboard', 'Foto 1');
+    $expl1 = $getBanner('Dashboard Explore', 'Foto 1');
+    $expl2 = $getBanner('Dashboard Explore', 'Foto 2');
+    $expl3 = $getBanner('Dashboard Explore', 'Foto 3');
+    $expl4 = $getBanner('Dashboard Explore', 'Foto 4');
+    $ord = $getBanner('Order', 'Foto 1');
+    $pay1 = $getBanner('Pembayaran', 'Foto 1');
+    $pay2 = $getBanner('Pembayaran', 'Foto 2');
+    $conf = $getBanner('Konfirmasi Pembayaran', 'Foto 1');
+@endphp
+
 <div class="admin-wrapper">
     <aside class="sidebar">
         <div class="logo-area">
@@ -44,35 +66,35 @@
                     <div class="layout-card">
                         <img src="{{ asset('assets/img/content_creator/dashboard.png') }}" alt="Dashboard" class="layout-img">
                         <p class="layout-name">Dashboard</p>
-                        <button class="btn-pilih" onclick="showEditLayout('Dashboard', '{{ asset('assets/img/content_creator/dashboard.png') }}', '{{ asset('assets/img/content_creator/ad.jpg') }}')">Pilih</button>
+                        <button class="btn-pilih" onclick="showEditLayout('Dashboard', '{{ asset('assets/img/content_creator/dashboard.png') }}', '{{ $dash['image'] }}', '{{ $dash['link'] }}')">Pilih</button>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="layout-card">
                         <img src="{{ asset('assets/img/content_creator/dashboard-explore.png') }}" alt="Dashboard Explore" class="layout-img">
                         <p class="layout-name">Dashboard Explore</p>
-                        <button class="btn-pilih" onclick="showEditLayout('Dashboard Explore', '{{ asset('assets/img/content_creator/dashboard-explore.png') }}', '{{ asset('assets/img/content_creator/ad.jpg') }}', '{{ asset('assets/img/content_creator/ad.jpg') }}', '{{ asset('assets/img/content_creator/ad.jpg') }}')">Pilih</button>
+                        <button class="btn-pilih" onclick="showEditLayout('Dashboard Explore', '{{ asset('assets/img/content_creator/dashboard-explore.png') }}', '{{ $expl1['image'] }}', '{{ $expl1['link'] }}', '{{ $expl2['image'] }}', '{{ $expl2['link'] }}', '{{ $expl3['image'] }}', '{{ $expl3['link'] }}', '{{ $expl4['image'] }}', '{{ $expl4['link'] }}')">Pilih</button>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="layout-card">
                         <img src="{{ asset('assets/img/content_creator/order.png') }}" alt="Order" class="layout-img">
                         <p class="layout-name">Order</p>
-                        <button class="btn-pilih" onclick="showEditLayout('Order', '{{ asset('assets/img/content_creator/order.png') }}', '{{ asset('assets/img/content_creator/ad.jpg') }}')">Pilih</button>
+                        <button class="btn-pilih" onclick="showEditLayout('Order', '{{ asset('assets/img/content_creator/order.png') }}', '{{ $ord['image'] }}', '{{ $ord['link'] }}')">Pilih</button>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="layout-card">
                         <img src="{{ asset('assets/img/content_creator/pembayaran.png') }}" alt="Pembayaran" class="layout-img">
                         <p class="layout-name">Pembayaran</p>
-                        <button class="btn-pilih" onclick="showEditLayout('Pembayaran', '{{ asset('assets/img/content_creator/pembayaran.png') }}', '{{ asset('assets/img/content_creator/ad.jpg') }}', '{{ asset('assets/img/content_creator/ad.jpg') }}')">Pilih</button>
+                        <button class="btn-pilih" onclick="showEditLayout('Pembayaran', '{{ asset('assets/img/content_creator/pembayaran.png') }}', '{{ $pay1['image'] }}', '{{ $pay1['link'] }}', '{{ $pay2['image'] }}', '{{ $pay2['link'] }}')">Pilih</button>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="layout-card">
                         <img src="{{ asset('assets/img/content_creator/konfirmasi-pembayaran.png') }}" alt="Konfirmasi Pembayaran" class="layout-img">
                         <p class="layout-name">Konfirmasi Pembayaran</p>
-                        <button class="btn-pilih" onclick="showEditLayout('Konfirmasi Pembayaran', '{{ asset('assets/img/content_creator/konfirmasi-pembayaran.png') }}', '{{ asset('assets/img/content_creator/ad.jpg') }}')">Pilih</button>
+                        <button class="btn-pilih" onclick="showEditLayout('Konfirmasi Pembayaran', '{{ asset('assets/img/content_creator/konfirmasi-pembayaran.png') }}', '{{ $conf['image'] }}', '{{ $conf['link'] }}')">Pilih</button>
                     </div>
                 </div>
             </div>
@@ -96,12 +118,16 @@
                         
                         <div class="current-photo-box mb-3 p-4" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
                             <img src="" alt="Current Ad 1" class="current-ad-img mb-3" id="current-ad-image-1">
-                            <br><button class="btn-delete-ad"><i class="fas fa-trash-alt me-2"></i>Hapus foto 1</button>
+                            <input type="hidden" id="delete-flag-1" value="0">
+                            <div class="d-flex gap-2 justify-content-center mt-2">
+                                <button class="btn btn-sm" style="background-color: #2b3674; color: white; border-radius: 6px;" type="button" onclick="document.getElementById('file-input-1').click()"><i class="fas fa-edit me-2"></i>Ganti Foto</button>
+                                <button class="btn btn-sm btn-danger" style="border-radius: 6px;" type="button" onclick="deleteAd(1)"><i class="fas fa-trash-alt me-2"></i>Hapus</button>
+                            </div>
                         </div>
                         
                         <div class="form-group text-start mb-3" id="link-group-1" style="display: none;">
                             <label class="form-label fw-bold" style="font-size: 0.9rem;">Link Eksternal Foto 1</label>
-                            <input type="url" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
+                            <input type="url" id="link-input-1" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
                         </div>
 
                         <div class="drop-zone mb-4" id="drop-zone-1">
@@ -109,7 +135,7 @@
                                 <div class="icon-upload-circle"><i class="fas fa-cloud-upload-alt"></i></div>
                                 <p class="mt-3 text-muted fw-medium">Klik untuk upload Foto 1 baru</p>
                             </div>
-                            <input type="file" id="file-input-1" hidden accept="image/*">
+                            <input type="file" id="file-input-1" class="drop-zone__input" hidden accept="image/*">
                         </div>
                     </div>
 
@@ -118,12 +144,16 @@
                         
                         <div class="current-photo-box mb-3 p-4" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
                             <img src="" alt="Current Ad 2" class="current-ad-img mb-3" id="current-ad-image-2">
-                            <br><button class="btn-delete-ad"><i class="fas fa-trash-alt me-2"></i>Hapus foto 2</button>
+                            <input type="hidden" id="delete-flag-2" value="0">
+                            <div class="d-flex gap-2 justify-content-center mt-2">
+                                <button class="btn btn-sm" style="background-color: #2b3674; color: white; border-radius: 6px;" type="button" onclick="document.getElementById('file-input-2').click()"><i class="fas fa-edit me-2"></i>Ganti Foto</button>
+                                <button class="btn btn-sm btn-danger" style="border-radius: 6px;" type="button" onclick="deleteAd(2)"><i class="fas fa-trash-alt me-2"></i>Hapus</button>
+                            </div>
                         </div>
 
                         <div class="form-group text-start mb-3" id="link-group-2" style="display: none;">
                             <label class="form-label fw-bold" style="font-size: 0.9rem;">Link Eksternal Foto 2</label>
-                            <input type="url" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
+                            <input type="url" id="link-input-2" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
                         </div>
 
                         <div class="drop-zone mb-4" id="drop-zone-2">
@@ -131,7 +161,7 @@
                                 <div class="icon-upload-circle"><i class="fas fa-cloud-upload-alt"></i></div>
                                 <p class="mt-3 text-muted fw-medium">Klik untuk upload Foto 2 baru</p>
                             </div>
-                            <input type="file" id="file-input-2" hidden accept="image/*">
+                            <input type="file" id="file-input-2" class="drop-zone__input" hidden accept="image/*">
                         </div>
                     </div>
 
@@ -140,12 +170,16 @@
                         
                         <div class="current-photo-box mb-3 p-4" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
                             <img src="" alt="Current Ad 3" class="current-ad-img mb-3" id="current-ad-image-3">
-                            <br><button class="btn-delete-ad"><i class="fas fa-trash-alt me-2"></i>Hapus foto 3</button>
+                            <input type="hidden" id="delete-flag-3" value="0">
+                            <div class="d-flex gap-2 justify-content-center mt-2">
+                                <button class="btn btn-sm" style="background-color: #2b3674; color: white; border-radius: 6px;" type="button" onclick="document.getElementById('file-input-3').click()"><i class="fas fa-edit me-2"></i>Ganti Foto</button>
+                                <button class="btn btn-sm btn-danger" style="border-radius: 6px;" type="button" onclick="deleteAd(3)"><i class="fas fa-trash-alt me-2"></i>Hapus</button>
+                            </div>
                         </div>
 
                         <div class="form-group text-start mb-3" id="link-group-3" style="display: none;">
                             <label class="form-label fw-bold" style="font-size: 0.9rem;">Link Eksternal Foto 3</label>
-                            <input type="url" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
+                            <input type="url" id="link-input-3" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
                         </div>
 
                         <div class="drop-zone mb-4" id="drop-zone-3">
@@ -153,7 +187,33 @@
                                 <div class="icon-upload-circle"><i class="fas fa-cloud-upload-alt"></i></div>
                                 <p class="mt-3 text-muted fw-medium">Klik untuk upload Foto 3 baru</p>
                             </div>
-                            <input type="file" id="file-input-3" hidden accept="image/*">
+                            <input type="file" id="file-input-3" class="drop-zone__input" hidden accept="image/*">
+                        </div>
+                    </div>
+
+                    <div class="upload-block mt-5 pt-3" id="upload-block-4" style="display: none; border-top: 2px dashed #e2e8f0;">
+                        <h5 class="fw-bold text-start mb-3" style="color: #df9e4c;">Foto 4</h5>
+                        
+                        <div class="current-photo-box mb-3 p-4" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+                            <img src="" alt="Current Ad 4" class="current-ad-img mb-3" id="current-ad-image-4">
+                            <input type="hidden" id="delete-flag-4" value="0">
+                            <div class="d-flex gap-2 justify-content-center mt-2">
+                                <button class="btn btn-sm" style="background-color: #2b3674; color: white; border-radius: 6px;" type="button" onclick="document.getElementById('file-input-4').click()"><i class="fas fa-edit me-2"></i>Ganti Foto</button>
+                                <button class="btn btn-sm btn-danger" style="border-radius: 6px;" type="button" onclick="deleteAd(4)"><i class="fas fa-trash-alt me-2"></i>Hapus</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-start mb-3" id="link-group-4" style="display: none;">
+                            <label class="form-label fw-bold" style="font-size: 0.9rem;">Link Eksternal Foto 4</label>
+                            <input type="url" id="link-input-4" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
+                        </div>
+
+                        <div class="drop-zone mb-4" id="drop-zone-4">
+                            <div class="drop-zone-content">
+                                <div class="icon-upload-circle"><i class="fas fa-cloud-upload-alt"></i></div>
+                                <p class="mt-3 text-muted fw-medium">Klik untuk upload Foto 4 baru</p>
+                            </div>
+                            <input type="file" id="file-input-4" class="drop-zone__input" hidden accept="image/*">
                         </div>
                     </div>
                 </div>
@@ -183,6 +243,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('assets/js/content_creator/script.js') }}?v={{ time() }}"></script>
 </body>
 </html>

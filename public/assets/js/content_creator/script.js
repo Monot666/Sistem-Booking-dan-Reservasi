@@ -3,7 +3,7 @@
  */
 
 // Fungsi untuk menyesuaikan layout berdasarkan jumlah gambar yang diterima
-function showEditLayout(layoutName, mockupUrl, ad1Url, ad2Url = '', ad3Url = '') {
+function showEditLayout(layoutName, mockupUrl, ad1Url, ad1Link = '', ad2Url = '', ad2Link = '', ad3Url = '', ad3Link = '', ad4Url = '', ad4Link = '') {
     // Tampilkan panel upload
     document.getElementById('view-selection').style.display = 'none';
     document.getElementById('view-upload').style.display = 'block';
@@ -11,45 +11,93 @@ function showEditLayout(layoutName, mockupUrl, ad1Url, ad2Url = '', ad3Url = '')
     document.getElementById('selected-layout-title').innerText = layoutName;
     document.getElementById('mockup-image').src = mockupUrl;
 
-    // --- BLOK 1 (Selalu Muncul) ---
-    document.getElementById('upload-block-1').style.display = 'block';
-    document.getElementById('current-ad-image-1').src = ad1Url;
+    let ads = [
+        { url: ad1Url, link: ad1Link },
+        { url: ad2Url, link: ad2Link },
+        { url: ad3Url, link: ad3Link },
+        { url: ad4Url, link: ad4Link }
+    ];
 
-    // Sembunyikan semua input link secara default
-    document.getElementById('link-group-1').style.display = 'none';
-    document.getElementById('link-group-2').style.display = 'none';
-    document.getElementById('link-group-3').style.display = 'none';
+    // Helper untuk reset state
+    for(let i=1; i<=4; i++) {
+        if(document.getElementById('upload-block-' + i)) {
+            document.getElementById('upload-block-' + i).style.display = 'none';
+            document.getElementById('current-ad-image-' + i).parentElement.style.display = 'block';
+            if(document.getElementById('drop-zone-' + i)) document.getElementById('drop-zone-' + i).style.display = 'block';
+        }
+        if(document.getElementById('delete-flag-' + i)) document.getElementById('delete-flag-' + i).value = '0';
+        if(document.getElementById('link-group-' + i)) document.getElementById('link-group-' + i).style.display = 'none';
+    }
 
     // --- LOGIKA KONDISIONAL ---
     if (layoutName === 'Dashboard Explore') {
-        // Tampilkan 3 Blok & 3 Input Link
-        document.getElementById('upload-block-2').style.display = 'block';
-        document.getElementById('upload-block-3').style.display = 'block';
-        
-        document.getElementById('current-ad-image-2').src = ad2Url;
-        document.getElementById('current-ad-image-3').src = ad3Url;
-
-        document.getElementById('link-group-1').style.display = 'block';
-        document.getElementById('link-group-2').style.display = 'block';
-        document.getElementById('link-group-3').style.display = 'block';
-
+        let nextEmptyFound = false;
+        for (let i = 1; i <= 4; i++) {
+            let ad = ads[i-1];
+            if (ad.url && ad.url !== '') {
+                // Ada isinya
+                document.getElementById('upload-block-' + i).style.display = 'block';
+                document.getElementById('current-ad-image-' + i).src = ad.url;
+                document.getElementById('current-ad-image-' + i).parentElement.style.display = 'block';
+                document.getElementById('link-input-' + i).value = ad.link;
+                document.getElementById('link-group-' + i).style.display = 'block';
+                // Sembunyikan drop-zone untuk foto yang sudah ada!
+                if(document.getElementById('drop-zone-' + i)) document.getElementById('drop-zone-' + i).style.display = 'none';
+            } else {
+                // Kosong
+                if (!nextEmptyFound) {
+                    // Blok untuk menambah foto di paling bawah
+                    document.getElementById('upload-block-' + i).style.display = 'block';
+                    document.getElementById('current-ad-image-' + i).parentElement.style.display = 'none';
+                    document.getElementById('link-input-' + i).value = '';
+                    document.getElementById('link-group-' + i).style.display = 'block';
+                    if(document.getElementById('drop-zone-' + i)) document.getElementById('drop-zone-' + i).style.display = 'block';
+                    nextEmptyFound = true;
+                }
+            }
+        }
     } else if (layoutName === 'Pembayaran') {
-        // Tampilkan 2 Blok (Tanpa Input Link)
-        document.getElementById('upload-block-2').style.display = 'block';
-        document.getElementById('upload-block-3').style.display = 'none'; // Sembunyikan blok 3
-        
-        document.getElementById('current-ad-image-2').src = ad2Url;
-
+        for (let i = 1; i <= 2; i++) {
+            document.getElementById('upload-block-' + i).style.display = 'block';
+            document.getElementById('current-ad-image-' + i).src = ads[i-1].url || '/assets/img/content_creator/ad.jpg';
+        }
     } else {
-        // Tampilkan 1 Blok saja
-        document.getElementById('upload-block-2').style.display = 'none';
-        document.getElementById('upload-block-3').style.display = 'none';
+        document.getElementById('upload-block-1').style.display = 'block';
+        document.getElementById('current-ad-image-1').src = ads[0].url || '/assets/img/content_creator/ad.jpg';
+        if (layoutName === 'Dashboard') {
+            document.getElementById('link-group-1').style.display = 'block';
+            document.getElementById('link-input-1').value = ads[0].link;
+        }
     }
 }
 
 function showLayoutSelection() {
     document.getElementById('view-selection').style.display = 'block';
     document.getElementById('view-upload').style.display = 'none';
+}
+
+// Fungsi menghapus foto dari UI sebelum disubmit
+function deleteAd(index) {
+    Swal.fire({
+        title: 'Yakin ingin menghapus?',
+        text: 'Foto ' + index + ' akan dihapus dari layout ini.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('current-ad-image-' + index).src = '';
+            if(document.getElementById('link-input-' + index)) document.getElementById('link-input-' + index).value = '';
+            if(document.getElementById('file-input-' + index)) document.getElementById('file-input-' + index).value = '';
+            if(document.getElementById('delete-flag-' + index)) document.getElementById('delete-flag-' + index).value = '1';
+            
+            // Langsung trigger simpan agar real-time dan tersinkronisasi dengan database!
+            document.getElementById('btn-upload').click();
+        }
+    });
 }
 
 // Inisialisasi Dropzone
@@ -64,17 +112,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
         dropZone.addEventListener('click', () => fileInput.click());
 
-        fileInput.addEventListener('change', () => {
+        fileInput.addEventListener("change", (e) => {
             if (fileInput.files.length) {
                 updateThumbnail(dropZone, fileInput.files[0]);
+                
+                // Update preview gambar di atas (jika sedang ganti foto)
+                const currentImg = document.getElementById('current-ad-image-' + index);
+                if (currentImg && currentImg.parentElement.style.display !== 'none') {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        currentImg.src = e.target.result;
+                    };
+                    reader.readAsDataURL(fileInput.files[0]);
+                }
             }
         });
     }
 
     // Aktifkan ketiga dropzone
-    setupDropZone('drop-zone-1', 'file-input-1');
-    setupDropZone('drop-zone-2', 'file-input-2');
-    setupDropZone('drop-zone-3', 'file-input-3');
+    setupDropZone('drop-zone-1', 'file-input-1', 1);
+    setupDropZone('drop-zone-2', 'file-input-2', 2);
+    setupDropZone('drop-zone-3', 'file-input-3', 3);
+    setupDropZone('drop-zone-4', 'file-input-4', 4);
 
     // Tombol Submit Global
     const btnUpload = document.getElementById('btn-upload');
@@ -89,12 +148,19 @@ document.addEventListener("DOMContentLoaded", function() {
         
         if (document.getElementById('file-input-1').files[0]) formData.append('file_1', document.getElementById('file-input-1').files[0]);
         if (document.getElementById('link-input-1')) formData.append('link_1', document.getElementById('link-input-1').value);
+        if (document.getElementById('delete-flag-1')) formData.append('delete_1', document.getElementById('delete-flag-1').value);
         
-        if (document.getElementById('file-input-2').files[0]) formData.append('file_2', document.getElementById('file-input-2').files[0]);
+        if (document.getElementById('file-input-2') && document.getElementById('file-input-2').files[0]) formData.append('file_2', document.getElementById('file-input-2').files[0]);
         if (document.getElementById('link-input-2')) formData.append('link_2', document.getElementById('link-input-2').value);
+        if (document.getElementById('delete-flag-2')) formData.append('delete_2', document.getElementById('delete-flag-2').value);
         
-        if (document.getElementById('file-input-3').files[0]) formData.append('file_3', document.getElementById('file-input-3').files[0]);
+        if (document.getElementById('file-input-3') && document.getElementById('file-input-3').files[0]) formData.append('file_3', document.getElementById('file-input-3').files[0]);
         if (document.getElementById('link-input-3')) formData.append('link_3', document.getElementById('link-input-3').value);
+        if (document.getElementById('delete-flag-3')) formData.append('delete_3', document.getElementById('delete-flag-3').value);
+
+        if (document.getElementById('file-input-4') && document.getElementById('file-input-4').files[0]) formData.append('file_4', document.getElementById('file-input-4').files[0]);
+        if (document.getElementById('link-input-4')) formData.append('link_4', document.getElementById('link-input-4').value);
+        if (document.getElementById('delete-flag-4')) formData.append('delete_4', document.getElementById('delete-flag-4').value);
 
         fetch('/content/upload', {
             method: 'POST',
