@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 class IsAdmin {
     public function handle(Request $request, Closure $next) {
-        if (auth()->check() && auth()->user()->role === 'admin') {
+        $role = auth()->check() ? (auth()->user()->role->value ?? auth()->user()->role) : null;
+        if ($role === 'admin') {
             return $next($request);
         }
         

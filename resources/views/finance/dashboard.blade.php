@@ -291,6 +291,14 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    window.financeChartData = {
+        labels: {!! json_encode($chartLabels ?? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']) !!},
+        revenue: {!! json_encode($chartRevenue ?? [0,0,0,0,0,0]) !!},
+        expense: {!! json_encode($chartExpense ?? [0,0,0,0,0,0]) !!},
+        profit: {!! json_encode($chartProfit ?? [0,0,0,0,0,0]) !!}
+    };
+</script>
 <script src="{{ asset('assets/js/finance/finance.js') }}"></script>
 </body>
 </html>

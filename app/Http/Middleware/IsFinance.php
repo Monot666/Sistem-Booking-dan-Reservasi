@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 class IsFinance {
     public function handle(Request $request, Closure $next) {
-        if (auth()->check() && auth()->user()->role === 'finance') {
+        $role = auth()->check() ? (auth()->user()->role->value ?? auth()->user()->role) : null;
+        if ($role === 'finance') {
             return $next($request);
         }
         

@@ -36,10 +36,10 @@ document.addEventListener("DOMContentLoaded", function () {
         new Chart(ctxLine, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                labels: window.financeChartData ? window.financeChartData.labels : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
                 datasets: [{
                     label: 'Net Profit',
-                    data: [35000, 42000, 58000, 35000, 40000, 55000],
+                    data: window.financeChartData ? window.financeChartData.profit : [35000, 42000, 58000, 35000, 40000, 55000],
                     borderColor: '#df9e4c',
                     backgroundColor: 'transparent',
                     borderWidth: 2,
@@ -72,17 +72,17 @@ document.addEventListener("DOMContentLoaded", function () {
         new Chart(ctxBar, {
             type: 'bar',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                labels: window.financeChartData ? window.financeChartData.labels : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
                 datasets: [
                     {
                         label: 'Revenue',
-                        data: [75000, 85000, 115000, 70000, 80000, 110000],
+                        data: window.financeChartData ? window.financeChartData.revenue : [75000, 85000, 115000, 70000, 80000, 110000],
                         backgroundColor: '#00d25b',
                         barPercentage: 0.6,
                     },
                     {
                         label: 'Expense',
-                        data: [45000, 50000, 58000, 35000, 40000, 45000],
+                        data: window.financeChartData ? window.financeChartData.expense : [45000, 50000, 58000, 35000, 40000, 45000],
                         backgroundColor: '#fc424a',
                         barPercentage: 0.6,
                     }

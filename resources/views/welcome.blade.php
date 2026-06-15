@@ -27,9 +27,9 @@
             </a>
             
             <div class="nav-right-buttons d-flex align-items-center">
-                <a href="{{ url('/send-tester') }}" class="btn btn-outline-light me-3 btn-sm">
+                <!-- <a href="{{ url('/send-tester') }}" class="btn btn-outline-light me-3 btn-sm">
                     📧 Kirim Report User
-                </a>
+                </a> -->
                 
                 @auth
                     {{-- Tampilan Profil Profesional saat User SUDAH Login --}}
@@ -100,41 +100,47 @@
     <div class="container py-4">
         <h2 class="section-title font-serif mb-5 text-dark">Wide Choice of Hotels</h2>
         <div class="row g-4">
+            @forelse($exploreBanners as $exploreBanner)
+            <div class="col-md-3 hotel-card">
+                <div class="hotel-wrapper">
+                    @if($exploreBanner->external_link)
+                    <a href="{{ $exploreBanner->external_link }}" target="_blank">
+                    @endif
+                        <img src="{{ $exploreBanner->image_path ? (str_starts_with($exploreBanner->image_path, 'http') ? $exploreBanner->image_path : asset('storage/' . $exploreBanner->image_path)) : asset('assets/img/hotel_aston 1.png') }}" alt="{{ $exploreBanner->position }}">
+                        <div class="hotel-overlay">
+                            <div class="hotel-text">{{ $exploreBanner->position }}</div>
+                        </div>
+                    @if($exploreBanner->external_link)
+                    </a>
+                    @endif
+                </div>
+            </div>
+            @empty
             <div class="col-md-3 hotel-card">
                 <div class="hotel-wrapper">
                     <img src="{{ asset('assets/img/hotel_aston 1.png') }}" alt="Gedung">
-                    <div class="hotel-overlay">
-                        <div class="hotel-text">Gedung Hotel</div>
-                    </div>
+                    <div class="hotel-overlay"><div class="hotel-text">Gedung Hotel</div></div>
                 </div>
             </div>
-
             <div class="col-md-3 hotel-card">
                 <div class="hotel-wrapper">
                     <img src="{{ asset('assets/img/aston-solo-hotel.jpg') }}" alt="Kamar">
-                    <div class="hotel-overlay">
-                        <div class="hotel-text">Kamar Hotel</div>
-                    </div>
+                    <div class="hotel-overlay"><div class="hotel-text">Kamar Hotel</div></div>
                 </div>
             </div>
-
             <div class="col-md-3 hotel-card">
                 <div class="hotel-wrapper">
                     <img src="{{ asset('assets/img/1d3b438d_z.jpg') }}" alt="Lobby">
-                    <div class="hotel-overlay">
-                        <div class="hotel-text">Lobby Hotel</div>
-                    </div>
+                    <div class="hotel-overlay"><div class="hotel-text">Lobby Hotel</div></div>
                 </div>
             </div>
-
             <div class="col-md-3 hotel-card">
                 <div class="hotel-wrapper">
                     <img src="{{ asset('assets/img/images (1).jpg') }}" alt="Swimming Pool">
-                    <div class="hotel-overlay">
-                        <div class="hotel-text">Swimming Pool</div>
-                    </div>
+                    <div class="hotel-overlay"><div class="hotel-text">Swimming Pool</div></div>
                 </div>
             </div>
+            @endforelse
         </div>
     </div>
 </section>
@@ -171,11 +177,17 @@
                     </div>
                 </div>
             </div>
+        @if(isset($banner))
+        <div class="ad-banner">
+            <a href="{{ $banner->external_link ?? '#' }}" target="_blank">
+                <img src="{{ $banner->image_path ? (str_starts_with($banner->image_path, 'http') ? $banner->image_path : asset('storage/' . $banner->image_path)) : 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80' }}" alt="Banner Iklan Roomly">
+            </a>
         </div>
-
+        @else
         <div class="ad-banner">
             <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80" alt="Banner Iklan Roomly">
         </div>
+        @endif
 
     </div>
 </section>

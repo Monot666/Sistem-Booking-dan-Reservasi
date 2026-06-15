@@ -10,6 +10,7 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
+        'booking_id',
         'date',
         'description',
         'type',
@@ -21,4 +22,9 @@ class Transaction extends Model
     protected $casts = [
         'type' => \App\Enums\TransactionType::class,
     ];
+
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class);
+    }
 }
