@@ -69,13 +69,18 @@ class DashboardController extends Controller
 
             if ($item['file']) {
                 $file = $item['file'];
-                $mimeType = $file->getMimeType();
-                $base64Data = base64_encode(file_get_contents($file->getRealPath()));
-                $banner->image_path = 'data:' . $mimeType . ';base64,' . $base64Data;
+                $filename = time() . '_' . rand(1000, 9999) . '_' . $file->getClientOriginalName();
+                $file->move(public_path('uploads/banners'), $filename);
+                $banner->image_path = 'uploads/banners/' . $filename;
             }
 
             if ($item['link'] !== null) {
-                $banner->external_link = $item['link'];
+                $link = $item['link'];
+                // Tambahkan https:// jika user hanya mengetik google.com (tidak ada http:// atau https://)
+                if (!preg_match("~^(?:f|ht)tps?://~i", $link) && !empty(trim($link))) {
+                    $link = "https://" . $link;
+                }
+                $banner->external_link = $link;
             }
 
             $banner->save();

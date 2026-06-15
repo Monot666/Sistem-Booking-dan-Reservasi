@@ -117,7 +117,7 @@
                         <h5 class="fw-bold text-start mb-3" style="color: #df9e4c;">Foto 1</h5>
                         
                         <div class="current-photo-box mb-3 p-4" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
-                            <img src="" alt="Current Ad 1" class="current-ad-img mb-3" id="current-ad-image-1">
+                            <img src="" alt="Current Ad 1" class="current-ad-img mb-3" id="current-ad-image-1" style="cursor: pointer;" onclick="document.getElementById('file-input-1').click()" title="Klik untuk ganti foto">
                             <input type="hidden" id="delete-flag-1" value="0">
                             <div class="d-flex gap-2 justify-content-center mt-2">
                                 <button class="btn btn-sm" style="background-color: #2b3674; color: white; border-radius: 6px;" type="button" onclick="document.getElementById('file-input-1').click()"><i class="fas fa-edit me-2"></i>Ganti Foto</button>
@@ -127,7 +127,7 @@
                         
                         <div class="form-group text-start mb-3" id="link-group-1" style="display: none;">
                             <label class="form-label fw-bold" style="font-size: 0.9rem;">Link Eksternal Foto 1</label>
-                            <input type="url" id="link-input-1" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
+                            <input type="text" id="link-input-1" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
                         </div>
 
                         <div class="drop-zone mb-4" id="drop-zone-1">
@@ -143,7 +143,7 @@
                         <h5 class="fw-bold text-start mb-3" style="color: #df9e4c;">Foto 2</h5>
                         
                         <div class="current-photo-box mb-3 p-4" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
-                            <img src="" alt="Current Ad 2" class="current-ad-img mb-3" id="current-ad-image-2">
+                            <img src="" alt="Current Ad 2" class="current-ad-img mb-3" id="current-ad-image-2" style="cursor: pointer;" onclick="document.getElementById('file-input-2').click()" title="Klik untuk ganti foto">
                             <input type="hidden" id="delete-flag-2" value="0">
                             <div class="d-flex gap-2 justify-content-center mt-2">
                                 <button class="btn btn-sm" style="background-color: #2b3674; color: white; border-radius: 6px;" type="button" onclick="document.getElementById('file-input-2').click()"><i class="fas fa-edit me-2"></i>Ganti Foto</button>
@@ -153,7 +153,7 @@
 
                         <div class="form-group text-start mb-3" id="link-group-2" style="display: none;">
                             <label class="form-label fw-bold" style="font-size: 0.9rem;">Link Eksternal Foto 2</label>
-                            <input type="url" id="link-input-2" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
+                            <input type="text" id="link-input-2" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
                         </div>
 
                         <div class="drop-zone mb-4" id="drop-zone-2">
@@ -169,7 +169,7 @@
                         <h5 class="fw-bold text-start mb-3" style="color: #df9e4c;">Foto 3</h5>
                         
                         <div class="current-photo-box mb-3 p-4" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
-                            <img src="" alt="Current Ad 3" class="current-ad-img mb-3" id="current-ad-image-3">
+                            <img src="" alt="Current Ad 3" class="current-ad-img mb-3" id="current-ad-image-3" style="cursor: pointer;" onclick="document.getElementById('file-input-3').click()" title="Klik untuk ganti foto">
                             <input type="hidden" id="delete-flag-3" value="0">
                             <div class="d-flex gap-2 justify-content-center mt-2">
                                 <button class="btn btn-sm" style="background-color: #2b3674; color: white; border-radius: 6px;" type="button" onclick="document.getElementById('file-input-3').click()"><i class="fas fa-edit me-2"></i>Ganti Foto</button>
@@ -179,7 +179,7 @@
 
                         <div class="form-group text-start mb-3" id="link-group-3" style="display: none;">
                             <label class="form-label fw-bold" style="font-size: 0.9rem;">Link Eksternal Foto 3</label>
-                            <input type="url" id="link-input-3" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
+                            <input type="text" id="link-input-3" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
                         </div>
 
                         <div class="drop-zone mb-4" id="drop-zone-3">
@@ -195,7 +195,7 @@
                         <h5 class="fw-bold text-start mb-3" style="color: #df9e4c;">Foto 4</h5>
                         
                         <div class="current-photo-box mb-3 p-4" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
-                            <img src="" alt="Current Ad 4" class="current-ad-img mb-3" id="current-ad-image-4">
+                            <img src="" alt="Current Ad 4" class="current-ad-img mb-3" id="current-ad-image-4" style="cursor: pointer;" onclick="document.getElementById('file-input-4').click()" title="Klik untuk ganti foto">
                             <input type="hidden" id="delete-flag-4" value="0">
                             <div class="d-flex gap-2 justify-content-center mt-2">
                                 <button class="btn btn-sm" style="background-color: #2b3674; color: white; border-radius: 6px;" type="button" onclick="document.getElementById('file-input-4').click()"><i class="fas fa-edit me-2"></i>Ganti Foto</button>
@@ -205,7 +205,7 @@
 
                         <div class="form-group text-start mb-3" id="link-group-4" style="display: none;">
                             <label class="form-label fw-bold" style="font-size: 0.9rem;">Link Eksternal Foto 4</label>
-                            <input type="url" id="link-input-4" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
+                            <input type="text" id="link-input-4" class="form-control p-2" placeholder="Masukkan link (contoh: https://...)" style="border-radius: 8px;">
                         </div>
 
                         <div class="drop-zone mb-4" id="drop-zone-4">

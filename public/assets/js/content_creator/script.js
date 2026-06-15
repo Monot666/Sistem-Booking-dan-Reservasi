@@ -60,14 +60,14 @@ function showEditLayout(layoutName, mockupUrl, ad1Url, ad1Link = '', ad2Url = ''
         for (let i = 1; i <= 2; i++) {
             document.getElementById('upload-block-' + i).style.display = 'block';
             document.getElementById('current-ad-image-' + i).src = ads[i-1].url || '/assets/img/content_creator/ad.jpg';
+            document.getElementById('link-group-' + i).style.display = 'block';
+            document.getElementById('link-input-' + i).value = ads[i-1].link || '';
         }
     } else {
         document.getElementById('upload-block-1').style.display = 'block';
         document.getElementById('current-ad-image-1').src = ads[0].url || '/assets/img/content_creator/ad.jpg';
-        if (layoutName === 'Dashboard') {
-            document.getElementById('link-group-1').style.display = 'block';
-            document.getElementById('link-input-1').value = ads[0].link;
-        }
+        document.getElementById('link-group-1').style.display = 'block';
+        document.getElementById('link-input-1').value = ads[0].link || '';
     }
 }
 
@@ -104,7 +104,7 @@ function deleteAd(index) {
 document.addEventListener("DOMContentLoaded", function() {
     
     // Fungsi untuk menghubungkan area dropzone dengan input filenya
-    function setupDropZone(zoneId, inputId) {
+    function setupDropZone(zoneId, inputId, index) {
         const dropZone = document.getElementById(zoneId);
         const fileInput = document.getElementById(inputId);
 
@@ -114,7 +114,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
         fileInput.addEventListener("change", (e) => {
             if (fileInput.files.length) {
-                updateThumbnail(dropZone, fileInput.files[0]);
+                if (typeof updateThumbnail === 'function') {
+                    updateThumbnail(dropZone, fileInput.files[0]);
+                }
                 
                 // Update preview gambar di atas (jika sedang ganti foto)
                 const currentImg = document.getElementById('current-ad-image-' + index);

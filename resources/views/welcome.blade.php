@@ -106,7 +106,7 @@
                     @if($exploreBanner->external_link)
                     <a href="{{ $exploreBanner->external_link }}" target="_blank">
                     @endif
-                        <img src="{{ $exploreBanner->image_path ? (str_starts_with($exploreBanner->image_path, 'http') ? $exploreBanner->image_path : asset('storage/' . $exploreBanner->image_path)) : asset('assets/img/hotel_aston 1.png') }}" alt="{{ $exploreBanner->position }}">
+                        <img src="{{ $exploreBanner->image_path ? (str_starts_with($exploreBanner->image_path, 'http') ? $exploreBanner->image_path : asset($exploreBanner->image_path)) : asset('assets/img/hotel_aston 1.png') }}" alt="{{ $exploreBanner->position }}">
                         <div class="hotel-overlay">
                             <div class="hotel-text">{{ $exploreBanner->position }}</div>
                         </div>
@@ -180,7 +180,7 @@
         @if(isset($banner))
         <div class="ad-banner">
             <a href="{{ $banner->external_link ?? '#' }}" target="_blank">
-                <img src="{{ $banner->image_path ? (str_starts_with($banner->image_path, 'http') ? $banner->image_path : asset('storage/' . $banner->image_path)) : 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80' }}" alt="Banner Iklan Roomly">
+                <img src="{{ $banner->image_path ? (str_starts_with($banner->image_path, 'http') ? $banner->image_path : asset($banner->image_path)) : 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80' }}" alt="Banner Iklan Roomly">
             </a>
         </div>
         @else
