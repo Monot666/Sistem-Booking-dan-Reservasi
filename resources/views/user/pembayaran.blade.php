@@ -214,8 +214,8 @@
                 <h3 class="summary-section-title">Rincian Harga</h3>
                 
                 <div class="price-data-line">
-                    <span class="label-text">Aston Solo Hotel, {{ $pemesanan->room_name }} - {{ $pemesanan->option_type }} (1x)</span>
-                    <span class="value-text">Rp. {{ number_format($pemesanan->price_per_night, 0, ',', '.') }}</span>
+                    <span class="label-text">Roomly Hotel, {{ $pemesanan->room_name }} - Standard Rate (1x)</span>
+                    <span class="value-text">Rp. {{ number_format($pemesanan->room_price, 0, ',', '.') }}</span>
                 </div>
                 <div class="price-data-line">
                     <span class="label-text">Pajak dan Biaya</span>
@@ -330,10 +330,10 @@
             return;
         }
 
-        const selectedMethod = selectedMethodElement.value;
+        const bookingId = '{{ $pemesanan->id }}';
         
-        // Diarahkan ke rute instruksi-pembayaran terlebih dahulu dengan prefix /user
-        let targetUrl = '/user/instruksi-pembayaran?method=' + selectedMethod;
+        // Diarahkan ke rute instruksi-pembayaran terlebih dahulu
+        let targetUrl = '/bookings/payment-instructions?method=' + selectedMethod + '&booking_id=' + bookingId;
 
         if (selectedMethod === 'VA') {
             const selectedBankElement = document.querySelector('input[name="va_bank_selected"]:checked');

@@ -66,6 +66,14 @@ class Booking extends Model
     }
 
     /**
+     * Get the transactions for this booking.
+     */
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    /**
      * Get the payments for this booking.
      */
     public function payments()

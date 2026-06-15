@@ -20,7 +20,16 @@ use App\Http\Controllers\Admin\UserController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-    return view('welcome');
+    $banner = \App\Models\Banner::where('is_active', true)
+                ->where('layout_name', 'Dashboard')
+                ->inRandomOrder()->first();
+                
+    $exploreBanners = \App\Models\Banner::where('is_active', true)
+                ->where('layout_name', 'Dashboard Explore')
+                ->orderBy('position')
+                ->take(4)->get();
+                
+    return view('welcome', compact('banner', 'exploreBanners'));
 })->name('home');
 
 Route::get('/how-to-book', [PageController::class, 'howToBook'])->name('how-to-book');
@@ -45,10 +54,10 @@ Route::middleware(['auth'])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| PROTECTED ROUTES (Must be logged in)
+| PROTECTED ROUTES (Must be logged in and verified)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
 
     // --- PROFILE ---
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
@@ -82,16 +91,15 @@ Route::middleware(['auth'])->group(function () {
 
     // --- BOOKINGS ---
     Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
-    Route::get('/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
+    Route::get('/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show')->where('id', '[0-9]+');
 
     /*
     |--------------------------------------------------------------------------
-    | VERIFIED ONLY ROUTES (Must have verified email/OTP)
+    | BOOKING FLOW & ROLES
     |--------------------------------------------------------------------------
     */
-    Route::middleware(['verified'])->group(function () {
 
-        // --- BOOKING FLOW (Review → Store → Payment) ---
+    // --- BOOKING FLOW (Review → Store → Payment) ---
         Route::get('/bookings/review', [BookingController::class, 'review'])->name('bookings.review');
         Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
         Route::get('/bookings/{id}/payment', [BookingController::class, 'payment'])->name('bookings.payment');
@@ -128,7 +136,6 @@ Route::middleware(['auth'])->group(function () {
         Route::middleware('content_creator')->group(function () {
             Route::get('/content/dashboard', [\App\Http\Controllers\ContentCreator\DashboardController::class, 'index'])->name('content.dashboard');
             Route::post('/content/upload', [\App\Http\Controllers\ContentCreator\DashboardController::class, 'upload'])->name('content.upload');
-        });
     });
 });
 

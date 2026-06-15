@@ -28,10 +28,14 @@
     } elseif ($method === 'ATM') {
         $nomorKodeBayar = "KODE-ATM-9875";
     }
+
+    $bookingId = request('booking_id');
+    $booking = $bookingId ? \App\Models\Booking::find($bookingId) : null;
+    $totalPrice = $booking ? $booking->total_price : 0;
 @endphp
 
 <div class="page-header" style="padding: 20px; display: flex; align-items: center; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-    <a href="{{ route('bookings.payment', ['id' => session('current_booking_id', 1)]) }}" class="back-arrow" style="text-decoration: none; color: #333; font-size: 1.2rem; margin-right: 15px;">
+    <a href="{{ route('bookings.payment', ['id' => $bookingId ?? 1]) }}" class="back-arrow" style="text-decoration: none; color: #333; font-size: 1.2rem; margin-right: 15px;">
         <i class="fa-solid fa-arrow-left"></i>
     </a>
     <h1 style="font-size: 1.2rem; margin: 0;">Selesaikan Pembayaran</h1>
@@ -65,7 +69,7 @@
                         <i class="fa-regular fa-copy"></i> Salin
                     </button>
                 </div>
-                <p class="merchant-notice">Total Tagihan: <strong>Rp. 535.000</strong></p>
+                <p class="merchant-notice">Total Tagihan: <strong>Rp. {{ number_format($totalPrice, 0, ',', '.') }}</strong></p>
             </div>
 
             <div class="deadline-timer-banner">
@@ -82,7 +86,7 @@
                         <li>Tunjukkan <strong>Kode Pembayaran</strong> di atas ke kasir.</li>
                     @elseif($method === 'TRANSFER')
                         <li>Transfer ke Rekening Mandiri: <strong>1234567890987</strong>.</li>
-                        <li>Pastikan nominal presisi sebesar Rp 535.000.</li>
+                        <li>Pastikan nominal presisi sebesar Rp {{ number_format($totalPrice, 0, ',', '.') }}.</li>
                     @elseif($method === 'VA')
                         <li>Buka M-Banking/ATM <strong>{{ $bank }}</strong>.</li>
                         <li>Pilih menu <strong>Transfer > Virtual Account</strong>.</li>

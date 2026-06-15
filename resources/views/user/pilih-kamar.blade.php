@@ -91,10 +91,10 @@
                         <tbody>
                             <tr>
                                 <td class="option-info">
-                                    <span class="sub-title">{{ $resource->name }} - Room Only</span>
-                                    <h4>Without Breakfast</h4>
-                                    <p class="bed-info">🛏️ 1 double bed</p>
-                                    <p class="policy-info text-muted">🔄 Non-Refundable</p>
+                                    <span class="sub-title">{{ $resource->name }}</span>
+                                    <h4>Standard Rate</h4>
+                                    <p class="bed-info">👥 Kapasitas: {{ $resource->max_adults }} Dewasa, {{ $resource->max_children }} Anak</p>
+                                    <p class="policy-info text-muted">✨ Sesuai Fasilitas Kamar</p>
                                 </td>
                                 <td class="text-center" style="font-size: 1.5rem;">👥</td>
                                 <td class="price-amount">Rp {{ number_format($resource->price_per_hour, 0, ',', '.') }}</td>
@@ -106,32 +106,12 @@
                                         <input type="hidden" name="checkin" value="{{ $checkinRaw }}">
                                         <input type="hidden" name="checkout" value="{{ $checkoutRaw }}">
                                         <input type="hidden" name="room_name" value="{{ $resource->name }}">
-                                        <input type="hidden" name="option_type" value="Room Only">
+                                        <input type="hidden" name="option_type" value="Standard Rate">
                                         <input type="hidden" name="price" value="{{ $resource->price_per_hour }}">
-                                        <button type="submit" class="btn-choose">Choose</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            
-                            <tr>
-                                <td class="option-info">
-                                    <span class="sub-title">{{ $resource->name }} - Breakfast</span>
-                                    <h4>Breakfast for 2</h4>
-                                    <p class="bed-info">🛏️ 1 double bed</p>
-                                    <p class="policy-info text-muted">🔄 Non-Refundable</p>
-                                </td>
-                                <td class="text-center" style="font-size: 1.5rem;">👥</td>
-                                <td class="price-amount">Rp {{ number_format($resource->price_per_hour + 75000, 0, ',', '.') }}</td>
-                                <td class="text-center text-muted">x1</td>
-                                <td class="text-center">
-                                    <form action="{{ route('bookings.review') }}" method="GET">
-                                        @csrf
-                                        <input type="hidden" name="resource_id" value="{{ $resource->id }}">
-                                        <input type="hidden" name="checkin" value="{{ $checkinRaw }}">
-                                        <input type="hidden" name="checkout" value="{{ $checkoutRaw }}">
-                                        <input type="hidden" name="room_name" value="{{ $resource->name }}">
-                                        <input type="hidden" name="option_type" value="Breakfast for 2">
-                                        <input type="hidden" name="price" value="{{ $resource->price_per_hour + 75000 }}">
+                                        <input type="hidden" name="nama_pemesan" value="{{ auth()->user()->name ?? 'Guest' }}">
+                                        <input type="hidden" name="email" value="{{ auth()->user()->email ?? 'guest@example.com' }}">
+                                        <input type="hidden" name="no_hp" value="{{ auth()->user()->phone ?? '08123456789' }}">
+                                        <input type="hidden" name="nama_pengunjung" value="{{ auth()->user()->name ?? 'Guest' }}">
                                         <button type="submit" class="btn-choose">Choose</button>
                                     </form>
                                 </td>
