@@ -31,11 +31,7 @@ class UserController extends Controller
         $user->role = $request->role;
         $user->save();
 
-        // Bisa disesuaikan kembali jika menggunakan redirect ke halaman view (misal: redirect()->back()->with('success', 'Role berhasil diubah'))
-        return response()->json([
-            'success' => true,
-            'message' => 'Role pengguna berhasil diperbarui.',
-            'data' => $user
-        ]);
+        // Menggunakan redirect ke halaman view agar frontend HTML berjalan tanpa JS
+        return redirect()->back()->with('success', 'Role pengguna berhasil diperbarui.');
     }
 }
