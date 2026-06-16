@@ -40,6 +40,10 @@
         </form>
 
         <p class="reg-link">
+            Lupa Password? <a href="{{ route('password.request') }}">Reset di sini</a>
+        </p>
+
+        <p class="reg-link" style="margin-top: 10px;">
             Are You New Member? <a href="{{ route('register') }}">Register</a>
         </p>
     </div>
