@@ -48,11 +48,15 @@
                             </div>
 
                             <p style="color:#666; line-height:1.6;">
-                                Silakan lakukan pembayaran sesuai dengan metode yang Anda pilih untuk mengonfirmasi pesanan Anda secara permanen.
+                                Silakan segera lakukan pembayaran untuk mengonfirmasi pesanan Anda. Klik tombol di bawah ini untuk langsung menuju halaman pembayaran.
                             </p>
 
-                            <div style="text-align:center; margin-top:40px;">
-                                <a href="{{ url('/profile/orders') }}" style="background:#0a0a0a; color:#ffffff; padding:15px 30px; text-decoration:none; border-radius:30px; font-weight:bold; display:inline-block;">LIHAT PESANAN SAYA</a>
+                            <div style="text-align:center; margin-top:30px;">
+                                <a href="{{ url('/bookings/' . $booking->id . '/payment') }}" style="background:#e6a04d; color:#ffffff; padding:16px 40px; text-decoration:none; border-radius:30px; font-weight:bold; display:inline-block; font-size:15px; letter-spacing:1px;">BAYAR SEKARANG</a>
+                            </div>
+
+                            <div style="text-align:center; margin-top:15px;">
+                                <a href="{{ url('/profile/orders') }}" style="background:#0a0a0a; color:#ffffff; padding:12px 30px; text-decoration:none; border-radius:30px; font-weight:bold; display:inline-block; font-size:13px;">LIHAT PESANAN SAYA</a>
                             </div>
                         </td>
                     </tr>
