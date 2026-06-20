@@ -11,14 +11,7 @@
 <body>
 
 @php
-$transactions = [
-    ['id' => 1, 'date' => '12-03-2026', 'desc' => 'Room Booking - BK001', 'category' => 'Revenue', 'amount' => 535000, 'method' => 'Virtual Account'],
-    ['id' => 2, 'date' => '12-03-2026', 'desc' => 'Staff Salaries - Praya', 'category' => 'Expense', 'amount' => 5000000, 'method' => 'Bank Transfer'],
-    ['id' => 3, 'date' => '11-03-2026', 'desc' => 'Room Booking - BK002', 'category' => 'Revenue', 'amount' => 890000, 'method' => 'Paypal'],
-    ['id' => 4, 'date' => '10-03-2026', 'desc' => 'Maintenance Supplies', 'category' => 'Expense', 'amount' => 1000000, 'method' => 'Virtual Account'],
-    ['id' => 5, 'date' => '09-03-2026', 'desc' => 'Booking Cancellation - BK004', 'category' => 'Refund', 'amount' => 450000, 'method' => 'Credit Card'],
-    ['id' => 6, 'date' => '08-03-2026', 'desc' => 'Room Booking - BK003', 'category' => 'Revenue', 'amount' => 600000, 'method' => 'Virtual Account'],
-];
+// Data is now passed directly from Admin\PaymentController
 @endphp
 
 <div class="admin-wrapper">
@@ -36,6 +29,9 @@ $transactions = [
             </li>
             <li class="{{ request()->routeIs('admin.kamar') ? 'active' : '' }}">
                 <a href="{{ route('admin.kamar') }}"><i class="fas fa-bed"></i> Kamar</a>
+            </li>
+            <li class="{{ request()->routeIs('admin.room_units') ? 'active' : '' }}">
+                <a href="{{ route('admin.room_units') }}"><i class="fas fa-door-open"></i> Unit Kamar</a>
             </li>
             <li class="{{ request()->routeIs('admin.bookings') ? 'active' : '' }}">
                 <a href="{{ route('admin.bookings') }}"><i class="fas fa-calendar-alt"></i> Pesanan</a>
@@ -71,29 +67,29 @@ $transactions = [
             <div class="col-md-3">
                 <div class="finance-card bg-revenue">
                     <div class="finance-card-title">Total Revenue <i class="fas fa-arrow-trend-up"></i></div>
-                    <div class="finance-card-value"><span class="currency-symbol">Rp</span>4.390.000</div>
+                    <div class="finance-card-value"><span class="currency-symbol">Rp</span>{{ number_format($totalRevenue, 0, ',', '.') }}</div>
                     <div class="finance-card-subtitle">+12% from last month</div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="finance-card bg-expense">
                     <div class="finance-card-title">Total Expenses <i class="fas fa-arrow-trend-down"></i></div>
-                    <div class="finance-card-value"><span class="currency-symbol">Rp</span>19.050.000</div>
+                    <div class="finance-card-value"><span class="currency-symbol">Rp</span>{{ number_format($totalExpense, 0, ',', '.') }}</div>
                     <div class="finance-card-subtitle">+5% from last month</div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="finance-card bg-profit">
                     <div class="finance-card-title">Net Profit <i class="fas fa-money-bill-wave"></i></div>
-                    <div class="finance-card-value"><span class="currency-symbol">Rp</span>15.200.000</div>
+                    <div class="finance-card-value"><span class="currency-symbol">Rp</span>{{ number_format($netProfit, 0, ',', '.') }}</div>
                     <div class="finance-card-subtitle">Profit Margin: +67.2%</div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="finance-card bg-transactions">
                     <div class="finance-card-title">Transactions <i class="far fa-calendar-alt"></i></div>
-                    <div class="finance-card-value">58</div>
-                    <div class="finance-card-subtitle">This month</div>
+                    <div class="finance-card-value">{{ count($transactions) }}</div>
+                    <div class="finance-card-subtitle">All Time</div>
                 </div>
             </div>
         </div>
@@ -148,19 +144,19 @@ $transactions = [
                     </thead>
                     <tbody id="transactionBody">
                         @foreach($transactions as $t)
-                        <tr class="transaction-row" data-category="{{ strtolower($t['category']) }}">
-                            <td class="tx-date">{{ $t['date'] }}</td>
-                            <td class="text-start">{{ $t['desc'] }}</td>
+                        <tr class="transaction-row" data-category="{{ strtolower($t->type->value ?? $t->type) }}">
+                            <td class="tx-date">{{ \Carbon\Carbon::parse($t->date)->format('d-m-Y') }}</td>
+                            <td class="text-start">{{ $t->description }}</td>
                             <td>
-                                @if($t['category'] == 'Revenue') <span class="badge-cat cat-revenue">Revenue</span>
-                                @elseif($t['category'] == 'Expense') <span class="badge-cat cat-expense">Expense</span>
-                                @elseif($t['category'] == 'Refund') <span class="badge-cat cat-refund">Refund</span>
+                                @if(($t->type->value ?? $t->type) == 'Revenue') <span class="badge-cat cat-revenue">Revenue</span>
+                                @elseif(($t->type->value ?? $t->type) == 'Expense') <span class="badge-cat cat-expense">Expense</span>
+                                @elseif(($t->type->value ?? $t->type) == 'Refund') <span class="badge-cat cat-refund">Refund</span>
                                 @endif
                             </td>
-                            <td style="color: {{ $t['category'] == 'Expense' || $t['category'] == 'Refund' ? '#ef4444' : '#16a34a' }}">
-                                {{ $t['category'] == 'Expense' || $t['category'] == 'Refund' ? '-' : '+' }} Rp. {{ number_format($t['amount'], 0, ',', '.') }}
+                            <td style="color: {{ ($t->type->value ?? $t->type) == 'Expense' || ($t->type->value ?? $t->type) == 'Refund' ? '#ef4444' : '#16a34a' }}">
+                                {{ ($t->type->value ?? $t->type) == 'Expense' || ($t->type->value ?? $t->type) == 'Refund' ? '-' : '+' }} Rp. {{ number_format($t->amount, 0, ',', '.') }}
                             </td>
-                            <td>{{ $t['method'] }}</td>
+                            <td>{{ $t->method }}</td>
                         </tr>
                         @endforeach
                     </tbody>

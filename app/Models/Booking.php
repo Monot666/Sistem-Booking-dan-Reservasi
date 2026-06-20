@@ -18,6 +18,7 @@ class Booking extends Model
         'no_pesanan',
         'user_id',
         'resource_id',
+        'room_unit_id',
         'nama_pemesan',
         'no_hp',
         'email',
@@ -58,6 +59,14 @@ class Booking extends Model
     }
 
     /**
+     * Get the physical room unit assigned to this booking.
+     */
+    public function roomUnit()
+    {
+        return $this->belongsTo(RoomUnit::class, 'room_unit_id');
+    }
+
+    /**
      * Get the user who made this booking.
      */
     public function user()
@@ -73,13 +82,7 @@ class Booking extends Model
         return $this->hasMany(Transaction::class);
     }
 
-    /**
-     * Get the payments for this booking.
-     */
-    public function payments()
-    {
-        return $this->hasMany(Payment::class);
-    }
+
 
     /**
      * Legacy alias for the room() relationship.

@@ -24,7 +24,7 @@ class TesterController extends Controller
         try {
             $users = User::latest()->take(10)->get(); 
 
-            Mail::send('email.tester', ['users' => $users], function ($message) {
+            Mail::send('emails.tester', ['users' => $users], function ($message) {
                 $message->to('roomlytrust@gmail.com')
                         ->subject('Daftar User Terbaru');
             });

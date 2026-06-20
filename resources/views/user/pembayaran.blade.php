@@ -28,8 +28,9 @@
             <span class="timer-count" id="countdown-timer" data-redirect="{{ route('bookings.review') }}">00:15:20</span>
         </div>
 
-        <form action="#" method="POST">
+        <form action="{{ route('bookings.charge') }}" method="POST" id="payment-form">
             @csrf
+            <input type="hidden" name="booking_id" value="{{ $pemesanan->id }}">
 
             <!-- GRUP METODE PEMBAYARAN BER-ACCORDION LENGKAP -->
             <div class="card">
@@ -194,6 +195,31 @@
                         </div>
                     </div>
 
+                    <!-- METODE 6: QRIS -->
+                    <div class="payment-group-item">
+                        <div class="payment-header-trigger">
+                            <div class="row-left">
+                                <input type="radio" name="payment_method" value="QRIS" class="parent-radio">
+                                <label>QRIS</label>
+                            </div>
+                            <div class="row-right logos-flex">
+                                <img src="https://gopay.co.id/icon.png" alt="QRIS" class="method-header-logo" onerror="this.style.display='none'">
+                                <i class="fa-solid fa-qrcode bank-right-icon"></i>
+                            </div>
+                        </div>
+                        <div class="payment-dropdown-content">
+                            <div class="transfer-info-block">
+                                <label style="font-weight: 600; margin-bottom: 5px;">Panduan Bayar dengan QRIS:</label>
+                                <ol style="margin: 0; padding-left: 20px; font-size: 0.82rem; color: #64748b; line-height: 1.6;">
+                                    <li>Buka aplikasi m-banking atau e-wallet (GoPay, OVO, Dana, dll).</li>
+                                    <li>Pilih menu <strong>Scan QR</strong>.</li>
+                                    <li>Scan kode QR yang akan muncul di halaman selanjutnya.</li>
+                                    <li>Selesaikan pembayaran di aplikasi Anda.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -213,24 +239,28 @@
             <div class="card price-summary-card">
                 <h3 class="summary-section-title">Rincian Harga</h3>
                 
+                @php
+                    $start = \Carbon\Carbon::parse($pemesanan->start_time);
+                    $end = \Carbon\Carbon::parse($pemesanan->end_time);
+                    $nights = max(1, $start->diffInDays($end));
+                    // Calculate room total dynamically to avoid math errors from seeded database data
+                    $calculatedRoomTotal = $pemesanan->total_price - $pemesanan->tax_and_fee;
+                @endphp
+
                 <div class="price-data-line">
-                    <span class="label-text">Roomly Hotel, {{ $pemesanan->room_name }} - Standard Rate (1x)</span>
-                    <span class="value-text">Rp. {{ number_format($pemesanan->room_price, 0, ',', '.') }}</span>
+                    <span class="label-text">Roomly Hotel, {{ $pemesanan->room_name }} ({{ $nights }}x Malam)</span>
+                    <span class="value-text">Rp. {{ number_format($calculatedRoomTotal, 0, ',', '.') }}</span>
                 </div>
                 <div class="price-data-line">
                     <span class="label-text">Pajak dan Biaya</span>
                     <span class="value-text">Rp. {{ number_format($pemesanan->tax_and_fee, 0, ',', '.') }}</span>
-                </div>
-                <div class="price-data-line coupon-discount-line">
-                    <span class="label-text">Kupon</span>
-                    <span class="value-text">-Rp. 50.000</span>
                 </div>
 
                 <div class="divider-line-th"></div>
 
                 <div class="price-data-line total-price-final-row">
                     <span class="total-label">Harga Total</span>
-                    <span class="total-value">Rp. {{ number_format($pemesanan->total_price - 50000, 0, ',', '.') }}</span>
+                    <span class="total-value">Rp. {{ number_format($pemesanan->total_price, 0, ',', '.') }}</span>
                 </div>
 
                 <!-- FAIL-SAFE BUTTON: Memicu fungsi redirect client-side aman -->
@@ -330,22 +360,8 @@
             return;
         }
 
-        const bookingId = '{{ $pemesanan->id }}';
-        
-        // Diarahkan ke rute instruksi-pembayaran terlebih dahulu
-        let targetUrl = '/bookings/payment-instructions?method=' + selectedMethod + '&booking_id=' + bookingId;
-
-        if (selectedMethod === 'VA') {
-            const selectedBankElement = document.querySelector('input[name="va_bank_selected"]:checked');
-            const bankName = selectedBankElement ? selectedBankElement.value : 'BCA';
-            targetUrl += '&bank=' + bankName;
-        } else if (selectedMethod === 'MINIMARKET') {
-            const selectedMartElement = document.querySelector('input[name="mart_selected"]:checked');
-            const martName = selectedMartElement ? selectedMartElement.value : 'ALFAMART';
-            targetUrl += '&mart=' + martName;
-        }
-
-        window.location.href = targetUrl;
+        // Submit form ke backend untuk proses Core API
+        document.getElementById('payment-form').submit();
     }
 </script>
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Payment;
 
 /**
  * Admin controller for viewing payment/financial data.
@@ -15,10 +14,13 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::with('booking', 'booking.room', 'booking.user')
-            ->latest()
-            ->get();
+        $transactions = \App\Models\Transaction::orderByDesc('date')->get();
 
-        return view('admin.finance', compact('payments'));
+        $totalRevenue = $transactions->where('type', \App\Enums\TransactionType::Revenue)->sum('amount');
+        $totalExpense = $transactions->where('type', \App\Enums\TransactionType::Expense)->sum('amount');
+        $totalRefund = $transactions->where('type', \App\Enums\TransactionType::Refund)->sum('amount');
+        $netProfit = $totalRevenue - $totalExpense - $totalRefund;
+
+        return view('admin.finance', compact('transactions', 'totalRevenue', 'totalExpense', 'netProfit'));
     }
 }

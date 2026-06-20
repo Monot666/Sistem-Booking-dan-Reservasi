@@ -30,6 +30,9 @@
             <li class="{{ request()->routeIs('admin.kamar') ? 'active' : '' }}">
                 <a href="{{ route('admin.kamar') }}"><i class="fas fa-bed"></i> Kamar</a>
             </li>
+            <li class="{{ request()->routeIs('admin.room_units') ? 'active' : '' }}">
+                <a href="{{ route('admin.room_units') }}"><i class="fas fa-door-open"></i> Unit Kamar</a>
+            </li>
             <li class="{{ request()->routeIs('admin.bookings') ? 'active' : '' }}">
                 <a href="{{ route('admin.bookings') }}"><i class="fas fa-calendar-alt"></i> Pesanan</a>
             </li>
@@ -69,7 +72,7 @@
             <div class="col-md-4">
                 <div class="booking-stat-card">
                     <div class="booking-stat-title">Total Revenue <i class="fas fa-dollar-sign"></i></div>
-                    <div class="booking-stat-value">Rp.{{ number_format($bookings->whereIn('status', [\App\Enums\BookingStatus::Confirmed, \App\Enums\BookingStatus::Completed])->sum('total_price'), 0, ',', '.') }}</div>
+                    <div class="booking-stat-value">Rp.{{ number_format($bookings->whereIn('status', [\App\Enums\BookingStatus::Confirmed])->sum('total_price'), 0, ',', '.') }}</div>
                 </div>
             </div>
         </div>
@@ -119,7 +122,6 @@
                             <td>Rp.{{ number_format($b->total_price, 0, ',', '.') }}</td>
                             <td class="booking-status" data-status="{{ strtolower($b->status->value ?? $b->status) }}">
                                 @if($b->status === \App\Enums\BookingStatus::Confirmed) <span class="status-badge badge-confirmed">Confirmed</span>
-                                @elseif($b->status === \App\Enums\BookingStatus::Completed) <span class="status-badge badge-completed">Completed</span>
                                 @elseif($b->status === \App\Enums\BookingStatus::Cancelled) <span class="status-badge badge-cancelled">Cancelled</span>
                                 @else <span class="status-badge badge-pending bg-warning text-dark px-2 rounded">Pending</span>
                                 @endif
@@ -157,7 +159,6 @@
                     </div>
                     <div>
                         @if($b->status === \App\Enums\BookingStatus::Confirmed) <span class="status-badge badge-confirmed">Confirmed</span>
-                        @elseif($b->status === \App\Enums\BookingStatus::Completed) <span class="status-badge badge-completed">Completed</span>
                         @elseif($b->status === \App\Enums\BookingStatus::Cancelled) <span class="status-badge badge-cancelled">Cancelled</span>
                         @else <span class="status-badge badge-pending bg-warning text-dark px-2 rounded">Pending</span>
                         @endif

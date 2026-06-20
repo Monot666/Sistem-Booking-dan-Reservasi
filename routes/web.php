@@ -44,15 +44,28 @@ Route::get('/terms', [PageController::class, 'termsAndConditions'])->name('terms
 
 /*
 |--------------------------------------------------------------------------
-| AUTH ROUTES (Managed by Fortify)
+| AUTH ROUTES (Manual — tanpa Fortify)
 |--------------------------------------------------------------------------
 */
-// Login, register, logout, etc. are automatically handled by Fortify.
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/login', [AuthController::class, 'authenticate']);
+    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/register', [AuthController::class, 'store']);
 
-// Custom OTP Verification Route
+    // Password Reset
+    Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+});
+
+// OTP Verification (must be logged in, but not necessarily verified)
 Route::middleware(['auth'])->group(function () {
-    Route::post('/email/verify-otp', [OTPVerificationController::class, 'verify'])
-        ->name('verification.verify-otp');
+    Route::get('/email/verify', [AuthController::class, 'showOtpForm'])->name('verification.notice');
+    Route::post('/email/verify-otp', [OTPVerificationController::class, 'verify'])->name('verification.verify-otp');
+    Route::post('/email/resend-otp', [AuthController::class, 'resendOTP'])->name('verification.send');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 /*
@@ -65,9 +78,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // --- PROFILE ---
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/profile/orders', function () {
-        return view('profile.orders');
-    })->name('profile.orders');
+    Route::get('/profile/orders', [ProfileController::class, 'orders'])->name('profile.orders');
     Route::get('/profile/refunds', function () {
         return view('profile.refunds');
     })->name('profile.refunds');
@@ -106,9 +117,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/bookings/review', [BookingController::class, 'review'])->name('bookings.review');
         Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
         Route::get('/bookings/{id}/payment', [BookingController::class, 'payment'])->name('bookings.payment');
+        Route::post('/bookings/charge', [BookingController::class, 'chargePayment'])->name('bookings.charge');
+        Route::get('/bookings/{id}/status', [BookingController::class, 'checkStatus'])->name('bookings.status');
         Route::post('/bookings/process-payment', [BookingController::class, 'processPayment'])->name('bookings.processPayment');
-        Route::get('/bookings/payment-instructions', fn() => view('user.instruksi-pembayaran'))->name('bookings.payment.instructions');
+        Route::get('/bookings/payment-instructions', [BookingController::class, 'paymentInstructions'])->name('bookings.payment.instructions');
         Route::get('/bookings/payment-success', fn() => view('user.sukses-pembayaran'))->name('bookings.payment.success');
+        Route::post('/bookings/{id}/refund', [BookingController::class, 'requestRefund'])->name('bookings.refund');
 
         /*
         |--------------------------------------------------------------------------
@@ -121,6 +135,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/rooms', [AdminRoomController::class, 'store'])->name('rooms.store');
             Route::put('/rooms/{room}', [AdminRoomController::class, 'update'])->name('rooms.update');
             Route::delete('/rooms/{room}', [AdminRoomController::class, 'destroy'])->name('rooms.destroy');
+            Route::get('/room-units', [\App\Http\Controllers\Admin\RoomUnitController::class, 'index'])->name('room_units');
             Route::get('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'index'])->name('bookings');
             Route::get('/guests', [\App\Http\Controllers\Admin\GuestController::class, 'index'])->name('guests');
             Route::get('/finance', [AdminPaymentController::class, 'index'])->name('finance');
@@ -133,6 +148,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::middleware('finance')->group(function () {
             Route::get('/finance/dashboard', [\App\Http\Controllers\Finance\DashboardController::class, 'index'])->name('finance.dashboard');
             Route::post('/finance/transactions', [\App\Http\Controllers\Finance\DashboardController::class, 'store'])->name('finance.transactions.store');
+            Route::put('/finance/transactions/{id}', [\App\Http\Controllers\Finance\DashboardController::class, 'update'])->name('finance.transactions.update');
+            Route::delete('/finance/transactions/{id}', [\App\Http\Controllers\Finance\DashboardController::class, 'destroy'])->name('finance.transactions.destroy');
+            Route::post('/finance/refunds/{id}/confirm', [\App\Http\Controllers\Finance\DashboardController::class, 'confirmRefund'])->name('finance.refunds.confirm');
         });
 
         // --- CONTENT CREATOR ONLY ---
@@ -150,3 +168,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // @deprecated These routes are for development/testing only.
 // Route::get('/send-tester', [TesterController::class, 'send']);
 // Route::get('/test', [TesterController::class, 'index']);
+
+// Midtrans Webhook Route (Publicly accessible, excluded from CSRF)
+Route::post('/api/midtrans-callback', [\App\Http\Controllers\MidtransController::class, 'webhook']);

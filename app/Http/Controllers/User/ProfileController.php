@@ -37,4 +37,17 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Profile updated successfully!');
     }
+
+    /**
+     * Show the user's order history.
+     */
+    public function orders()
+    {
+        $bookings = \App\Models\Booking::with(['resource', 'user'])
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('profile.orders', compact('bookings'));
+    }
 }

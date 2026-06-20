@@ -25,6 +25,9 @@
             <li class="{{ request()->routeIs('admin.kamar') ? 'active' : '' }}">
                 <a href="{{ route('admin.kamar') }}"><i class="fas fa-bed"></i> Kamar</a>
             </li>
+            <li class="{{ request()->routeIs('admin.room_units') ? 'active' : '' }}">
+                <a href="{{ route('admin.room_units') }}"><i class="fas fa-door-open"></i> Unit Kamar</a>
+            </li>
             <li class="{{ request()->routeIs('admin.bookings') ? 'active' : '' }}">
                 <a href="{{ route('admin.bookings') }}"><i class="fas fa-calendar-alt"></i> Pesanan</a>
             </li>
@@ -83,10 +86,13 @@
 
                     <div class="amenities-badges mb-4">
                         <div class="text-muted mb-2" style="font-size: 0.75rem;">Fasilitas:</div>
-                        <span>Wi-Fi</span>
-                        <span>TV</span>
-                        <span>Mini Bar</span>
-                        <span>City View</span>
+                        @if($room->facilities)
+                            @foreach(explode(',', $room->facilities) as $facility)
+                                <span>{{ trim($facility) }}</span>
+                            @endforeach
+                        @else
+                            <span class="text-muted fst-italic">Belum ada fasilitas</span>
+                        @endif
                     </div>
                     
                     <div class="action-buttons">
@@ -108,18 +114,18 @@
                             <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body p-4">
-                            <form action="#" method="POST">
+                            <form action="{{ route('admin.rooms.update', $room->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Room Number / Name</label>
-                                    <input type="text" class="form-control custom-input" name="name" value="{{ $room->name }}">
+                                    <input type="text" class="form-control custom-input" name="name" value="{{ $room->name }}" required>
                                 </div>
                                 
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Room Type</label>
-                                    <select class="form-select custom-input" name="type">
+                                    <select class="form-select custom-input" name="type" required>
                                         <option value="Deluxe" {{ $room->type == 'Deluxe' ? 'selected' : '' }}>Deluxe</option>
                                         <option value="Superior Double" {{ $room->type == 'Superior Double' ? 'selected' : '' }}>Superior Double</option>
                                         <option value="Executive Suite" {{ $room->type == 'Executive Suite' ? 'selected' : '' }}>Executive Suite</option>
@@ -128,13 +134,13 @@
                                 
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Price per Night (Rp)</label>
-                                    <input type="number" class="form-control custom-input" name="price_per_hour" value="{{ $room->price_per_hour }}">
+                                    <input type="number" class="form-control custom-input" name="price_per_hour" value="{{ $room->price_per_hour }}" required>
                                 </div>
                                 
                                 <div class="row mb-4">
                                     <div class="col-6">
                                         <label class="form-label fw-bold">Capacity</label>
-                                        <input type="number" class="form-control custom-input" name="capacity" value="{{ $room->capacity }}">
+                                        <input type="number" class="form-control custom-input" name="capacity" value="{{ $room->capacity }}" required>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label fw-bold">Floor</label>
@@ -142,45 +148,52 @@
                                     </div>
                                 </div>
                                 
+                                @php
+                                    $room_facs = array_map('trim', explode(',', $room->facilities));
+                                @endphp
                                 <div class="mb-4">
                                     <label class="form-label fw-bold mb-2">Amenities</label>
                                     <div class="row g-2" style="font-size: 0.9rem;">
                                         <div class="col-4">
                                             <div class="form-check">
-                                                <input class="form-check-input custom-checkbox" type="checkbox" id="edit_wifi_{{ $room->id }}">
-                                                <label class="form-check-label" for="edit_wifi_{{ $room->id }}">Wi-Fi</label>
+                                                <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="🚿 Shower" id="edit_shower_{{ $room->id }}" {{ in_array('🚿 Shower', $room_facs) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="edit_shower_{{ $room->id }}">🚿 Shower</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input custom-checkbox" type="checkbox" id="edit_tv_{{ $room->id }}">
-                                                <label class="form-check-label" for="edit_tv_{{ $room->id }}">TV</label>
+                                                <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="❄️ AC" id="edit_ac_{{ $room->id }}" {{ in_array('❄️ AC', $room_facs) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="edit_ac_{{ $room->id }}">❄️ AC</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input custom-checkbox" type="checkbox" id="edit_minibar_{{ $room->id }}">
-                                                <label class="form-check-label" for="edit_minibar_{{ $room->id }}">Mini Bar</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="form-check">
-                                                <input class="form-check-input custom-checkbox" type="checkbox" id="edit_smoking_{{ $room->id }}">
-                                                <label class="form-check-label" for="edit_smoking_{{ $room->id }}">Smoking Area</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input custom-checkbox" type="checkbox" id="edit_nosmoking_{{ $room->id }}">
-                                                <label class="form-check-label" for="edit_nosmoking_{{ $room->id }}">No Smoking</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input custom-checkbox" type="checkbox" id="edit_refund_{{ $room->id }}">
-                                                <label class="form-check-label" for="edit_refund_{{ $room->id }}">Refund</label>
+                                                <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="📶 WiFi" id="edit_wifi_{{ $room->id }}" {{ in_array('📶 WiFi', $room_facs) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="edit_wifi_{{ $room->id }}">📶 WiFi</label>
                                             </div>
                                         </div>
                                         <div class="col-4">
                                             <div class="form-check">
-                                                <input class="form-check-input custom-checkbox" type="checkbox" id="edit_norefund_{{ $room->id }}">
-                                                <label class="form-check-label" for="edit_norefund_{{ $room->id }}">No Refund</label>
+                                                <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="📺 Smart TV" id="edit_tv_{{ $room->id }}" {{ in_array('📺 Smart TV', $room_facs) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="edit_tv_{{ $room->id }}">📺 Smart TV</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input custom-checkbox" type="checkbox" id="edit_cityview_{{ $room->id }}">
-                                                <label class="form-check-label" for="edit_cityview_{{ $room->id }}">City View</label>
+                                                <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="🔲 Mini Fridge" id="edit_fridge_{{ $room->id }}" {{ in_array('🔲 Mini Fridge', $room_facs) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="edit_fridge_{{ $room->id }}">🔲 Mini Fridge</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="☕ Coffee Maker" id="edit_coffee_{{ $room->id }}" {{ in_array('☕ Coffee Maker', $room_facs) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="edit_coffee_{{ $room->id }}">☕ Coffee Maker</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="🔐 Safe Deposit Box" id="edit_safe_{{ $room->id }}" {{ in_array('🔐 Safe Deposit Box', $room_facs) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="edit_safe_{{ $room->id }}">🔐 Safe Deposit Box</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="💨 Hairdryer" id="edit_hairdryer_{{ $room->id }}" {{ in_array('💨 Hairdryer', $room_facs) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="edit_hairdryer_{{ $room->id }}">💨 Hairdryer</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="🛁 Bathtub" id="edit_bathtub_{{ $room->id }}" {{ in_array('🛁 Bathtub', $room_facs) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="edit_bathtub_{{ $room->id }}">🛁 Bathtub</label>
                                             </div>
                                         </div>
                                     </div>
@@ -202,7 +215,7 @@
                         
                         <div class="d-flex justify-content-center gap-3">
                             <button type="button" class="btn btn-light fw-bold px-4" data-bs-dismiss="modal" style="border-radius: 8px;">Batal</button>
-                            <form action="#" method="POST">
+                            <form action="{{ route('admin.rooms.destroy', $room->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger fw-bold px-4" style="border-radius: 8px;">Ya, Hapus</button>
@@ -224,31 +237,31 @@
                     </div>
                     
                     <div class="modal-body p-4">
-                        <form action="#" method="POST">
+                        <form action="{{ route('admin.rooms.store') }}" method="POST">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Room Number / Name</label>
-                                <input type="text" class="form-control custom-input" placeholder="e.g. 101 or Superior 1">
+                                <input type="text" class="form-control custom-input" name="name" placeholder="e.g. 101 or Superior 1" required>
                             </div>
                             
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Room Type</label>
-                                <select class="form-select custom-input">
-                                    <option>Deluxe</option>
-                                    <option>Superior Double</option>
-                                    <option>Executive Suite</option>
+                                <select class="form-select custom-input" name="type" required>
+                                    <option value="Deluxe">Deluxe</option>
+                                    <option value="Superior Double">Superior Double</option>
+                                    <option value="Executive Suite">Executive Suite</option>
                                 </select>
                             </div>
                             
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Price per Night (Rp)</label>
-                                <input type="number" class="form-control custom-input" placeholder="500000">
+                                <input type="number" class="form-control custom-input" name="price_per_hour" placeholder="500000" required>
                             </div>
                             
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <label class="form-label fw-bold">Capacity</label>
-                                    <input type="number" class="form-control custom-input" placeholder="2">
+                                    <input type="number" class="form-control custom-input" name="capacity" placeholder="2" required>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label fw-bold">Floor</label>
@@ -261,40 +274,44 @@
                                 <div class="row g-2" style="font-size: 0.9rem;">
                                     <div class="col-4">
                                         <div class="form-check">
-                                            <input class="form-check-input custom-checkbox" type="checkbox" id="add_wifi">
-                                            <label class="form-check-label" for="add_wifi">Wi-Fi</label>
+                                            <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="🚿 Shower" id="add_shower">
+                                            <label class="form-check-label" for="add_shower">🚿 Shower</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input custom-checkbox" type="checkbox" id="add_tv">
-                                            <label class="form-check-label" for="add_tv">TV</label>
+                                            <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="❄️ AC" id="add_ac">
+                                            <label class="form-check-label" for="add_ac">❄️ AC</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input custom-checkbox" type="checkbox" id="add_minibar">
-                                            <label class="form-check-label" for="add_minibar">Mini Bar</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="form-check">
-                                            <input class="form-check-input custom-checkbox" type="checkbox" id="add_smoking">
-                                            <label class="form-check-label" for="add_smoking">Smoking Area</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input custom-checkbox" type="checkbox" id="add_nosmoking">
-                                            <label class="form-check-label" for="add_nosmoking">No Smoking</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input custom-checkbox" type="checkbox" id="add_refund">
-                                            <label class="form-check-label" for="add_refund">Refund</label>
+                                            <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="📶 WiFi" id="add_wifi">
+                                            <label class="form-check-label" for="add_wifi">📶 WiFi</label>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="form-check">
-                                            <input class="form-check-input custom-checkbox" type="checkbox" id="add_norefund">
-                                            <label class="form-check-label" for="add_norefund">No Refund</label>
+                                            <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="📺 Smart TV" id="add_tv">
+                                            <label class="form-check-label" for="add_tv">📺 Smart TV</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input custom-checkbox" type="checkbox" id="add_cityview">
-                                            <label class="form-check-label" for="add_cityview">City View</label>
+                                            <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="🔲 Mini Fridge" id="add_fridge">
+                                            <label class="form-check-label" for="add_fridge">🔲 Mini Fridge</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="☕ Coffee Maker" id="add_coffee">
+                                            <label class="form-check-label" for="add_coffee">☕ Coffee Maker</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="🔐 Safe Deposit Box" id="add_safe">
+                                            <label class="form-check-label" for="add_safe">🔐 Safe Deposit Box</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="💨 Hairdryer" id="add_hairdryer">
+                                            <label class="form-check-label" for="add_hairdryer">💨 Hairdryer</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input custom-checkbox" type="checkbox" name="facilities[]" value="🛁 Bathtub" id="add_bathtub">
+                                            <label class="form-check-label" for="add_bathtub">🛁 Bathtub</label>
                                         </div>
                                     </div>
                                 </div>

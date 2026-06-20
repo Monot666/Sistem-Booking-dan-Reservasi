@@ -66,12 +66,12 @@
                                 <div>
                                     <h5 class="fw-bold mb-1">{{ $booking->resource->name ?? 'Nama Hotel' }}</h5>
                                     <small class="text-muted d-block mb-2">ID Pesanan: #{{ $booking->id }}</small>
-                                    @if($booking->status === 'pending')
+                                    @if($booking->status === \App\Enums\BookingStatus::Pending)
                                         <span class="status-pending"><i class="fas fa-clock"></i> PERLU DIBAYAR</span>
-                                    @elseif($booking->status === 'confirmed')
+                                    @elseif($booking->status === \App\Enums\BookingStatus::Confirmed)
                                         <span class="status-paid"><i class="fas fa-check-circle"></i> DIKONFIRMASI</span>
                                     @else
-                                        <span class="status-pending bg-light text-secondary"><i class="fas fa-times-circle"></i> DIBATALKAN</span>
+                                        <span class="status-pending bg-light text-secondary"><i class="fas fa-times-circle"></i> {{ strtoupper($booking->status->value) }}</span>
                                     @endif
                                 </div>
                                 <div class="d-flex gap-2 text-center">
@@ -95,7 +95,7 @@
                                 <div class="price-tag">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</div>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('bookings.show', $booking->id) }}" class="btn-maps">Detail</a>
-                                    @if($booking->status === 'pending')
+                                    @if($booking->status === \App\Enums\BookingStatus::Pending)
                                         <a href="{{ route('bookings.payment', $booking->id) }}" class="btn-pay">Bayar Sekarang</a>
                                     @endif
                                 </div>

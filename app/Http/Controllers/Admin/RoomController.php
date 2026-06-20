@@ -33,14 +33,18 @@ class RoomController extends Controller
             'description'    => 'nullable|string',
             'capacity'       => 'required|integer',
             'price_per_hour' => 'required|numeric',
+            'facilities'     => 'nullable|array',
         ]);
+
+        if(isset($data['facilities'])) {
+            $data['facilities'] = implode(', ', $data['facilities']);
+        } else {
+            $data['facilities'] = '';
+        }
 
         $room = Room::create($data);
 
-        return response()->json([
-            'message' => 'Room created successfully',
-            'data'    => $room,
-        ], 201);
+        return back()->with('success', 'Room created successfully');
     }
 
     /**
@@ -54,14 +58,18 @@ class RoomController extends Controller
             'description'    => 'nullable|string',
             'capacity'       => 'sometimes|required|integer',
             'price_per_hour' => 'sometimes|required|numeric',
+            'facilities'     => 'nullable|array',
         ]);
+
+        if(isset($data['facilities'])) {
+            $data['facilities'] = implode(', ', $data['facilities']);
+        } else {
+            $data['facilities'] = '';
+        }
 
         $room->update($data);
 
-        return response()->json([
-            'message' => 'Room updated successfully',
-            'data'    => $room,
-        ], 200);
+        return back()->with('success', 'Room updated successfully');
     }
 
     /**

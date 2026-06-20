@@ -61,4 +61,12 @@ class Room extends Model
     {
         return $this->hasMany(Booking::class, 'resource_id');
     }
+
+    /**
+     * Get the physical room units belonging to this room type.
+     */
+    public function roomUnits()
+    {
+        return $this->hasMany(RoomUnit::class, 'resource_id');
+    }
 }

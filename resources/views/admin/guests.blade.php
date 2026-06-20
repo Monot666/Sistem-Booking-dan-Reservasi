@@ -30,6 +30,9 @@
             <li class="{{ request()->routeIs('admin.kamar') ? 'active' : '' }}">
                 <a href="{{ route('admin.kamar') }}"><i class="fas fa-bed"></i> Kamar</a>
             </li>
+            <li class="{{ request()->routeIs('admin.room_units') ? 'active' : '' }}">
+                <a href="{{ route('admin.room_units') }}"><i class="fas fa-door-open"></i> Unit Kamar</a>
+            </li>
             <li class="{{ request()->routeIs('admin.bookings') ? 'active' : '' }}">
                 <a href="{{ route('admin.bookings') }}"><i class="fas fa-calendar-alt"></i> Pesanan</a>
             </li>
