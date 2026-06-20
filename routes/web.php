@@ -22,12 +22,15 @@ use App\Http\Controllers\Admin\UserController;
 Route::get('/', function () {
     $banner = \App\Models\Banner::where('is_active', true)
                 ->where('layout_name', 'Dashboard')
-                ->inRandomOrder()->first();
+                ->inRandomOrder()
+                ->limit(1)
+                ->first();
                 
     $exploreBanners = \App\Models\Banner::where('is_active', true)
                 ->where('layout_name', 'Dashboard Explore')
                 ->orderBy('position')
-                ->take(4)->get();
+                ->limit(4)
+                ->get();
                 
     return view('welcome', compact('banner', 'exploreBanners'));
 })->name('home');
