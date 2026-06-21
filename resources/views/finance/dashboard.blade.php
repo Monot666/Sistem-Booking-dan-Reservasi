@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/admin/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/finance/finance.css') }}">
 </head>
+
 <body>
 
 @php
@@ -165,11 +166,71 @@
                             </td>
                             <td>
                                 <button class="btn-action-detail" data-bs-toggle="modal" data-bs-target="#detailModal{{ $t->id }}">
-                                    <i class="fas fa-ellipsis-h"></i>
+                                    <i class="fas fa-eye"></i>
                                 </button>
+                                @if(empty($t->booking_id))
+                                <button class="btn-action-detail ms-1 text-primary" data-bs-toggle="modal" data-bs-target="#editTransactionModal{{ $t->id }}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action-detail ms-1 text-danger" data-bs-toggle="modal" data-bs-target="#deleteTransactionModal{{ $t->id }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Refund Requests Section -->
+        <div class="glass-card mt-5">
+            <h4 class="section-title mb-4">Refund Requests <span class="badge bg-warning text-dark ms-2">{{ count($refundRequests) }} Pending</span></h4>
+            <div class="table-responsive">
+                <table class="table custom-table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Date Requested</th>
+                            <th>Guest Name</th>
+                            <th>Reason</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($refundRequests as $req)
+                        <tr>
+                            <td class="fw-bold text-dark">#BK{{ str_pad($req->id, 3, '0', STR_PAD_LEFT) }}</td>
+                            <td>{{ $req->updated_at->format('d-m-Y H:i') }}</td>
+                            <td>{{ $req->user->name ?? $req->nama_pemesan }}</td>
+                            <td class="text-start" style="max-width: 250px; white-space: normal; font-size: 0.9rem;">
+                                <strong>Alasan:</strong> {{ $req->refund_reason }}<br>
+                                <div class="mt-2" style="background-color: #f1f5f9; padding: 8px; border-radius: 6px;">
+                                    <strong>Metode:</strong> {{ $req->refund_payment_method }}<br>
+                                    <strong>No. Akun:</strong> {{ $req->refund_payment_account }}<br>
+                                    <strong>A.N:</strong> {{ $req->refund_account_name }}
+                                </div>
+                            </td>
+                            <td class="fw-semibold text-danger">
+                                Rp. {{ number_format($req->total_price, 0, ',', '.') }}
+                            </td>
+                            <td>
+                                <form action="{{ route('finance.refunds.confirm', $req->id) }}" method="POST" class="d-inline-block m-0" id="refund-form-{{ $req->id }}">
+                                    @csrf
+                                    <button type="button" class="btn btn-sm btn-success fw-bold px-3 py-2" style="border-radius: 6px;"
+                                        onclick="showRefundModal({{ $req->id }})">
+                                        <i class="fas fa-check-circle me-1"></i> Konfirmasi Refund
+                                    </button>
+                                </form>
+</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">No pending refund requests.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -188,7 +249,7 @@
             <div class="modal-body p-4">
                 <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
                     <span class="text-muted" style="font-size: 0.9rem;">Transaction ID:</span>
-                    <span class="fw-bold text-dark">#TXN-00{{ $t->id }}</span>
+                    <span class="fw-bold text-dark">#{{ $t->id }}</span>
                 </div>
                 <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
                     <span class="text-muted" style="font-size: 0.9rem;">Date:</span>
@@ -223,6 +284,74 @@
         </div>
     </div>
 </div>
+
+@if(empty($t->booking_id))
+<div class="modal fade" id="editTransactionModal{{ $t->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; padding: 10px;">
+            <div class="modal-header border-0 pb-0">
+                <h4 class="modal-title fw-bold" style="color: #1e293b;">Edit Transaction</h4>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('finance.transactions.update', $t->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-3">
+                        <label class="custom-form-label">Date</label>
+                        <input type="date" class="form-control custom-form-input" name="date" value="{{ \Carbon\Carbon::parse($t->date)->format('Y-m-d') }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="custom-form-label">Description</label>
+                        <input type="text" class="form-control custom-form-input" name="description" value="{{ $t->description }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="custom-form-label">Category</label>
+                        <select class="form-select custom-form-input" name="type" required>
+                            <option value="Revenue" {{ ($t->type->value ?? $t->type) == 'Revenue' ? 'selected' : '' }}>Revenue</option>
+                            <option value="Expense" {{ ($t->type->value ?? $t->type) == 'Expense' ? 'selected' : '' }}>Expense</option>
+                            <option value="Refund" {{ ($t->type->value ?? $t->type) == 'Refund' ? 'selected' : '' }}>Refund</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="custom-form-label">Amount (Rp)</label>
+                        <input type="number" class="form-control custom-form-input" name="amount" value="{{ $t->amount }}" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="custom-form-label">Payment Method</label>
+                        <select class="form-select custom-form-input" name="method" required>
+                            <option value="Virtual Account" {{ $t->method == 'Virtual Account' ? 'selected' : '' }}>Virtual Account</option>
+                            <option value="Bank Transfer" {{ $t->method == 'Bank Transfer' ? 'selected' : '' }}>Bank Transfer</option>
+                            <option value="Cash" {{ $t->method == 'Cash' ? 'selected' : '' }}>Cash</option>
+                            <option value="Credit Card" {{ $t->method == 'Credit Card' ? 'selected' : '' }}>Credit Card</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn w-100 mt-2" style="background-color: #3b82f6; color: white; border-radius: 8px; font-weight: 600; padding: 12px;">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteTransactionModal{{ $t->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4 border-0 shadow-lg" style="border-radius: 16px;">
+            <div class="mb-3"><i class="fas fa-trash text-danger" style="font-size: 3.5rem;"></i></div>
+            <h4 class="fw-bold mb-2">Delete Transaction?</h4>
+            <p class="text-muted mb-4">Are you sure you want to delete this transaction? This cannot be undone.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <button type="button" class="btn btn-light fw-bold px-4" data-bs-dismiss="modal" style="border-radius: 8px;">Cancel</button>
+                <form action="{{ route('finance.transactions.destroy', $t->id) }}" method="POST" class="m-0">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger fw-bold px-4" style="border-radius: 8px;">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 @endforeach
 
 <div class="modal fade" id="addTransactionModal" tabindex="-1" aria-hidden="true">
@@ -289,6 +418,21 @@
     </div>
 </div>
 
+<!-- Refund Confirmation Modal -->
+<div class="modal fade" id="refundConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4 border-0 shadow-lg" style="border-radius: 16px;">
+            <div class="mb-3"><i class="fas fa-check-circle text-success" style="font-size: 3.5rem;"></i></div>
+            <h4 class="fw-bold mb-2">Konfirmasi Refund?</h4>
+            <p class="text-muted mb-4">Apakah Anda yakin dana sudah ditransfer ke tamu?</p>
+            <div class="d-flex justify-content-center gap-3">
+                <button type="button" class="btn btn-light fw-bold px-4" data-bs-dismiss="modal" style="border-radius: 8px;">Batal</button>
+                <button type="button" class="btn btn-success fw-bold px-4" style="border-radius: 8px;" id="btnConfirmRefund">Ya, Konfirmasi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -299,6 +443,19 @@
         profit: {!! json_encode($chartProfit ?? [0,0,0,0,0,0]) !!}
     };
 </script>
-<script src="{{ asset('assets/js/finance/finance.js') }}"></script>
+<script>
+    let activeRefundId = null;
+
+    function showRefundModal(id) {
+        activeRefundId = id;
+        new bootstrap.Modal(document.getElementById('refundConfirmModal')).show();
+    }
+
+    document.getElementById('btnConfirmRefund').addEventListener('click', function() {
+    if (activeRefundId) {
+        document.getElementById('refund-form-' + activeRefundId).submit();
+    }
+});
+</script>
 </body>
 </html>
