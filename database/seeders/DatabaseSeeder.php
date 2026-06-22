@@ -32,56 +32,113 @@ class DatabaseSeeder extends Seeder
         // 2. Membuat 10 user tambahan secara acak
         User::factory(10)->create();
 
-        // 3. Mengisi Tipe Kamar Spesifik beserta detail tambahannya
+        // 3. Mengisi Tipe Kamar Fisik (4 Tingkatan)
         $allFacilities = ['🚿 Shower', '❄️ AC', '📶 WiFi', '📺 Smart TV', '🔲 Mini Fridge', '☕ Coffee Maker', '🔒 Safe Deposit Box', '💨 Hairdryer', '🛁 Bathtub'];
         
-        DB::table('resources')->insert([
+        $roomTypes = [
             [
-                'name' => 'Superior Double',
-                'type' => 'Double Bed',
+                'name' => 'Presidential Suite', // Tingkat 4
+                'type' => 'King Bed',
+                'capacity' => 4,
+                'price_per_hour' => 2500000, 
+                'image' => 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=600&auto=format&fit=crop',
+                'description' => 'Kamar termewah di tingkat tertinggi dengan pemandangan kota 360 derajat. Dilengkapi fasilitas VVIP.',
+                'size' => '80.0 m²',
+                'facilities' => implode(', ', $allFacilities),
+                'max_adults' => 4,
+                'max_children' => 2,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Executive Suite', // Tingkat 3
+                'type' => 'King Bed',
                 'capacity' => 2,
-                'price_per_hour' => 445000, 
+                'price_per_hour' => 1200000,
                 'image' => 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=600&auto=format&fit=crop',
-                'description' => 'Kamar superior dengan kasur double yang nyaman, dilengkapi pancuran air hangat, AC, kulkas mini, dan koneksi Wi-Fi berkecepatan tinggi.',
-                'size' => '28.0 m²',
-                'facilities' => implode(', ', fake()->randomElements($allFacilities, rand(3, 5))),
+                'description' => 'Kamar premium yang luas dan nyaman, cocok untuk tamu VIP maupun keluarga.',
+                'size' => '45.0 m²',
+                'facilities' => implode(', ', fake()->randomElements($allFacilities, 7)),
+                'max_adults' => 2,
+                'max_children' => 2,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Deluxe Room', // Tingkat 2
+                'type' => 'Queen Bed',
+                'capacity' => 2,
+                'price_per_hour' => 750000,
+                'image' => 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=600&auto=format&fit=crop',
+                'description' => 'Kamar modern dengan fasilitas yang memanjakan Anda selama menginap.',
+                'size' => '32.0 m²',
+                'facilities' => implode(', ', fake()->randomElements($allFacilities, 5)),
                 'max_adults' => 2,
                 'max_children' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Deluxe Twin',
-                'type' => 'Twin Bed',
+                'name' => 'Standard King', // Tingkat 1
+                'type' => 'King Bed',
                 'capacity' => 2,
-                'price_per_hour' => 550000,
-                'image' => 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=600&auto=format&fit=crop',
-                'description' => 'Kamar Deluxe dengan dua kasur single terpisah. Menyuguhkan ruang yang lebih luas dengan penataan interior modern yang mewah.',
-                'size' => '32.0 m²',
-                'facilities' => implode(', ', fake()->randomElements($allFacilities, rand(4, 6))),
+                'price_per_hour' => 450000,
+                'image' => 'https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=600&auto=format&fit=crop',
+                'description' => 'Kamar standar dengan satu ranjang King yang sangat nyaman untuk istirahat optimal.',
+                'size' => '24.0 m²',
+                'facilities' => implode(', ', fake()->randomElements($allFacilities, 4)),
                 'max_adults' => 2,
-                'max_children' => 2,
+                'max_children' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Executive Suite',
-                'type' => 'King Bed',
+                'name' => 'Standard Twin', // Tingkat 1
+                'type' => 'Twin Bed',
                 'capacity' => 2,
-                'price_per_hour' => 950000,
+                'price_per_hour' => 450000,
                 'image' => 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=600&auto=format&fit=crop',
-                'description' => 'Nikmati kemewahan berkelas di Executive Suite Roomly. Dilengkapi dengan bathtub premium, Smart TV, dan ruang santai terpisah.',
-                'size' => '45.0 m²',
-                'facilities' => implode(', ', fake()->randomElements($allFacilities, rand(5, 8))),
+                'description' => 'Kamar standar dengan dua ranjang terpisah, pilihan tepat untuk perjalanan bersama teman.',
+                'size' => '24.0 m²',
+                'facilities' => implode(', ', fake()->randomElements($allFacilities, 4)),
                 'max_adults' => 2,
-                'max_children' => 2,
+                'max_children' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
-        ]);
+        ];
         
-        // 3.1. Membuat 97 tipe kamar tambahan secara acak agar total menjadi 100 data
-        \App\Models\Room::factory(97)->create();
+        DB::table('resources')->insert($roomTypes);
+
+        // 3.1. Mengisi Data Nomor Kamar (Room Units)
+        $roomUnits = [];
+        
+        // Tingkat 4: Kamar 1 - 5 (Presidential Suite, ID: 1)
+        for ($i = 1; $i <= 5; $i++) {
+            $roomUnits[] = ['resource_id' => 1, 'room_number' => (string)$i, 'created_at' => now(), 'updated_at' => now()];
+        }
+        
+        // Tingkat 3: Kamar 6 - 30 (Executive Suite, ID: 2)
+        for ($i = 6; $i <= 30; $i++) {
+            $roomUnits[] = ['resource_id' => 2, 'room_number' => (string)$i, 'created_at' => now(), 'updated_at' => now()];
+        }
+        
+        // Tingkat 2: Kamar 31 - 80 (Deluxe Room, ID: 3)
+        for ($i = 31; $i <= 80; $i++) {
+            $roomUnits[] = ['resource_id' => 3, 'room_number' => (string)$i, 'created_at' => now(), 'updated_at' => now()];
+        }
+        
+        // Tingkat 1: Kamar 81 - 130 (Standard King, ID: 4)
+        for ($i = 81; $i <= 130; $i++) {
+            $roomUnits[] = ['resource_id' => 4, 'room_number' => (string)$i, 'created_at' => now(), 'updated_at' => now()];
+        }
+        
+        // Tingkat 1: Kamar 131 - 180 (Standard Twin, ID: 5)
+        for ($i = 131; $i <= 180; $i++) {
+            $roomUnits[] = ['resource_id' => 5, 'room_number' => (string)$i, 'created_at' => now(), 'updated_at' => now()];
+        }
+        
+        DB::table('room_units')->insert($roomUnits);
         
         // 4. Dummy Transactions
         // Pindah ke bawah setelah Bookings terbuat agar bisa di-relasikan

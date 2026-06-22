@@ -127,19 +127,9 @@ return new class extends Migration {
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
             $table->timestamps();
         });
-
-        Schema::create('payments', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('booking_id')->constrained()->onDelete('cascade');
-            $table->decimal('amount', 12, 2);
-            $table->string('method');
-            $table->enum('status', ['unpaid', 'paid', 'failed'])->default('unpaid');
-            $table->timestamps();
-        });
     }
 
     public function down() {
-        Schema::dropIfExists('payments');
         Schema::dropIfExists('bookings');
         Schema::dropIfExists('resources');
         Schema::dropIfExists('ewallets');

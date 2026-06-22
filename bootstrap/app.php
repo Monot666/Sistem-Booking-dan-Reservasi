@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'finance' => \App\Http\Middleware\IsFinance::class,
             'content_creator' => \App\Http\Middleware\IsContentCreator::class,
         ]);
+        $middleware->validateCsrfTokens(except: [
+            'api/midtrans-callback',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
