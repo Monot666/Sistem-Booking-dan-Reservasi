@@ -51,6 +51,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 @endif
+                @if (session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
                 @if ($errors->any())
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <ul class="mb-0">
@@ -82,23 +88,26 @@
                             <label class="custom-label">Birthdate</label>
                             <div class="row g-2">
                                 <div class="col-4">
+                                    @php $bDay = Auth::user()->birthdate ? \Carbon\Carbon::parse(Auth::user()->birthdate)->format('j') : 1; @endphp
                                     <select name="birth_day" class="form-select custom-input">
                                         @for ($i = 1; $i <= 31; $i++)
-                                            <option value="{{ $i }}" {{ old('birth_day', Auth::user()->birth_day ?? 1) == $i ? 'selected' : '' }}>{{ sprintf('%02d', $i) }}</option>
+                                            <option value="{{ $i }}" {{ old('birth_day', $bDay) == $i ? 'selected' : '' }}>{{ sprintf('%02d', $i) }}</option>
                                         @endfor
                                     </select>
                                 </div>
                                 <div class="col-4">
+                                    @php $bMonth = Auth::user()->birthdate ? \Carbon\Carbon::parse(Auth::user()->birthdate)->format('F') : 'January'; @endphp
                                     <select name="birth_month" class="form-select custom-input">
                                         @foreach(['January','February','March','April','May','June','July','August','September','October','November','December'] as $month)
-                                            <option value="{{ $month }}" {{ old('birth_month', Auth::user()->birth_month ?? 'January') == $month ? 'selected' : '' }}>{{ $month }}</option>
+                                            <option value="{{ $month }}" {{ old('birth_month', $bMonth) == $month ? 'selected' : '' }}>{{ $month }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-4">
+                                    @php $bYear = Auth::user()->birthdate ? \Carbon\Carbon::parse(Auth::user()->birthdate)->format('Y') : date('Y'); @endphp
                                     <select name="birth_year" class="form-select custom-input">
                                         @for ($y = date('Y'); $y >= 1950; $y--)
-                                            <option value="{{ $y }}" {{ old('birth_year', Auth::user()->birth_year ?? '2001') == $y ? 'selected' : '' }}>{{ $y }}</option>
+                                            <option value="{{ $y }}" {{ old('birth_year', $bYear) == $y ? 'selected' : '' }}>{{ $y }}</option>
                                         @endfor
                                     </select>
                                 </div>

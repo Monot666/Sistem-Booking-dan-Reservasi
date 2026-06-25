@@ -2,7 +2,7 @@
     <div class="avatar-section">
         <div class="avatar-wrapper">
             <img id="avatar-preview" 
-                 src="{{ Auth::user()->profile_photo_url ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=f3f4f6&color=333' }}" 
+                 src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=f3f4f6&color=333' }}" 
                  alt="Foto Profil"
                  onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=333'">
             

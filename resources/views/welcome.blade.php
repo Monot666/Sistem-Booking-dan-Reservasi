@@ -36,8 +36,8 @@
                     <a href="{{ route('profile') }}" class="nav-profile-pill">
                         <span class="nav-greeting">Hi, {{ strtok(Auth::user()->name, " ") }}</span>
                         <div class="nav-avatar">
-                            @if(Auth::user()->profile_photo_url)
-                                <img src="{{ Auth::user()->profile_photo_url }}" alt="Avatar">
+                            @if(Auth::user()->avatar)
+                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="Avatar">
                             @else
                                 <span>{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
                             @endif

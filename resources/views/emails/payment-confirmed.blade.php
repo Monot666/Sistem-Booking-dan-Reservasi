@@ -28,7 +28,7 @@
             <tr>
                 <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #E53935; font-size: 1.2em;"><strong>NOMOR KAMAR ANDA</strong></td>
                 <td style="padding: 8px 0; border-bottom: 1px solid #eee; text-align: right; color: #E53935; font-size: 1.2em; font-weight: bold;">
-                    {{ $booking->roomUnit ? $booking->roomUnit->room_number : 'Belum Ditentukan' }}
+                    {{ $booking->roomUnit->room_number ?? '' }}
                 </td>
             </tr>
             <tr>

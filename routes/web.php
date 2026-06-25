@@ -106,6 +106,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // --- BOOKINGS ---
     Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show')->where('id', '[0-9]+');
+    Route::get('/bookings/{id}/receipt', [BookingController::class, 'receipt'])->name('bookings.receipt')->where('id', '[0-9]+');
 
     /*
     |--------------------------------------------------------------------------
@@ -121,7 +122,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/bookings/{id}/status', [BookingController::class, 'checkStatus'])->name('bookings.status');
         Route::post('/bookings/process-payment', [BookingController::class, 'processPayment'])->name('bookings.processPayment');
         Route::get('/bookings/payment-instructions', [BookingController::class, 'paymentInstructions'])->name('bookings.payment.instructions');
-        Route::get('/bookings/payment-success', fn() => view('user.sukses-pembayaran'))->name('bookings.payment.success');
+        Route::get('/bookings/{id}/payment-success', [BookingController::class, 'paymentSuccess'])->name('bookings.payment.success');
         Route::post('/bookings/{id}/refund', [BookingController::class, 'requestRefund'])->name('bookings.refund');
 
         /*
@@ -139,6 +140,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'index'])->name('bookings');
             Route::get('/guests', [\App\Http\Controllers\Admin\GuestController::class, 'index'])->name('guests');
             Route::get('/finance', [AdminPaymentController::class, 'index'])->name('finance');
+            Route::get('/finance/export', [AdminPaymentController::class, 'export'])->name('finance.export');
             Route::post('/payments', [BookingController::class, 'processPayment'])->name('payments.store');
             Route::get('/users', [UserController::class, 'index'])->name('users.index');
             Route::put('/users/{id}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
@@ -147,6 +149,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // --- FINANCE ONLY ---
         Route::middleware('finance')->group(function () {
             Route::get('/finance/dashboard', [\App\Http\Controllers\Finance\DashboardController::class, 'index'])->name('finance.dashboard');
+            Route::get('/finance/export', [\App\Http\Controllers\Finance\DashboardController::class, 'export'])->name('finance.export');
             Route::post('/finance/transactions', [\App\Http\Controllers\Finance\DashboardController::class, 'store'])->name('finance.transactions.store');
             Route::put('/finance/transactions/{id}', [\App\Http\Controllers\Finance\DashboardController::class, 'update'])->name('finance.transactions.update');
             Route::delete('/finance/transactions/{id}', [\App\Http\Controllers\Finance\DashboardController::class, 'destroy'])->name('finance.transactions.destroy');

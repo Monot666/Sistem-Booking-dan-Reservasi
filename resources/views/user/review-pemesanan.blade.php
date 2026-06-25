@@ -28,6 +28,7 @@
         <input type="hidden" name="option_type" value="{{ $optionType }}">
         <input type="hidden" name="price" value="{{ $pricePerNight }}">
         <input type="hidden" name="total_price" value="{{ $totalPrice }}">
+        <input type="hidden" name="guest_count" value="{{ $guestCount }}">
 
         <div class="booking-layout">
             
@@ -50,19 +51,19 @@
                     
                     <div class="form-group">
                         <label>Nama Lengkap</label>
-                        <input type="text" name="nama_pemesan" class="form-control" value="Dimas Sudarmono" required>
+                        <input type="text" name="nama_pemesan" class="form-control" value="{{ Auth::check() ? Auth::user()->name : '' }}" required>
                         <div class="input-desc">Sesuai KTP/Paspor/SIM (tanpa tanda baca atau gelar).</div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label>No. Handphone</label>
-                            <input type="text" name="no_hp" class="form-control" value="087759315883" required>
+                            <input type="text" name="no_hp" class="form-control" value="{{ Auth::check() ? Auth::user()->phone : '' }}" required>
                             <div class="input-desc">No. Handphone wajib diisi.</div>
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" name="email" class="form-control" value="dimas@gmail.com" required>
+                            <input type="email" name="email" class="form-control" value="{{ Auth::check() ? Auth::user()->email : '' }}" required>
                             <div class="input-desc">Contoh: email@example.com</div>
                         </div>
                     </div>
@@ -78,7 +79,7 @@
                     
                     <div class="form-group" style="margin-bottom: 0;">
                         <label>Nama Lengkap</label>
-                        <input type="text" name="nama_pengunjung" class="form-control" value="Dimas Sudarmono">
+                        <input type="text" name="nama_pengunjung" class="form-control" value="{{ Auth::check() ? Auth::user()->name : '' }}">
                         <div class="input-desc">Sesuai KTP/paspor/SIM (tanpa tanda baca atau gelar).</div>
                     </div>
                 </div>
@@ -173,8 +174,8 @@
                     </div>
 
                     <div class="room-meta-icons">
-                        <span><i class="fa-solid fa-users" style="color: #94a3b8; margin-right: 5px;"></i> 2 Tamu</span>
-                        <span><i class="fa-solid fa-bed" style="color: #94a3b8; margin-right: 5px;"></i> 1 Bed</span>
+                        <span><i class="fa-solid fa-users" style="color: #94a3b8; margin-right: 5px;"></i> {{ $guestCount }} Tamu</span>
+                        <span><i class="fa-solid fa-bed" style="color: #94a3b8; margin-right: 5px;"></i> {{ $bedInfo }}</span>
                     </div>
                     <p style="font-size: 0.78rem; color: #dc2626; margin: 12px 0 0 0; font-weight: 500;"><i class="fa-solid fa-calendar-xmark" style="margin-right: 5px;"></i> Pemesanan ini tidak bisa di-refund.</p>
                     <p style="font-size: 0.78rem; color: #64748b; margin: 4px 0 0 0;"><i class="fa-solid fa-ban" style="margin-right: 5px;"></i> Non-reschedulable</p>

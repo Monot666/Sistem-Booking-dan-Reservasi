@@ -28,11 +28,31 @@ class ProfileController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'phone' => 'nullable|string|max:20',
+            'city' => 'nullable|string|max:100',
+            'gender' => 'nullable|in:Male,Female',
         ], [
             'name.required' => 'Full name is required.',
         ]);
 
         $user->name = $request->name;
+        $user->phone = $request->phone;
+        $user->city = $request->city;
+        $user->gender = $request->gender;
+
+        if ($request->filled(['birth_year', 'birth_month', 'birth_day'])) {
+            $monthNum = date('m', strtotime($request->birth_month));
+            $user->birthdate = $request->birth_year . '-' . $monthNum . '-' . str_pad($request->birth_day, 2, '0', STR_PAD_LEFT);
+        }
+
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar && \Illuminate\Support\Facades\Storage::exists('public/' . $user->avatar)) {
+                \Illuminate\Support\Facades\Storage::delete('public/' . $user->avatar);
+            }
+            $user->avatar = $request->file('avatar')->store('avatars', 'public');
+        }
+
         $user->save();
 
         return back()->with('success', 'Profile updated successfully!');
