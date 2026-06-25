@@ -9,7 +9,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $transactions = \App\Models\Transaction::orderByDesc('date')->get();
+        $transactions = \App\Models\Transaction::orderByDesc('created_at')->get();
 
         $totalRevenue = $transactions->where('type', \App\Enums\TransactionType::Revenue)->sum('amount');
         $totalExpense = $transactions->where('type', \App\Enums\TransactionType::Expense)->sum('amount');
@@ -58,35 +58,49 @@ class DashboardController extends Controller
         
         abort_if($booking->refund_status !== 'requested', 400, 'Invalid refund request.');
 
-        // Update via Eloquent
         $booking->refund_status = 'completed';
         $booking->save();
-
-        // Update via DB Query to be absolutely sure
-        \Illuminate\Support\Facades\DB::table('bookings')->where('id', $id)->update(['refund_status' => 'completed']);
-        
-        \Illuminate\Support\Facades\Log::info("Refund status set to completed in DB for ID: " . $id);
 
         \App\Models\Transaction::create([
             'booking_id'  => $booking->id,
             'date'        => now(),
-            'description' => 'Refund Confirmed - BK' . str_pad($booking->id, 3, '0', STR_PAD_LEFT),
+            'description' => 'Refund for Booking - BK' . str_pad($booking->id, 3, '0', STR_PAD_LEFT),
             'type'        => \App\Enums\TransactionType::Refund,
             'amount'      => $booking->total_price,
-            'method'      => $booking->refund_payment_method ?? 'Bank Transfer',
+            'method'      => $booking->refund_payment_method,
             'status'      => 'Completed',
         ]);
 
-        try {
-            $recipientEmail = $booking->email ?? ($booking->user ? $booking->user->email : null);
-            if ($recipientEmail) {
-                \Illuminate\Support\Facades\Mail::to($recipientEmail)->send(new \App\Mail\RefundConfirmed($booking));
-            }
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Mail Error (Refund): ' . $e->getMessage());
+        return redirect()->back()->with('success', 'Refund confirmed successfully.');
+    }
+
+    public function export(Request $request)
+    {
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = \App\Models\Transaction::query();
+        
+        if ($startDate) {
+            $query->whereDate('date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('date', '<=', $endDate);
         }
 
-        return back()->with('success', 'Refund telah dikonfirmasi dan dicatat ke dalam transaksi pengeluaran.');
+        $transactions = $query->orderByDesc('created_at')->get()->map(function($t) {
+            return [
+                'ID Transaksi' => $t->id,
+                'Tanggal' => \Carbon\Carbon::parse($t->date)->format('d-m-Y'),
+                'Deskripsi' => $t->description,
+                'Tipe' => $t->type->value ?? $t->type,
+                'Nominal (Rp)' => $t->amount,
+                'Metode' => $t->method,
+                'Status' => $t->status
+            ];
+        });
+
+        return response()->json($transactions);
     }
 
     public function store(\Illuminate\Http\Request $request)

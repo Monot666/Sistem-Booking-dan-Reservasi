@@ -50,7 +50,7 @@
                 <p class="text-muted mb-0" style="font-size: 0.9rem;">Track revenue, expenses, and financial performance</p>
             </div>
             <div class="d-flex gap-2">
-                <button class="btn-save-data" id="btnSaveData">
+                <button class="btn-save-data" id="btnSaveData" data-bs-toggle="modal" data-bs-target="#exportModal">
                     <i class="far fa-save me-2"></i> Save Data
                 </button>
                 <button class="btn-add-tx" data-bs-toggle="modal" data-bs-target="#addTransactionModal">
@@ -433,6 +433,34 @@
     </div>
 </div>
 
+<!-- Export Data Modal -->
+<div class="modal fade" id="exportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+            <div class="modal-header border-0 pb-0 pt-4 px-4">
+                <h5 class="modal-title fw-bold" style="color: #1e293b;">Export Data Transaksi</h5>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="text-muted mb-4">Pilih rentang tanggal transaksi yang ingin Anda unduh dalam format Excel (.xlsx).</p>
+                <form id="exportForm">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Mulai Tanggal</label>
+                        <input type="date" class="form-control" id="exportStartDate" name="start_date">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Sampai Tanggal</label>
+                        <input type="date" class="form-control" id="exportEndDate" name="end_date">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 fw-bold py-2" style="border-radius: 8px;">
+                        <i class="fas fa-file-excel me-2"></i> Unduh File Excel
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -452,10 +480,64 @@
     }
 
     document.getElementById('btnConfirmRefund').addEventListener('click', function() {
-    if (activeRefundId) {
-        document.getElementById('refund-form-' + activeRefundId).submit();
-    }
-});
+        if (activeRefundId) {
+            document.getElementById('refund-form-' + activeRefundId).submit();
+        }
+    });
+
+    // Export Logic using SheetJS
+    document.getElementById('exportForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const startDate = document.getElementById('exportStartDate').value;
+        const endDate = document.getElementById('exportEndDate').value;
+        let url = "{{ route('finance.export') }}?";
+        if (startDate) url += "start_date=" + startDate + "&";
+        if (endDate) url += "end_date=" + endDate;
+
+        const btn = this.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Memproses...';
+        btn.disabled = true;
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                if(data.length === 0) {
+                    alert('Tidak ada transaksi pada rentang tanggal tersebut.');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    return;
+                }
+
+                // Create a new workbook and worksheet from the JSON data
+                const worksheet = XLSX.utils.json_to_sheet(data);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
+
+                // Generate filename based on dates or current date
+                let filename = "Laporan_Keuangan_Roomly";
+                if (startDate && endDate) filename += "_" + startDate + "_to_" + endDate;
+                else filename += "_" + new Date().toISOString().slice(0,10);
+                filename += ".xlsx";
+
+                // Trigger download
+                XLSX.writeFile(workbook, filename);
+
+                // Reset button and close modal
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                bootstrap.Modal.getInstance(document.getElementById('exportModal')).hide();
+            })
+            .catch(err => {
+                console.error('Export error:', err);
+                alert('Terjadi kesalahan saat mengekspor data.');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+    });
 </script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+<script src="{{ asset('assets/js/admin/finance.js') }}"></script>
 </body>
 </html>
