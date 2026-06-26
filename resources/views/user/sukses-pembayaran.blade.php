@@ -29,15 +29,19 @@
             <div class="receipt-summary-box">
                 <div class="receipt-row">
                     <span>No. Pemesanan</span>
-                    <strong>RM-2026031299</strong>
+                    <strong>{{ isset($booking) ? 'RM-'.$booking->no_pesanan : 'RM-2026031299' }}</strong>
                 </div>
                 <div class="receipt-row">
                     <span>Akomodasi</span>
-                    <strong>Aston Hotel Solo</strong>
+                    <strong>{{ isset($booking) ? 'Roomly ('.$booking->room_name.')' : 'Aston Hotel Solo' }}</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Nomor Kamar</span>
+                    <strong style="color: #e69c24; font-size: 1.05em;">{{ $booking->roomUnit->room_number ?? '' }}</strong>
                 </div>
                 <div class="receipt-row">
                     <span>Metode Pembayaran</span>
-                    <strong>{{ strtoupper($method) }} (Terverifikasi Otomatis)</strong>
+                    <strong>{{ isset($booking) ? (strtoupper($booking->transactions()->latest()->first()->method ?? 'VA')) : strtoupper($method) }} (Terverifikasi Otomatis)</strong>
                 </div>
                 <div class="divider-receipt"></div>
                 <div class="receipt-row total-row-style">
@@ -46,8 +50,8 @@
                 </div>
             </div>
 
-            <div class="action-footer-group">
-                <a href="#" class="btn-status-primary" onclick="alert('E-Voucher berhasil diunduh ke folder download!')">
+            <div class="action-footer-group d-print-none">
+                <a href="#" class="btn-status-primary" onclick="window.print(); return false;">
                     <i class="fa-solid fa-download"></i> Unduh Voucher Hotel
                 </a>
                 <a href="{{ route('bookings.index') }}" class="btn-status-secondary">Kembali ke Beranda</a>
@@ -57,5 +61,23 @@
     </div>
 </div>
 
+<style>
+@media print {
+    .d-print-none { display: none !important; }
+    body { background: #fff !important; }
+    .status-page-wrapper { min-height: auto !important; padding: 0 !important; background: #fff !important; }
+    .status-card { box-shadow: none !important; margin: 0 auto; max-width: 100%; border: 2px solid #eee; }
+}
+</style>
+
+@if(isset($autoPrint) && $autoPrint)
+<script>
+    window.onload = function() {
+        setTimeout(function() {
+            window.print();
+        }, 500);
+    }
+</script>
+@endif
 </body>
 </html>

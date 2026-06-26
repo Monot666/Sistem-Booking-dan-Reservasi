@@ -17,11 +17,11 @@ document.addEventListener('DOMContentLoaded', function() {
         new Chart(ctxProfit, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                labels: window.financeChartData ? window.financeChartData.labels : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
                 datasets: [{
                     label: 'Net Profit (Rp)',
-                    // Data disesuaikan menjadi nominal Rupiah
-                    data: [12000000, 19000000, 14000000, 25000000, 22000000, 32000000],
+                    // Menggunakan data dinamis dari backend jika tersedia
+                    data: window.financeChartData ? window.financeChartData.profit : [12000000, 19000000, 14000000, 25000000, 22000000, 32000000],
                     borderColor: '#f59e0b',
                     backgroundColor: gradientFill,
                     borderWidth: 3,
@@ -51,19 +51,19 @@ document.addEventListener('DOMContentLoaded', function() {
         new Chart(ctxPerform, {
             type: 'bar',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                labels: window.financeChartData ? window.financeChartData.labels : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
                 datasets: [
                     {
                         label: 'Revenue (Rp)',
-                        // Data disesuaikan menjadi nominal Rupiah
-                        data: [25000000, 32000000, 28000000, 40000000, 38000000, 45000000],
+                        // Menggunakan data dinamis dari backend jika tersedia
+                        data: window.financeChartData ? window.financeChartData.revenue : [25000000, 32000000, 28000000, 40000000, 38000000, 45000000],
                         backgroundColor: '#10b981',
                         borderRadius: 4
                     },
                     {
                         label: 'Expenses (Rp)',
-                        // Data disesuaikan menjadi nominal Rupiah
-                        data: [13000000, 13000000, 14000000, 15000000, 16000000, 13000000],
+                        // Menggunakan data dinamis dari backend jika tersedia
+                        data: window.financeChartData ? window.financeChartData.expense : [13000000, 13000000, 14000000, 15000000, 16000000, 13000000],
                         backgroundColor: '#f43f5e',
                         borderRadius: 4
                     }

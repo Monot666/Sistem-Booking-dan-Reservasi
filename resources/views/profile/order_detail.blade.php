@@ -2,6 +2,28 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/profile.css') }}">
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .glass-card, .glass-card * {
+                visibility: visible;
+            }
+            .glass-card {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+            .btn, .page-header-profil, .back-arrow, nav, footer, .avatar-section, .sidebar-menu {
+                display: none !important;
+            }
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -68,6 +90,9 @@
                     <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#refundModal">
                         <i class="fas fa-times-circle me-1"></i> Batalkan Pesanan & Ajukan Refund
                     </button>
+                    <a href="{{ route('bookings.receipt', $booking->id) }}" target="_blank" class="btn btn-primary d-print-none">
+                        <i class="fas fa-print me-1"></i> Cetak Struk Digital
+                    </a>
                 </div>
                 
                 <!-- Refund Modal -->

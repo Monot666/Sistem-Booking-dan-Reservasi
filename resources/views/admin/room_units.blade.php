@@ -160,9 +160,20 @@
                                             @foreach($unit->bookings as $booking)
                                                 <li class="list-group-item px-0 py-3 border-bottom">
                                                     <div class="d-flex align-items-start">
-                                                        <div class="badge-occupied me-3 mt-1" style="padding: 6px 10px; border-radius: 8px;"><i class="fas fa-lock"></i></div>
-                                                        <div>
-                                                            <div class="fw-bold text-dark mb-1">{{ \Carbon\Carbon::parse($booking->start_time)->format('d M Y') }} s/d {{ \Carbon\Carbon::parse($booking->end_time)->format('d M Y') }}</div>
+                                                        <div class="badge-occupied me-3 mt-1 text-center" style="padding: 6px 10px; border-radius: 8px; min-width: 70px;">
+                                                            <i class="fas fa-lock d-block mb-1"></i> Terisi
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <div class="fw-bold text-dark mb-1 d-flex justify-content-between align-items-center">
+                                                                <span>{{ \Carbon\Carbon::parse($booking->start_time)->format('d M Y') }} s/d {{ \Carbon\Carbon::parse($booking->end_time)->format('d M Y') }}</span>
+                                                                @if($booking->status === \App\Enums\BookingStatus::Pending)
+                                                                    <span class="badge bg-warning text-dark border border-warning-subtle" style="font-size: 0.75rem;">Belum Lunas (Pending)</span>
+                                                                @elseif($booking->status === \App\Enums\BookingStatus::Confirmed)
+                                                                    <span class="badge bg-success border border-success-subtle" style="font-size: 0.75rem;">Lunas</span>
+                                                                @else
+                                                                    <span class="badge bg-secondary border border-secondary-subtle" style="font-size: 0.75rem;">{{ ucfirst($booking->status->value) }}</span>
+                                                                @endif
+                                                            </div>
                                                             <div class="text-muted" style="font-size: 0.85rem;"><i class="fas fa-user me-1"></i> {{ $booking->nama_pemesan }}</div>
                                                             <div class="text-primary mt-1" style="font-size: 0.8rem;"><i class="fas fa-hashtag me-1"></i> Ref: #{{ $booking->id }}</div>
                                                         </div>

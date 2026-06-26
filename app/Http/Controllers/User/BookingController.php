@@ -48,11 +48,27 @@ class BookingController extends Controller
         return view('profile.order_detail', compact('booking'));
     }
 
+    public function receipt($id)
+    {
+        $booking = Booking::with('room', 'user')->findOrFail($id);
+        abort_if($booking->user_id !== Auth::id(), 403);
+        
+        return view('user.sukses-pembayaran', [
+            'booking' => $booking,
+            'autoPrint' => true
+        ]);
+    }
+
     /**
      * Show the booking review/preview page before submission.
      */
     public function review(Request $request)
     {
+        $user = Auth::user();
+        if (!$user->phone || !$user->gender || !$user->birthdate || !$user->city) {
+            return redirect()->route('profile')->with('error', 'Silakan lengkapi data profil Anda (No. HP, Kota, Gender, Tanggal Lahir) sebelum melakukan pemesanan kamar.');
+        }
+
         $resourceId = $request->input('resource_id');
         $resource = $resourceId ? Room::find($resourceId) : null;
 
@@ -77,6 +93,7 @@ class BookingController extends Controller
         $taxAndFee      = 140000;
         $totalRoomPrice = $pricePerNight * $nights;
         $totalPrice     = $totalRoomPrice + $taxAndFee;
+        $guestCount     = $request->input('guest_count', $resource ? $resource->capacity : 2);
 
         return view('user.review-pemesanan', compact(
             'roomName',
@@ -91,7 +108,8 @@ class BookingController extends Controller
             'checkout',
             'nights',
             'checkinDisplay',
-            'checkoutDisplay'
+            'checkoutDisplay',
+            'guestCount'
         ));
     }
 
@@ -100,6 +118,11 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
+        if (!$user->phone || !$user->gender || !$user->birthdate || !$user->city) {
+            return redirect()->route('profile')->with('error', 'Silakan lengkapi data profil Anda terlebih dahulu.');
+        }
+
         $request->validate([
             'nama_pemesan' => 'required|string|max:255',
             'no_hp'        => 'required',
@@ -117,6 +140,11 @@ class BookingController extends Controller
         $start    = Carbon::parse($checkin);
         $end      = Carbon::parse($checkout);
         $nights   = max(1, $start->diffInDays($end));
+
+        // LAZY CLEANUP: Cancel any pending bookings older than 1 hour globally
+        \App\Models\Booking::where('status', \App\Enums\BookingStatus::Pending)
+            ->where('created_at', '<', now()->subHour())
+            ->update(['status' => \App\Enums\BookingStatus::Cancelled]);
 
         $resourceId = $request->resource_id;
 
@@ -144,6 +172,8 @@ class BookingController extends Controller
             // For now, allow it to proceed with unit=null if we just want to test booking flows.
             if ($availableRoomUnit) {
                 $assignedRoomUnitId = $availableRoomUnit->id;
+            } else {
+                return back()->with('error', 'Maaf, kamar tidak tersedia untuk jadwal yang Anda pilih. Silakan pilih tanggal atau kamar lain.');
             }
         }
 
@@ -172,6 +202,7 @@ class BookingController extends Controller
             'room_price'       => $roomPriceSnapshot,
             'start_time'       => $start,
             'end_time'         => $end,
+            'guest_count'      => $request->input('guest_count', 2),
             'total_price'      => $totalPrice,
             'tax_and_fee'      => $taxAndFee,
             'status'           => \App\Enums\BookingStatus::Pending,
@@ -193,6 +224,17 @@ class BookingController extends Controller
     public function payment($id)
     {
         $pemesanan = Booking::with('room')->findOrFail($id);
+
+        // Check if booking has expired (1 hour limit)
+        if ($pemesanan->status === \App\Enums\BookingStatus::Pending && $pemesanan->created_at < now()->subHour()) {
+            $pemesanan->update(['status' => \App\Enums\BookingStatus::Cancelled]);
+            return redirect()->route('bookings.index')->with('error', 'Waktu pembayaran telah habis (1 jam). Pesanan Anda otomatis dibatalkan.');
+        }
+
+        // Only allow payment if status is still pending
+        if ($pemesanan->status !== \App\Enums\BookingStatus::Pending) {
+            return redirect()->route('bookings.index')->with('error', 'Pesanan ini sudah tidak bisa dibayar atau sudah dibatalkan.');
+        }
 
         return view('user.pembayaran', compact('pemesanan'));
     }
@@ -326,6 +368,16 @@ class BookingController extends Controller
     }
 
     /**
+     * Show payment success page
+     */
+    public function paymentSuccess($id, Request $request)
+    {
+        $booking = Booking::with('roomUnit')->findOrFail($id);
+        $method = $request->query('method', 'VA');
+        return view('user.sukses-pembayaran', compact('booking', 'method'));
+    }
+
+    /**
      * Check booking status for AJAX polling
      */
     public function checkStatus($id, Request $request)
@@ -366,6 +418,16 @@ class BookingController extends Controller
                             'method'      => $friendlyMethod,
                             'status'      => 'Completed',
                         ]);
+
+                        // Send payment confirmation email
+                        try {
+                            $recipientEmail = $booking->email ?? ($booking->user ? $booking->user->email : null);
+                            if ($recipientEmail) {
+                                \Illuminate\Support\Facades\Mail::to($recipientEmail)->send(new \App\Mail\PaymentConfirmed($booking));
+                            }
+                        } catch (\Exception $e) {
+                            \Illuminate\Support\Facades\Log::error('Mail Error (checkStatus): ' . $e->getMessage());
+                        }
                     }
                 }
             } catch (\Exception $e) {
@@ -389,14 +451,19 @@ class BookingController extends Controller
             'method'     => 'required|string|in:card,bank_transfer,ewallet',
         ]);
 
-        $booking = Booking::findOrFail($data['booking_id']);
+        $booking = Booking::with('transactions')->findOrFail($data['booking_id']);
 
         // Authorization: ensure booking belongs to the authenticated user
         abort_if($booking->user_id !== Auth::id(), 403);
 
+        // Check if booking has expired (1 hour limit)
+        if ($booking->status === \App\Enums\BookingStatus::Pending && $booking->created_at < now()->subHour()) {
+            $booking->update(['status' => \App\Enums\BookingStatus::Cancelled]);
+        }
+
         // Only allow payment for pending bookings
         if ($booking->status !== \App\Enums\BookingStatus::Pending) {
-            return back()->with('error', 'This booking can no longer be paid.');
+            return redirect()->route('bookings.index')->with('error', 'Pesanan ini sudah tidak bisa dibayar karena waktu telah habis atau sudah dibatalkan.');
         }
 
         \App\Models\Transaction::create([

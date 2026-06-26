@@ -100,7 +100,7 @@
             </div>
 
             <div class="action-footer-group" style="margin-top: 25px;">
-                <a href="{{ route('bookings.payment.success', ['method' => $method]) }}" id="btn-verify-payment" class="btn-status-primary" style="display:block; text-align:center; padding: 12px; background-color: #94a3b8; color: #fff; text-decoration: none; border-radius: 8px; pointer-events: none; opacity: 0.7;">
+                <a href="{{ route('bookings.payment.success', ['id' => $bookingId ?? 1, 'method' => $method]) }}" id="btn-verify-payment" class="btn-status-primary" style="display:block; text-align:center; padding: 12px; background-color: #94a3b8; color: #fff; text-decoration: none; border-radius: 8px; pointer-events: none; opacity: 0.7;">
                     <i class="fa-solid fa-spinner fa-spin"></i> Menunggu Pembayaran...
                 </a>
                 <a href="{{ route('bookings.index') }}" style="display:block; text-align:center; margin-top: 10px; color: #666; text-decoration: none;">Bayar Nanti (Ke Beranda)</a>

@@ -29,31 +29,28 @@ function showEditLayout(layoutName, mockupUrl, ad1Url, ad1Link = '', ad2Url = ''
         if(document.getElementById('link-group-' + i)) document.getElementById('link-group-' + i).style.display = 'none';
     }
 
-    // --- LOGIKA KONDISIONAL ---
+    // --- LOGIKA TAMPILAN SLOT ---
     if (layoutName === 'Dashboard Explore') {
-        let nextEmptyFound = false;
+        // Tampilkan ke-4 slot secara independen (tidak saling menggeser)
         for (let i = 1; i <= 4; i++) {
             let ad = ads[i-1];
+            document.getElementById('upload-block-' + i).style.display = 'block';
+            
             if (ad.url && ad.url !== '') {
                 // Ada isinya
-                document.getElementById('upload-block-' + i).style.display = 'block';
                 document.getElementById('current-ad-image-' + i).src = ad.url;
                 document.getElementById('current-ad-image-' + i).parentElement.style.display = 'block';
                 document.getElementById('link-input-' + i).value = ad.link;
                 document.getElementById('link-group-' + i).style.display = 'block';
-                // Sembunyikan drop-zone untuk foto yang sudah ada!
+                // Sembunyikan area drop zone karena sudah ada foto
                 if(document.getElementById('drop-zone-' + i)) document.getElementById('drop-zone-' + i).style.display = 'none';
             } else {
                 // Kosong
-                if (!nextEmptyFound) {
-                    // Blok untuk menambah foto di paling bawah
-                    document.getElementById('upload-block-' + i).style.display = 'block';
-                    document.getElementById('current-ad-image-' + i).parentElement.style.display = 'none';
-                    document.getElementById('link-input-' + i).value = '';
-                    document.getElementById('link-group-' + i).style.display = 'block';
-                    if(document.getElementById('drop-zone-' + i)) document.getElementById('drop-zone-' + i).style.display = 'block';
-                    nextEmptyFound = true;
-                }
+                document.getElementById('current-ad-image-' + i).parentElement.style.display = 'none';
+                document.getElementById('link-input-' + i).value = '';
+                document.getElementById('link-group-' + i).style.display = 'none'; // Sembunyikan input link jika tidak ada gambar
+                // Tampilkan drop zone agar bisa mengunggah foto baru
+                if(document.getElementById('drop-zone-' + i)) document.getElementById('drop-zone-' + i).style.display = 'block';
             }
         }
     } else if (layoutName === 'Pembayaran') {
@@ -126,6 +123,17 @@ document.addEventListener("DOMContentLoaded", function() {
                         currentImg.src = e.target.result;
                     };
                     reader.readAsDataURL(fileInput.files[0]);
+                } else if (currentImg) {
+                    // Jika sebelumnya kosong, munculkan area current photo dan sembunyikan drop zone
+                    currentImg.parentElement.style.display = 'block';
+                    document.getElementById('drop-zone-' + index).style.display = 'none';
+                    document.getElementById('link-group-' + index).style.display = 'block';
+                    
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        currentImg.src = e.target.result;
+                    };
+                    reader.readAsDataURL(fileInput.files[0]);
                 }
             }
         });
@@ -174,9 +182,8 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.json())
         .then(data => {
             alert(data.message);
-            btnUpload.innerHTML = originalText;
-            btnUpload.disabled = false;
-            showLayoutSelection(); 
+            // Muat ulang halaman agar mendapatkan url foto terbaru dari database (tidak stale)
+            window.location.reload();
         })
         .catch(error => {
             console.error('Error:', error);
