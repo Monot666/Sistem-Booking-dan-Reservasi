@@ -34,6 +34,8 @@ class ProfileController extends Controller
             'gender' => 'nullable|in:Male,Female',
         ], [
             'name.required' => 'Full name is required.',
+            'avatar.max' => 'Ukuran foto profil tidak boleh lebih dari 5 MB (5120 KB).',
+            'avatar.image' => 'File yang diunggah harus berupa gambar.'
         ]);
 
         $user->name = $request->name;

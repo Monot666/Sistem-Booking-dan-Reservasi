@@ -8,67 +8,67 @@
 <div class="container-fluid px-4 px-lg-5 py-4" style="max-width: 1440px;">
     
     <div class="profile-page-title mb-4">
-        <a href="javascript:history.back()"><i class="fa-solid fa-angle-left"></i></a>
+        <a href="{{ route('home') }}"><i class="fa-solid fa-angle-left"></i></a>
         <h2>Profil</h2>
     </div>
 
-    <div class="row g-4">
-        
-        <div class="col-md-4 col-lg-3">
-            @include('layouts.sidebar_profile')
-        </div>
+    <form id="profile-form" action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
 
-        <div class="col-md-8 col-lg-9">
-            <div class="profile-card form-content-area">
-                <h4 class="section-title">Personal Data</h4>
+        <div class="row g-4">
+            
+            <div class="col-md-4 col-lg-3">
+                @include('layouts.sidebar_profile')
+            </div>
 
-                {{-- Status Verifikasi --}}
-                @if (!Auth::user()->hasVerifiedEmail())
-                    <div class="alert alert-warning border-0 shadow-sm mb-4" style="border-radius: 12px;">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
-                            <div>
-                                <h6 class="fw-bold mb-1">Akun Belum Terverifikasi</h6>
-                                <p class="small mb-2">Silakan verifikasi akun Anda untuk dapat melakukan pemesanan kamar.</p>
-                                <a href="{{ route('verification.notice') }}" class="btn btn-sm btn-warning fw-bold px-3">Verifikasi Sekarang</a>
+            <div class="col-md-8 col-lg-9">
+                <div class="profile-card form-content-area">
+                    <h4 class="section-title">Personal Data</h4>
+
+                    {{-- Status Verifikasi --}}
+                    @if (!Auth::user()->hasVerifiedEmail())
+                        <div class="alert alert-warning border-0 shadow-sm mb-4" style="border-radius: 12px;">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                                <div>
+                                    <h6 class="fw-bold mb-1">Akun Belum Terverifikasi</h6>
+                                    <p class="small mb-2">Silakan verifikasi akun Anda untuk dapat melakukan pemesanan kamar.</p>
+                                    <a href="{{ route('verification.notice') }}" class="btn btn-sm btn-warning fw-bold px-3">Verifikasi Sekarang</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @else
-                    <div class="alert alert-success border-0 shadow-sm mb-4" style="border-radius: 12px;">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-check-circle fa-2x me-3"></i>
-                            <div>
-                                <h6 class="fw-bold mb-0">Akun Terverifikasi</h6>
+                    @else
+                        <div class="alert alert-success border-0 shadow-sm mb-4" style="border-radius: 12px;">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle fa-2x me-3"></i>
+                                <div>
+                                    <h6 class="fw-bold mb-0">Akun Terverifikasi</h6>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endif
+                    @endif
 
-                @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-                @if (session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-                @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-
-                <form id="profile-form" action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+                    @if ($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
 
                     <div class="mb-4">
                         <label class="custom-label">Full Name</label>
@@ -135,10 +135,10 @@
                         <button type="submit" class="btn btn-save">Save</button>
                     </div>
 
-                </form>
+                </div>
             </div>
-        </div>
 
-    </div>
+        </div>
+    </form> 
 </div>
 @endsection

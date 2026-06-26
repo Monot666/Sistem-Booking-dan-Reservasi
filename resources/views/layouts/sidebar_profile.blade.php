@@ -10,7 +10,7 @@
                 <i class="fas fa-camera"></i>
             </label>
 
-            <input type="file" id="avatar_upload" name="avatar" class="d-none" accept="image/*" form="profile-form" onchange="previewAvatar(event)">
+            <input type="file" id="avatar_upload" name="avatar" class="d-none" accept="image/*" onchange="previewAvatar(event)">
         </div>
     </div>
 
