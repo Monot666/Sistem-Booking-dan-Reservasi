@@ -35,8 +35,8 @@
             <li class="{{ request()->routeIs('admin.finance') ? 'active' : '' }}">
                 <a href="{{ route('admin.finance') }}"><i class="fas fa-wallet"></i> Keuangan</a>
             </li>
-            <li class="nav-logout">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+            <li class="nav-logout" style="margin-top: auto;">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal" style="display: block;">
                     <i class="fas fa-sign-out-alt"></i> Keluar
                 </a>
             </li>
@@ -114,38 +114,46 @@
                 <div class="custom-card">
                     <h5 class="section-title mb-3">Pesanan Terbaru</h5>
                     
-                    <div class="booking-item">
-                        <div class="booking-avatar">DS</div>
-                        <div class="booking-info">
-                            <p class="booking-name">Dimas Sudarmono</p>
-                            <p class="booking-room">Superior Double</p>
+                    @forelse ($recentBookings as $booking)
+                        <div class="booking-item">
+                            @php
+                                $inisial = collect(explode(' ', $booking->user->name))->map(function($segment) {
+                                    return strtoupper(substr($segment, 0, 1));
+                                })->take(2)->join('');
+                                
+                                $statusNilai = is_object($booking->status) ? $booking->status->value : $booking->status;
+                                $statusCek = strtolower($statusNilai);
+                            @endphp
+                            
+                            <div class="booking-avatar" {{ $statusCek == 'pending' ? 'style="background-color: #f1f3f5;"' : '' }}>
+                                {{ $inisial }}
+                            </div>
+                            
+                            <div class="booking-info">
+                                <p class="booking-name">{{ $booking->user->name }}</p>
+                                <p class="booking-room">{{ $booking->room->name ?? 'Tipe Kamar' }} (ID: #{{ $booking->id }})</p>
+                            </div>
+                            
+                            <div class="booking-date">{{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y') }}</div>
+                            
+                            @if($statusCek == 'success' || $statusCek == 'settlement' || $statusCek == 'dikonfirmasi' || $statusCek == 'paid' || $statusCek == 'confirmed')
+                                <span class="badge-confirmed">Dikonfirmasi</span>
+                            @elseif($statusCek == 'selesai' || $statusCek == 'completed' || $statusCek == 'checkout')
+                                <span style="background-color: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">Selesai</span>
+                            @elseif($statusCek == 'refund' || $statusCek == 'refunded' || $statusCek == 'dikembalikan')
+                                <span style="background-color: #fee2e2; color: #b91c1c; padding: 4px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">Refund</span>
+                            @else
+                                <span class="badge-pending">Menunggu</span>
+                            @endif
                         </div>
-                        <div class="booking-date">12-03-2026</div>
-                        <span class="badge-confirmed">Dikonfirmasi</span>
-                    </div>
-
-                    <div class="booking-item">
-                        <div class="booking-avatar">DS</div>
-                        <div class="booking-info">
-                            <p class="booking-name">Dimas Sudarmono</p>
-                            <p class="booking-room">Superior Double</p>
+                    @empty
+                        <div class="text-center p-4 text-muted">
+                            Belum ada pesanan terbaru.
                         </div>
-                        <div class="booking-date">12-03-2026</div>
-                        <span class="badge-confirmed">Dikonfirmasi</span>
-                    </div>
-
-                    <div class="booking-item">
-                        <div class="booking-avatar" style="background-color: #f1f3f5;">DS</div>
-                        <div class="booking-info">
-                            <p class="booking-name">Dimas Sudarmono</p>
-                            <p class="booking-room">Superior Double</p>
-                        </div>
-                        <div class="booking-date">12-03-2026</div>
-                        <span class="badge-pending">Menunggu</span>
-                    </div>
+                    @endforelse
                 </div>
             </div>
-            
+                
             <div class="col-md-4">
                 <div class="custom-card">
                     <h5 class="section-title text-center">Hunian Kamar</h5>
@@ -163,9 +171,6 @@
     </main>
 </div>
 
-<!-- ==============================================
-     MODAL LOGOUT
-     ============================================== -->
 <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-center p-4" style="border-radius: 16px; border: none;">
@@ -189,7 +194,6 @@
     </div>
 </div>
 
-<!-- SCRIPT BOOTSTRAP DITAMBAHKAN AGAR POP-UP BERFUNGSI -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{{ asset('assets/js/admin/dashboard.js') }}"></script>

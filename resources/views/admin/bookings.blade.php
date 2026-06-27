@@ -41,8 +41,8 @@
             </li>
             <li><a href="{{ route('admin.finance') }}"><i class="fas fa-wallet"></i> Keuangan</a></li>
             
-            <li class="nav-logout">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+            <li class="nav-logout" style="margin-top: auto;">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal" style="display: block;">
                     <i class="fas fa-sign-out-alt"></i> Keluar
                 </a>
             </li>
