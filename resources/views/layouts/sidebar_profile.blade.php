@@ -41,9 +41,9 @@
             </a>
         </li>
         <li>
-            <button type="button" data-bs-toggle="modal" data-bs-target="#logoutModal">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                 <i class="fa-solid fa-power-off"></i> Log Out
-            </button>
+            </a>
         </li>
     </ul>
 </div>
