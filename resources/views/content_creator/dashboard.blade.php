@@ -25,10 +25,18 @@
     };
 
     $dash = $getBanner('Dashboard', 'Foto 1');
+    
+    // Dashboard Explore kini hanya 3 Foto
     $expl1 = $getBanner('Dashboard Explore', 'Foto 1');
     $expl2 = $getBanner('Dashboard Explore', 'Foto 2');
     $expl3 = $getBanner('Dashboard Explore', 'Foto 3');
-    $expl4 = $getBanner('Dashboard Explore', 'Foto 4');
+    
+    // Layout Baru: Fasilitas Hotel (4 Foto)
+    $fasil1 = $getBanner('Fasilitas Hotel', 'Foto 1');
+    $fasil2 = $getBanner('Fasilitas Hotel', 'Foto 2');
+    $fasil3 = $getBanner('Fasilitas Hotel', 'Foto 3');
+    $fasil4 = $getBanner('Fasilitas Hotel', 'Foto 4');
+
     $ord = $getBanner('Order', 'Foto 1');
     $pay1 = $getBanner('Pembayaran', 'Foto 1');
     $pay2 = $getBanner('Pembayaran', 'Foto 2');
@@ -48,7 +56,7 @@
             <li class="active" id="nav-dashboard">
                 <a href="javascript:void(0)" onclick="showLayoutSelection()"><i class="fas fa-th-large"></i> Dashboard</a>
             </li>
-            <li>
+            <li style="margin-top: auto;">
                 <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal" style="border: none; background: transparent;">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
@@ -73,7 +81,14 @@
                     <div class="layout-card">
                         <img src="{{ asset('assets/img/content_creator/dashboard-explore.png') }}" alt="Dashboard Explore" class="layout-img">
                         <p class="layout-name">Dashboard Explore</p>
-                        <button class="btn-pilih" onclick="showEditLayout('Dashboard Explore', '{{ asset('assets/img/content_creator/dashboard-explore.png') }}', '{{ $expl1['image'] }}', '{{ $expl1['link'] }}', '{{ $expl2['image'] }}', '{{ $expl2['link'] }}', '{{ $expl3['image'] }}', '{{ $expl3['link'] }}', '{{ $expl4['image'] }}', '{{ $expl4['link'] }}')">Pilih</button>
+                        <button class="btn-pilih" onclick="showEditLayout('Dashboard Explore', '{{ asset('assets/img/content_creator/dashboard-explore.png') }}', '{{ $expl1['image'] }}', '{{ $expl1['link'] }}', '{{ $expl2['image'] }}', '{{ $expl2['link'] }}', '{{ $expl3['image'] }}', '{{ $expl3['link'] }}')">Pilih</button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="layout-card">
+                        <img src="{{ asset('assets/img/content_creator/dashboard-explore.png') }}" alt="Fasilitas Hotel" class="layout-img">
+                        <p class="layout-name">Fasilitas Hotel</p>
+                        <button class="btn-pilih" onclick="showEditLayout('Fasilitas Hotel', '{{ asset('assets/img/content_creator/dashboard-explore.png') }}', '{{ $fasil1['image'] }}', '{{ $fasil1['link'] }}', '{{ $fasil2['image'] }}', '{{ $fasil2['link'] }}', '{{ $fasil3['image'] }}', '{{ $fasil3['link'] }}', '{{ $fasil4['image'] }}', '{{ $fasil4['link'] }}')">Pilih</button>
                     </div>
                 </div>
                 <div class="col-md-4">

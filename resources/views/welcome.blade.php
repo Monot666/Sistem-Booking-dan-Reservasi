@@ -98,7 +98,7 @@
 
 <section class="py-5 bg-white text-center">
     <div class="container py-4">
-        <h2 class="section-title font-serif mb-5 text-dark">Wide Choice of Hotels</h2>
+        <h2 class="section-title font-serif mb-5 text-dark">Fasilitas Hotel</h2>
         <div class="row g-4">
             @forelse($exploreBanners as $exploreBanner)
             <div class="col-md-3 hotel-card">
