@@ -10,8 +10,8 @@ body {
 /* --- Tampilan 1: Grid Layout Cards --- */
 .layout-card {
     background: #ffffff;
-    padding: 20px;
-    border-radius: 16px;
+    padding: 15px; /* Padding dikurangi agar lebih ringkas */
+    border-radius: 12px;
     text-align: center;
     border: 1px solid #e2e8f0;
     transition: all 0.3s ease;
@@ -28,28 +28,30 @@ body {
 
 .layout-img {
     width: 100%;
+    height: 120px !important; /* Tinggi dikurangi agar lebih compact */
     border-radius: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 12px; /* Jarak bawah dikurangi */
     border: 1px solid #f1f5f9;
     object-fit: cover;
+    object-position: center;
 }
 
 .layout-name {
     font-weight: 600;
     color: #1e293b;
-    font-size: 1.05rem;
-    margin-bottom: 15px;
+    font-size: 0.9rem; /* Ukuran font diperkecil sedikit */
+    margin-bottom: 12px;
 }
 
 .btn-pilih {
-    background-color: #df9e4c; /* Warna emas Roomly */
+    background-color: #df9e4c;
     color: #ffffff;
     border: none;
     width: 100%;
-    padding: 10px;
-    border-radius: 8px;
+    padding: 8px; /* Padding dikurangi */
+    border-radius: 6px;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.8rem; /* Font diperkecil agar pas */
     transition: 0.2s;
 }
 
@@ -82,7 +84,7 @@ body {
 
 .current-ad-img {
     width: 100%;
-    max-height: 180px;
+    max-height: 180px; /* Tinggi default */
     object-fit: cover;
     border-radius: 8px;
 }
@@ -106,7 +108,7 @@ body {
 /* Zona Upload (Dropzone) */
 .drop-zone {
     width: 100%;
-    height: 180px;
+    height: 180px; /* Tinggi default */
     padding: 25px;
     display: flex;
     align-items: center;
@@ -150,4 +152,84 @@ body {
 
 .btn-upload-submit:hover {
     background-color: #c7893a;
+}
+
+/* Kotak Pembungkus Foto saat ini (TYPO FIXED) */
+.current-photo-box {
+    background: #fcfcfc; 
+    border-radius: 30px; 
+    border: 2px solid #e2e8f0; 
+    width: 100%;
+}
+
+
+/* ==========================================================================
+   BAGIAN CUSTOM: PENGATURAN UKURAN FOTO SPESIFIK TIAP LAYOUT
+   Kamu tinggal mengubah angka 'height' di bawah ini untuk mengatur ukurannya!
+   ========================================================================== */
+
+/* 1. LAYOUT: DASHBOARD */
+.layout-dashboard .foto-1 .current-ad-img {
+    height: 200px !important; 
+    max-height: 200px !important; 
+}
+
+/* 2. LAYOUT: DASHBOARD EXPLORE */
+.layout-dashboard-explore .foto-1 .current-ad-img,
+.layout-dashboard-explore .foto-1 .drop-zone {
+    height: 180px !important;
+    max-height: 180px !important; 
+}
+.layout-dashboard-explore .foto-2 .current-ad-img,
+.layout-dashboard-explore .foto-2 .drop-zone {
+    height: 180px !important;
+    max-height: 180px !important; 
+}
+.layout-dashboard-explore .foto-3 .current-ad-img,
+.layout-dashboard-explore .foto-3 .drop-zone {
+    height: 180px !important;
+    max-height: 180px !important; 
+}
+
+/* 3. LAYOUT: FASILITAS HOTEL */
+.layout-fasilitas-hotel .foto-1 .current-ad-img,
+.layout-fasilitas-hotel .foto-1 .drop-zone {
+    height: 250px !important; 
+    max-height: 250px !important; 
+}
+.layout-fasilitas-hotel .foto-2 .current-ad-img,
+.layout-fasilitas-hotel .foto-2 .drop-zone {
+    height: 250px !important; 
+    max-height: 250px !important; 
+}
+.layout-fasilitas-hotel .foto-3 .current-ad-img,
+.layout-fasilitas-hotel .foto-3 .drop-zone {
+    height: 250px !important; 
+    max-height: 250px !important; 
+}
+
+/* 4. LAYOUT: ORDER */
+.layout-order .foto-1 .current-ad-img,
+.layout-order .foto-1 .drop-zone {
+    height: 200px !important;
+    max-height: 200px !important; 
+}
+
+/* 5. LAYOUT: PEMBAYARAN */
+.layout-pembayaran .foto-1 .current-ad-img,
+.layout-pembayaran .foto-1 .drop-zone {
+    height: 180px !important;
+    max-height: 180px !important; 
+}
+.layout-pembayaran .foto-2 .current-ad-img,
+.layout-pembayaran .foto-2 .drop-zone {
+    height: 180px !important;
+    max-height: 180px !important; 
+}
+
+/* 6. LAYOUT: KONFIRMASI PEMBAYARAN */
+.layout-konfirmasi-pembayaran .foto-1 .current-ad-img,
+.layout-konfirmasi-pembayaran .foto-1 .drop-zone {
+    height: 220px !important;
+    max-height: 220px !important; 
 }

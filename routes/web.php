@@ -27,9 +27,9 @@ Route::get('/', function () {
                 ->first();
                 
     $exploreBanners = \App\Models\Banner::where('is_active', true)
-                ->where('layout_name', 'Dashboard Explore')
+                ->where('layout_name', 'Fasilitas Hotel')
                 ->orderBy('position')
-                ->limit(4)
+                ->limit(3)
                 ->get();
                 
     return view('welcome', compact('banner', 'exploreBanners'));

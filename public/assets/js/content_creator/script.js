@@ -32,7 +32,7 @@ function showEditLayout(layoutName, mockupUrl, ad1Url, ad1Link = '', ad2Url = ''
     // --- LOGIKA TAMPILAN SLOT ---
     if (layoutName === 'Dashboard Explore') {
         // Tampilkan ke-4 slot secara independen (tidak saling menggeser)
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 3; i++) {
             let ad = ads[i-1];
             document.getElementById('upload-block-' + i).style.display = 'block';
             
