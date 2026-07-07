@@ -137,18 +137,6 @@
 
                 </div>
             </div>
-
-        </div>
-    </form> 
-</div>
-
-<div class="text-end mt-2">
-                        <button type="submit" class="btn btn-save">Save</button>
-                    </div>
-
-                </div>
-            </div>
-
         </div>
     </form> 
 </div>
