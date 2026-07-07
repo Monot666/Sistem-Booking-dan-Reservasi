@@ -3,13 +3,15 @@
  */
 
 // Fungsi untuk menyesuaikan layout berdasarkan jumlah gambar yang diterima
-function showEditLayout(layoutName, mockupUrl, ad1Url, ad1Link = '', ad2Url = '', ad2Link = '', ad3Url = '', ad3Link = '', ad4Url = '', ad4Link = '') {
+window.showEditLayout = function showEditLayout(layoutName, mockupUrl, ad1Url, ad1Link = '', ad2Url = '', ad2Link = '', ad3Url = '', ad3Link = '', ad4Url = '', ad4Link = '') {
     // Tampilkan panel upload
     document.getElementById('view-selection').style.display = 'none';
     document.getElementById('view-upload').style.display = 'block';
-    
+
     document.getElementById('selected-layout-title').innerText = layoutName;
     document.getElementById('mockup-image').src = mockupUrl;
+
+
 
     let ads = [
         { url: ad1Url, link: ad1Link },
@@ -18,7 +20,7 @@ function showEditLayout(layoutName, mockupUrl, ad1Url, ad1Link = '', ad2Url = ''
         { url: ad4Url, link: ad4Link }
     ];
 
-    // Helper untuk reset state
+    // Reset state (blok upload & visibility)
     for(let i=1; i<=4; i++) {
         if(document.getElementById('upload-block-' + i)) {
             document.getElementById('upload-block-' + i).style.display = 'none';
@@ -29,29 +31,43 @@ function showEditLayout(layoutName, mockupUrl, ad1Url, ad1Link = '', ad2Url = ''
         if(document.getElementById('link-group-' + i)) document.getElementById('link-group-' + i).style.display = 'none';
     }
 
+    // Helper per slot
+    function applySlot(i, ad, { showLinkAlways = false } = {}) {
+        document.getElementById('upload-block-' + i).style.display = 'block';
+
+        if (ad.url && ad.url !== '') {
+            document.getElementById('current-ad-image-' + i).src = ad.url;
+            document.getElementById('current-ad-image-' + i).parentElement.style.display = 'block';
+
+            document.getElementById('link-input-' + i).value = ad.link;
+            document.getElementById('link-group-' + i).style.display = 'block';
+
+            if(document.getElementById('drop-zone-' + i)) document.getElementById('drop-zone-' + i).style.display = 'none';
+        } else {
+            document.getElementById('current-ad-image-' + i).parentElement.style.display = 'none';
+            document.getElementById('link-input-' + i).value = '';
+
+            // Link "selalu tampil" untuk kebutuhan layout tertentu
+            if (showLinkAlways) {
+                document.getElementById('link-group-' + i).style.display = 'block';
+            } else {
+                document.getElementById('link-group-' + i).style.display = 'none';
+            }
+
+            if(document.getElementById('drop-zone-' + i)) document.getElementById('drop-zone-' + i).style.display = 'block';
+        }
+    }
+
     // --- LOGIKA TAMPILAN SLOT ---
     if (layoutName === 'Dashboard Explore') {
-        // Tampilkan ke-4 slot secara independen (tidak saling menggeser)
+        // Tampilkan Foto 1-3, link mengikuti aturan existing (tidak selalu)
         for (let i = 1; i <= 3; i++) {
-            let ad = ads[i-1];
-            document.getElementById('upload-block-' + i).style.display = 'block';
-            
-            if (ad.url && ad.url !== '') {
-                // Ada isinya
-                document.getElementById('current-ad-image-' + i).src = ad.url;
-                document.getElementById('current-ad-image-' + i).parentElement.style.display = 'block';
-                document.getElementById('link-input-' + i).value = ad.link;
-                document.getElementById('link-group-' + i).style.display = 'block';
-                // Sembunyikan area drop zone karena sudah ada foto
-                if(document.getElementById('drop-zone-' + i)) document.getElementById('drop-zone-' + i).style.display = 'none';
-            } else {
-                // Kosong
-                document.getElementById('current-ad-image-' + i).parentElement.style.display = 'none';
-                document.getElementById('link-input-' + i).value = '';
-                document.getElementById('link-group-' + i).style.display = 'none'; // Sembunyikan input link jika tidak ada gambar
-                // Tampilkan drop zone agar bisa mengunggah foto baru
-                if(document.getElementById('drop-zone-' + i)) document.getElementById('drop-zone-' + i).style.display = 'block';
-            }
+            applySlot(i, ads[i-1], { showLinkAlways: false });
+        }
+    } else if (layoutName === 'Fasilitas Hotel') {
+        // Tampilkan Foto 1-4, link harus tampil juga walau belum ada foto
+        for (let i = 1; i <= 4; i++) {
+            applySlot(i, ads[i-1], { showLinkAlways: true });
         }
     } else if (layoutName === 'Pembayaran') {
         for (let i = 1; i <= 2; i++) {
@@ -61,20 +77,33 @@ function showEditLayout(layoutName, mockupUrl, ad1Url, ad1Link = '', ad2Url = ''
             document.getElementById('link-input-' + i).value = ads[i-1].link || '';
         }
     } else {
-        document.getElementById('upload-block-1').style.display = 'block';
-        document.getElementById('current-ad-image-1').src = ads[0].url || '/assets/img/content_creator/ad.jpg';
+    document.getElementById('upload-block-1').style.display = 'block';
+        document.getElementById('current-ad-image-1').src = ads[0].url || '';
         document.getElementById('link-group-1').style.display = 'block';
         document.getElementById('link-input-1').value = ads[0].link || '';
+
+        // Pastikan Foto 1 terlihat sebagai kosong jika belum ada URL tersimpan
+        if(!ads[0].url){
+            document.getElementById('current-ad-image-1').parentElement.style.display = 'none';
+            if(document.getElementById('drop-zone-1')) document.getElementById('drop-zone-1').style.display = 'block';
+        }
+
+        // Jangan auto tampilkan gambar default kalau tidak ada foto tersimpan
+        if(!ads[0].url){
+            document.getElementById('current-ad-image-1').src = '';
+            document.getElementById('current-ad-image-1').parentElement.style.display = 'none';
+            if(document.getElementById('drop-zone-1')) document.getElementById('drop-zone-1').style.display = 'block';
+        }
     }
 }
 
-function showLayoutSelection() {
+window.showLayoutSelection = function showLayoutSelection() {
     document.getElementById('view-selection').style.display = 'block';
     document.getElementById('view-upload').style.display = 'none';
 }
 
 // Fungsi menghapus foto dari UI sebelum disubmit
-function deleteAd(index) {
+window.deleteAd = function deleteAd(index) {
     Swal.fire({
         title: 'Yakin ingin menghapus?',
         text: 'Foto ' + index + ' akan dihapus dari layout ini.',

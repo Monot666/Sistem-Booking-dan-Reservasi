@@ -215,14 +215,37 @@
                     </p>
                 </div>
 
+                @php
+                    $reviewPhoto1Banner = \App\Models\Banner::where('is_active', true)
+                        ->where('layout_name', 'Pembayaran')
+                        ->where('position', 'Foto 1')
+                        ->first();
+
+                    $reviewPhoto2Banner = \App\Models\Banner::where('is_active', true)
+                        ->where('layout_name', 'Pembayaran')
+                        ->where('position', 'Foto 2')
+                        ->first();
+
+                    $reviewPhoto1Image = $reviewPhoto1Banner?->image_path;
+                    $reviewPhoto2Image = $reviewPhoto2Banner?->image_path;
+
+                    $reviewPhoto1Url = $reviewPhoto1Image
+                        ? (str_starts_with($reviewPhoto1Image, 'http') ? $reviewPhoto1Image : asset($reviewPhoto1Image))
+                        : asset('assets/img/hotel.png');
+
+                    $reviewPhoto2Url = $reviewPhoto2Image
+                        ? (str_starts_with($reviewPhoto2Image, 'http') ? $reviewPhoto2Image : asset($reviewPhoto2Image))
+                        : asset('assets/img/hotel2.png');
+                @endphp
+
                 <!-- Banner 1: Model Landscape Tipis -->
                 <div class="banner-container banner-horizontal">
-                    <img src="{{ asset('assets/img/hotel.png') }}" alt="Nu Milk Tea Banner Horizontal">
+                    <img src="{{ $reviewPhoto1Url }}" alt="Banner Pembayaran Foto 1">
                 </div>
 
                 <!-- Banner 2: Model Kotak Taut / Vertikal -->
                 <div class="banner-container banner-vertical">
-                    <img src="{{ asset('assets/img/hotel2.png') }}" alt="Nu Milk Tea Banner Vertical">
+                    <img src="{{ $reviewPhoto2Url }}" alt="Banner Pembayaran Foto 2">
                 </div>
             </div>
 

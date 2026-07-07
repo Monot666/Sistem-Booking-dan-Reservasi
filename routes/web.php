@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoomController as AdminRoomController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\WelcomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,19 +21,20 @@ use App\Http\Controllers\Admin\UserController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
+    // Selalu ambil "Foto 1" untuk banner Dashboard agar saat Content Creator upload Foto 1
+    // tampilan di halaman utama (welcome) ikut berubah sesuai yang diupload.
     $banner = \App\Models\Banner::where('is_active', true)
                 ->where('layout_name', 'Dashboard')
-                ->inRandomOrder()
-                ->limit(1)
+                ->where('position', 'Foto 1')
                 ->first();
-                
+
     $exploreBanners = \App\Models\Banner::where('is_active', true)
                 ->where('layout_name', 'Fasilitas Hotel')
                 ->orderBy('position')
                 ->limit(3)
                 ->get();
-                
-    return view('welcome', compact('banner', 'exploreBanners'));
+
+    return view('welcome', compact('banner', 'exploreBanners', 'banner'));
 })->name('home');
 
 Route::get('/how-to-book', [PageController::class, 'howToBook'])->name('how-to-book');
@@ -174,3 +176,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // Midtrans Webhook Route (Publicly accessible, excluded from CSRF)
 Route::post('/api/midtrans-callback', [\App\Http\Controllers\MidtransController::class, 'webhook']);
+//dashboard explore
+Route::get('/', [WelcomeController::class, 'index'])->name('home');

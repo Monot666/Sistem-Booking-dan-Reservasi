@@ -47,8 +47,22 @@
             </form>
         </div>
 
+        @php
+            $orderBanner = \App\Models\Banner::where('is_active', true)
+                ->where('layout_name', 'Order')
+                ->where('position', 'Foto 1')
+                ->first();
+
+            $orderImage = $orderBanner?->image_path;
+            $orderImageUrl = $orderImage
+                ? (str_starts_with($orderImage, 'http') ? $orderImage : asset($orderImage))
+                : asset('assets/img/novotel 1.png');
+
+            $orderAlt = $orderBanner?->position ?? 'Promo Properti';
+        @endphp
+
         <div class="booking-ad">
-            <img src="{{ asset('assets/img/novotel 1.png') }}" alt="Promo Properti">
+            <img src="{{ $orderImageUrl }}" alt="{{ $orderAlt }}">
         </div>
         
     </div>

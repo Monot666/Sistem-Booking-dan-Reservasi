@@ -100,46 +100,38 @@
     <div class="container py-4">
         <h2 class="section-title font-serif mb-5 text-dark">Fasilitas Hotel</h2>
         <div class="row g-4">
-            @forelse($exploreBanners as $exploreBanner)
+            @forelse($fasilitasBanners as $fasilitasBanner)
             <div class="col-md-3 hotel-card">
                 <div class="hotel-wrapper">
-                    @if($exploreBanner->external_link)
-                    <a href="{{ $exploreBanner->external_link }}" target="_blank">
+                    @if($fasilitasBanner->external_link)
+                    <a href="{{ $fasilitasBanner->external_link }}" target="_blank">
                     @endif
-                        <img src="{{ $exploreBanner->image_path ? (str_starts_with($exploreBanner->image_path, 'http') ? $exploreBanner->image_path : asset($exploreBanner->image_path)) : asset('assets/img/hotel_aston 1.png') }}" alt="{{ $exploreBanner->position }}">
+                        <img src="{{ $fasilitasBanner->image_path ? (str_starts_with($fasilitasBanner->image_path, 'http') ? $fasilitasBanner->image_path : asset($fasilitasBanner->image_path)) : asset('assets/img/hotel_aston 1.png') }}" alt="{{ $fasilitasBanner->position }}">
                         <div class="hotel-overlay">
-                            <div class="hotel-text">{{ $exploreBanner->position }}</div>
+                            <div class="hotel-text">{{ $fasilitasBanner->position }}</div>
                         </div>
-                    @if($exploreBanner->external_link)
+                    @if($fasilitasBanner->external_link)
                     </a>
                     @endif
                 </div>
             </div>
             @empty
-            <div class="col-md-3 hotel-card">
-                <div class="hotel-wrapper">
-                    <img src="{{ asset('assets/img/hotel_aston 1.png') }}" alt="Gedung">
-                    <div class="hotel-overlay"><div class="hotel-text">Gedung Hotel</div></div>
+            @php
+                $fallbacks = [
+                    ['img' => 'hotel_aston 1.png', 'alt' => 'Gedung Hotel'],
+                    ['img' => 'aston-solo-hotel.jpg', 'alt' => 'Kamar Hotel'],
+                    ['img' => '1d3b438d_z.jpg', 'alt' => 'Lobby Hotel'],
+                    ['img' => 'images (1).jpg', 'alt' => 'Swimming Pool'],
+                ];
+            @endphp
+            @foreach($fallbacks as $f)
+                <div class="col-md-3 hotel-card">
+                    <div class="hotel-wrapper">
+                        <img src="{{ asset('assets/img/'.$f['img']) }}" alt="{{ $f['alt'] }}">
+                        <div class="hotel-overlay"><div class="hotel-text">{{ $f['alt'] }}</div></div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 hotel-card">
-                <div class="hotel-wrapper">
-                    <img src="{{ asset('assets/img/aston-solo-hotel.jpg') }}" alt="Kamar">
-                    <div class="hotel-overlay"><div class="hotel-text">Kamar Hotel</div></div>
-                </div>
-            </div>
-            <div class="col-md-3 hotel-card">
-                <div class="hotel-wrapper">
-                    <img src="{{ asset('assets/img/1d3b438d_z.jpg') }}" alt="Lobby">
-                    <div class="hotel-overlay"><div class="hotel-text">Lobby Hotel</div></div>
-                </div>
-            </div>
-            <div class="col-md-3 hotel-card">
-                <div class="hotel-wrapper">
-                    <img src="{{ asset('assets/img/images (1).jpg') }}" alt="Swimming Pool">
-                    <div class="hotel-overlay"><div class="hotel-text">Swimming Pool</div></div>
-                </div>
-            </div>
+            @endforeach
             @endforelse
         </div>
     </div>
@@ -224,33 +216,41 @@
     <div class="container pb-5">
         <h4 class="extra-section-title">Kami tidak hanya menyediakan kamar</h4>
         <div class="row g-4">
-            
-            <div class="col-md-4">
-                <a href="https://example.com/wisata" target="_blank" class="extra-card">
-                    <img src="{{ asset('assets/img/wisata-solo.png') }}" alt="Wisata Solo">
-                    <div class="extra-overlay">
-                        <h6>Wisata terbaik di Solo</h6>
-                    </div>
-                </a>
-            </div>
 
-            <div class="col-md-4">
-                <a href="https://example.com/resep" target="_blank" class="extra-card">
-                    <img src="{{ asset('assets/img/makanan-oriental.png') }}" alt="Makanan">
-                    <div class="extra-overlay">
-                        <h6>Resep makanan enak</h6>
-                    </div>
-                </a>
-            </div>
+            @php
+                // Untuk bagian ini, kita ambil banner "Dashboard Explore" posisi Foto 1-3
+                // sehingga saat content creator upload 3 foto, yang tampil di sini ikut berubah.
+                $extraBanners = 
+                    	collect($exploreBanners)
+                    	->where('position', 'Foto 1')
+                    	->merge(collect($exploreBanners)->where('position', 'Foto 2'))
+                    	->merge(collect($exploreBanners)->where('position', 'Foto 3'))
+                    	->values();
+            @endphp
 
-            <div class="col-md-4">
-                <a href="https://example.com/ikan" target="_blank" class="extra-card">
-                    <img src="{{ asset('assets/img/ikan-sapu.png') }}" alt="Menimbun Ikan">
-                    <div class="extra-overlay">
-                        <h6>Cara menimbun ikan</h6>
-                    </div>
-                </a>
-            </div>
+            @for ($i = 1; $i <= 3; $i++)
+                @php
+                    $bannerExtra = $extraBanners[$i-1] ?? null;
+                    $img = $bannerExtra?->image_path;
+                    $imgUrl = $img
+                        ? (str_starts_with($img, 'http') ? $img : asset($img))
+                        : (
+                            $i === 1 ? asset('assets/img/wisata-solo.png') :
+                            ($i === 2 ? asset('assets/img/makanan-oriental.png') : asset('assets/img/ikan-sapu.png'))
+                        );
+                    $link = $bannerExtra?->external_link ?? 'https://example.com/' . $i;
+                    $title = $bannerExtra?->position ?? ($i === 1 ? 'Wisata terbaik di Solo' : ($i === 2 ? 'Resep makanan enak' : 'Cara menimbun ikan'));
+                @endphp
+
+                <div class="col-md-4">
+                    <a href="{{ $link }}" target="_blank" class="extra-card">
+                        <img src="{{ $imgUrl }}" alt="{{ $title }}">
+                        <div class="extra-overlay">
+                            <h6>{{ $i === 1 ? 'Wisata terbaik di Solo' : ($i === 2 ? 'Resep makanan enak' : 'Cara menimbun ikan') }}</h6>
+                        </div>
+                    </a>
+                </div>
+            @endfor
 
         </div>
     </div>

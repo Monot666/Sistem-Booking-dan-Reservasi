@@ -594,7 +594,24 @@ body {
     width: 100% !important;
     height: 160px !important;
     object-fit: cover !important;
-    border-radius: 4px;
+    border-radius: 8px;
+}
+
+/* Samakan juga banner horizontal/vertikal agar konsisten saat datanya berasal dari Content Creator */
+.banner-container img {
+    width: 100% !important;
+    height: auto;
+    object-fit: cover;
+}
+
+.banner-container.banner-horizontal img {
+    height: 110px !important;
+    border-radius: 8px;
+}
+
+.banner-container.banner-vertical img {
+    height: 110px !important;
+    border-radius: 8px;
 }
 
 /* ==========================================================================

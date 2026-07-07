@@ -7,18 +7,22 @@ body {
     background-color: #f4f7fe;
 }
 
-/* --- Tampilan 1: Grid Layout Cards --- */
+/* Reset tinggi kartu agar tidak memenuhi layar */
 .layout-card {
-    background: #ffffff;
-    padding: 15px; /* Padding dikurangi agar lebih ringkas */
-    border-radius: 12px;
-    text-align: center;
-    border: 1px solid #e2e8f0;
-    transition: all 0.3s ease;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    height: auto !important; 
+    min-height: 300px !important; /* Minimal tinggi cukup untuk gambar + tombol */
+    max-height: 450px !important; /* Jangan biarkan lebih dari ini */
+    padding: 15px !important;
+    margin-bottom: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+}
+
+/* Pastikan container tidak memaksa tinggi 100vh */
+.row {
+    height: auto !important;
+    min-height: auto !important;
 }
 
 .layout-card:hover {
@@ -162,35 +166,59 @@ body {
     width: 100%;
 }
 
+/* Avatar user di halaman Content Creator (disamakan vibe seperti avatar/picture di welcome) */
+.creator-user-banner {
+    display: flex;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.creator-user-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 2px solid #f1f5f9;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+}
+
+.creator-user-avatar--fallback {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #df9e4c, #c7893a);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.25rem;
+}
+
 
 /* ==========================================================================
    BAGIAN CUSTOM: PENGATURAN UKURAN FOTO SPESIFIK TIAP LAYOUT
    Kamu tinggal mengubah angka 'height' di bawah ini untuk mengatur ukurannya!
    ========================================================================== */
 
+
 /* 1. LAYOUT: DASHBOARD */
 .layout-dashboard .foto-1 .current-ad-img {
-    height: 200px !important; 
-    max-height: 200px !important; 
+    height: 120px !important;      /* Ukurannya dikecilin jadi 120px */
+    max-height: 120px !important; 
+    object-fit: cover !important;  /* Wajib ada biar gambar nggak gepeng ditarik */
+    object-position: center;
 }
 
 /* 2. LAYOUT: DASHBOARD EXPLORE */
-.layout-dashboard-explore .foto-1 .current-ad-img,
-.layout-dashboard-explore .foto-1 .drop-zone {
-    height: 180px !important;
-    max-height: 180px !important; 
+.layout-fasilitas-hotel .foto-1 .current-ad-img,
+.layout-fasilitas-hotel .foto-2 .current-ad-img,
+.layout-fasilitas-hotel .foto-3 .current-ad-img {
+    height: 200px !important;       /* <--- Kisaran 180px - 220px */
+    max-height: 200px !important; 
+    object-fit: cover !important;   /* Biar foto nggak gepeng */
+    border-radius: 12px;            /* Biar ujung fotonya melengkung halus seperti di gambarmu */
 }
-.layout-dashboard-explore .foto-2 .current-ad-img,
-.layout-dashboard-explore .foto-2 .drop-zone {
-    height: 180px !important;
-    max-height: 180px !important; 
-}
-.layout-dashboard-explore .foto-3 .current-ad-img,
-.layout-dashboard-explore .foto-3 .drop-zone {
-    height: 180px !important;
-    max-height: 180px !important; 
-}
-
 /* 3. LAYOUT: FASILITAS HOTEL */
 .layout-fasilitas-hotel .foto-1 .current-ad-img,
 .layout-fasilitas-hotel .foto-1 .drop-zone {
@@ -204,6 +232,12 @@ body {
 }
 .layout-fasilitas-hotel .foto-3 .current-ad-img,
 .layout-fasilitas-hotel .foto-3 .drop-zone {
+    height: 250px !important; 
+    max-height: 250px !important; 
+}
+
+.layout-fasilitas-hotel .foto-4 .current-ad-img,
+.layout-fasilitas-hotel .foto-4 .drop-zone {
     height: 250px !important; 
     max-height: 250px !important; 
 }
@@ -233,3 +267,5 @@ body {
     height: 220px !important;
     max-height: 220px !important; 
 }
+
+

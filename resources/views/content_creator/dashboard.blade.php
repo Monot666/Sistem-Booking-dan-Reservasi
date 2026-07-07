@@ -15,6 +15,7 @@
 
 @php
     $groupedBanners = $banners->groupBy('layout_name');
+
     $getBanner = function($layout, $pos) use ($groupedBanners) {
         $banner = $groupedBanners->get($layout)?->firstWhere('position', $pos);
         $image = $banner?->image_path;
@@ -23,7 +24,6 @@
         return ['image' => $imageUrl, 'link' => $link];
     };
 
-    // Pengambilan data layout
     $dash = $getBanner('Dashboard', 'Foto 1');
     
     $expl1 = $getBanner('Dashboard Explore', 'Foto 1');
@@ -64,9 +64,8 @@
 
     <main class="main-content" style="background-color: #f4f7fe; min-height: 100vh;">
         
-        <div id="view-selection">
-            <h2 class="fw-bold mb-4" style="color: #2b3674; font-size: 1.8rem;">Pilih Layout</h2>
-            
+        <div id="view-selection" class="content-creator-view">
+            <h2 class="fw-bold mb-4" style="color: #2b3674; font-size: 1.8rem;">Pilih Layout</h2>            
             <div class="row g-4">
                 <div class="col-md-4 card-dashboard">
                     <div class="layout-card">
@@ -75,7 +74,6 @@
                         <button class="btn-pilih" onclick="showEditLayout('Dashboard', 'dash', '{{ asset('assets/img/content_creator/dashboard.png') }}', '{{ $dash['image'] }}', '{{ $dash['link'] }}')">Pilih</button>
                     </div>
                 </div>
-                
                 <div class="col-md-4 card-explore">
                     <div class="layout-card">
                         <img src="{{ asset('assets/img/content_creator/dashboard-explore.png') }}" alt="Dashboard Explore" class="layout-img">
@@ -83,7 +81,6 @@
                         <button class="btn-pilih" onclick="showEditLayout('Dashboard Explore', 'expl', '{{ asset('assets/img/content_creator/dashboard-explore.png') }}', '{{ $expl1['image'] }}', '{{ $expl1['link'] }}', '{{ $expl2['image'] }}', '{{ $expl2['link'] }}', '{{ $expl3['image'] }}', '{{ $expl3['link'] }}')">Pilih</button>
                     </div>
                 </div>
-                
                 <div class="col-md-4 card-fasilitas">
                     <div class="layout-card">
                         <img src="{{ asset('assets/img/content_creator/dashboard-explore.png') }}" alt="Fasilitas Hotel" class="layout-img">
@@ -91,7 +88,6 @@
                         <button class="btn-pilih" onclick="showEditLayout('Fasilitas Hotel', 'fasil', '{{ asset('assets/img/content_creator/dashboard-explore.png') }}', '{{ $fasil1['image'] }}', '', '{{ $fasil2['image'] }}', '', '{{ $fasil3['image'] }}', '', '{{ $fasil4['image'] }}', '')">Pilih</button>
                     </div>
                 </div>
-                
                 <div class="col-md-4 card-order">
                     <div class="layout-card">
                         <img src="{{ asset('assets/img/content_creator/order.png') }}" alt="Order" class="layout-img">
@@ -99,7 +95,6 @@
                         <button class="btn-pilih" onclick="showEditLayout('Order', 'ord', '{{ asset('assets/img/content_creator/order.png') }}', '{{ $ord['image'] }}', '{{ $ord['link'] }}')">Pilih</button>
                     </div>
                 </div>
-                
                 <div class="col-md-4 card-pembayaran">
                     <div class="layout-card">
                         <img src="{{ asset('assets/img/content_creator/pembayaran.png') }}" alt="Pembayaran" class="layout-img">
@@ -107,7 +102,6 @@
                         <button class="btn-pilih" onclick="showEditLayout('Pembayaran', 'pay', '{{ asset('assets/img/content_creator/pembayaran.png') }}', '{{ $pay1['image'] }}', '{{ $pay1['link'] }}', '{{ $pay2['image'] }}', '{{ $pay2['link'] }}')">Pilih</button>
                     </div>
                 </div>
-                
                 <div class="col-md-4 card-konfirmasi">
                     <div class="layout-card">
                         <img src="{{ asset('assets/img/content_creator/konfirmasi-pembayaran.png') }}" alt="Konfirmasi Pembayaran" class="layout-img">
@@ -120,15 +114,19 @@
 
         <div id="view-upload" style="display: none;">
             <div class="d-flex align-items-center mb-4">
-                <button class="btn-back" onclick="showLayoutSelection()"><i class="fas fa-chevron-left"></i></button>
+                <button type="button" class="btn btn-link btn-back text-decoration-none d-flex align-items-center" onclick="showLayoutSelection()"><i class="fas fa-chevron-left me-2"></i> </button>
                 <h2 class="fw-bold ms-3 mb-0" style="color: #2b3674; font-size: 1.8rem;" id="selected-layout-title">Dashboard</h2>
             </div>
 
             <div class="upload-container text-center">
                 
-                <div class="mockup-preview mb-5">
-                    <img src="" alt="Mockup" class="img-fluid" style="border-radius: 12px; width: 100%; max-width: 600px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" id="mockup-image">
-                </div>
+                    <div class="mockup-preview mb-5">
+
+                        <img src="{{ asset('assets/img/content_creator/dashboard.png') }}" alt="" class="img-fluid" style="border-radius: 12px; width: 100%; max-width: 600px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" id="mockup-image">
+                    </div>
+
+                    
+
 
                 <div id="dynamic-upload-zones">
                     
@@ -252,30 +250,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('assets/js/content_creator/script.js') }}?v={{ time() }}"></script>
 
-<script>
-    document.addEventListener('click', function(e) {
-        if(e.target && e.target.classList.contains('btn-pilih')) {
-            setTimeout(() => {
-                const title = document.getElementById('selected-layout-title').innerText;
-                const uploadContainer = document.getElementById('view-upload');
-                
-                // Menghapus class lama (jika ada) dan menyisipkan class baru sesuai nama menu yang diklik
-                uploadContainer.className = ''; 
-                const newClass = 'layout-' + title.toLowerCase().replace(/\s+/g, '-');
-                uploadContainer.classList.add(newClass);
-                
-                // Menonaktifkan kolom Link Eksternal khusus untuk menu Fasilitas Hotel
-                const linkGroups = document.querySelectorAll('[id^="link-group-"]');
-                if(title === 'Fasilitas Hotel') {
-                    linkGroups.forEach(el => el.style.setProperty('display', 'none', 'important'));
-                } else {
-                    linkGroups.forEach(el => el.style.setProperty('display', 'block', 'important'));
-                }
-            }, 100);
-        }
-    });
-</script>
+<script src="{{ asset('assets/js/content_creator/script.js') }}" defer></script>
 </body>
 </html>
+

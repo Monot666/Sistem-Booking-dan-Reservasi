@@ -22,8 +22,14 @@ class DashboardController extends Controller
         $layoutName = $request->layout_name;
         
         $maxPhotos = 1;
-        if ($layoutName === 'Dashboard Explore') $maxPhotos = 4;
-        elseif ($layoutName === 'Pembayaran') $maxPhotos = 2;
+        if ($layoutName === 'Dashboard Explore') {
+            $maxPhotos = 4;
+        } elseif ($layoutName === 'Fasilitas Hotel') {
+            // Agar tombol layout “Fasilitas Hotel” bisa upload Foto 1-4
+            $maxPhotos = 4;
+        } elseif ($layoutName === 'Pembayaran') {
+            $maxPhotos = 2;
+        }
         
         for ($i = 1; $i <= $maxPhotos; $i++) {
             $position = "Foto $i";

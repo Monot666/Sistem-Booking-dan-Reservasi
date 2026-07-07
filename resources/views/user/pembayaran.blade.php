@@ -340,8 +340,22 @@
             </div>
         </div>
 
+        @php
+            $confirmPhotoBanner = \App\Models\Banner::where('is_active', true)
+                ->where('layout_name', 'Konfirmasi Pembayaran')
+                ->where('position', 'Foto 1')
+                ->first();
+
+            $confirmPhotoImage = $confirmPhotoBanner?->image_path;
+            $confirmPhotoUrl = $confirmPhotoImage
+                ? (str_starts_with($confirmPhotoImage, 'http') ? $confirmPhotoImage : asset($confirmPhotoImage))
+                : asset('assets/img/bg login.png');
+
+            $confirmPhotoAlt = $confirmPhotoBanner?->position ?? 'Konfirmasi Pembayaran';
+        @endphp
+
         <div class="banner-container single-wide-ad-box">
-            <img src="{{ asset('assets/img/bg login.png') }}" alt="Teh Botol Sosro Landscape Banner">
+            <img src="{{ $confirmPhotoUrl }}" alt="{{ $confirmPhotoAlt }}">
         </div>
     </div>
 
