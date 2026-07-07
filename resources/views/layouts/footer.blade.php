@@ -146,12 +146,12 @@
                     <h5 class="fw-bold mb-3 text-white">Follow kami di</h5>
                     <ul class="list-unstyled">
                         <li class="mb-2">
-                            <a href="#" class="text-white text-decoration-none d-flex align-items-center">
+                            <a href="https://www.facebook.com/share/1D3wF4Xdfe/" class="text-white text-decoration-none d-flex align-items-center">
                                 <img src="{{ asset('assets/img/icons/logo_facebook.svg') }}" width="20" class="me-2" alt="Facebook"> Facebook
                             </a>
                         </li>
                         <li class="mb-2">
-                            <a href="#" class="text-white text-decoration-none d-flex align-items-center">
+                            <a href="https://www.instagram.com/roomlytrust?igsh=eml1NmFtanl3ZDIw" class="text-white text-decoration-none d-flex align-items-center">
                                 <img src="{{ asset('assets/img/icons/logo_instagram.svg') }}" width="20" class="me-2" alt="Instagram"> Instagram
                             </a>
                         </li>
@@ -161,7 +161,7 @@
                             </a>
                         </li>
                         <li class="mb-2">
-                            <a href="#" class="text-white text-decoration-none d-flex align-items-center">
+                            <a href="https://wa.me/6287759315863" class="text-white text-decoration-none d-flex align-items-center">
                                 <img src="{{ asset('assets/img/icons/logo_whatsapp.svg') }}" width="20" class="me-2" alt="WhatsApp"> WhatsApp
                             </a>
                         </li>
