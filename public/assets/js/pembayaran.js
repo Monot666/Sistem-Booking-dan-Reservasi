@@ -5,7 +5,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     // --- 1. LOGIKA COUNTDOWN TIMER ---
-    let totalSeconds = (30 * 60); // 1 jam
+    let totalSeconds = (10 * 60); // 10 menit
     const timerElement = document.getElementById('countdown-timer');
 
     if (timerElement) {

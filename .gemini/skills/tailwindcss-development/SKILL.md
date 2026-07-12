@@ -51,7 +51,7 @@ In Tailwind v4, configuration is CSS-first using the `@theme` directive — no s
 
 <code-snippet name="CSS-First Config" lang="css">
 @theme {
-  --color-brand: oklch(0.72 0.11 178);
+    --color-brand: oklch(0.72 0.11 178);
 }
 </code-snippet>
 
